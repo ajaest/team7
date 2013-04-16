@@ -1,14 +1,20 @@
 package se.chalmers.eda397.team7.so.activities;
 
+import java.io.IOException;
+
 import se.chalmers.eda397.team7.so.R;
+import so.chalmers.eda397.team7.so.data.SQLiteSODatabaseHelper;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
@@ -53,6 +59,20 @@ public class LoginActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		/*TODO: REMOVE! test block*/
+		try {
+			SQLiteSODatabaseHelper test = new SQLiteSODatabaseHelper(this.getApplicationContext());
+			SQLiteDatabase db = test.getWritableDatabase();
+			Cursor c = db.rawQuery("SELECT location FROM users LIMIT 1", new String[]{});
+			c.moveToNext();
+			Log.d("se.chalmers.eda397.team7.so.activities", "We got some data! rows retrieved: " + c.getCount());
+			Log.d("se.chalmers.eda397.team7.so.activities", "We got some data!: " + c.getString(0));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		/* ************************/
+		
 		setContentView(R.layout.activity_login);
 
 		// Set up the login form.

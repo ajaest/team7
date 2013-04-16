@@ -50,6 +50,15 @@ CREATE TABLE searchindex_tags
     ON DELETE CASCADE
 );
 
+DROP TABLE IF EXISTS tag_graph;
+ CREATE TABLE tag_graph
+ (
+   tag1   TEXT                                               ,
+   tag2   TEXT                                               ,
+   weight INT                                                ,
+   CONSTRAINT tag_graph_pk PRIMARY KEY (tag1, tag2)          
+)
+
 /* FK indexes */
 /* CREATE INDEX IF EXISTS posts_fk ON posts (id) /* Not necessary since sqlite create autmatically indexes for PKs*/
 
@@ -58,6 +67,8 @@ CREATE INDEX IF NOT EXISTS searchindex_comments_index    ON searchindex_comments
 CREATE INDEX IF NOT EXISTS searchindex_post_titles_index ON searchindex_post_titles (word);
 CREATE INDEX IF NOT EXISTS searchindex_posts_index       ON searchindex_posts       (word);
 CREATE INDEX IF NOT EXISTS searchindex_tags_index        ON searchindex_tags        (tag );
+CREATE INDEX tag_graph_tag1_index ON tag_graph (tag1);
+CREATE INDEX tag_graph_tag2_index ON tag_graph (tag2);
 
 /* insert indexes, those indexes can be removed after first indexing */
 /*

@@ -3,21 +3,6 @@
 
 global $pdo;
 
-/* register kill signal, commits transaction and makes task reanudable */
-function sig_handler($signo){
-  
-  global $pdo;
-
-  switch($signo){
-  case SIGTERM:
-  case SIGKILL:
-    echo "Exiting, ending transaction...\n";
-    $pdo->query('END TRANSACTION');
-    exit(0);
-  }
-}
-pcntl_signal(SIGTERM, "sig_handler");
-
 /* starts processing */
 $pdo = new PDO("sqlite:so.sqlite");
 
