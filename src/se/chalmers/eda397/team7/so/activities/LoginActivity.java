@@ -8,6 +8,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
@@ -168,6 +169,8 @@ public class LoginActivity extends Activity {
 			showProgress(true);
 			mAuthTask = new UserLoginTask();
 			mAuthTask.execute((Void) null);
+			Intent intent = new Intent(this, QuestionsActivity.class);
+			startActivity(intent);
 		}
 	}
 
@@ -247,6 +250,7 @@ public class LoginActivity extends Activity {
 
 			if (success) {
 				finish();
+				
 			} else {
 				mPasswordView
 						.setError(getString(R.string.error_incorrect_password));
