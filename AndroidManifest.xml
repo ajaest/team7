@@ -28,6 +28,15 @@
             android:name="se.chalmers.eda397.team7.so.activities.QuestionsActivity"
             android:label="@string/title_activity_questions" >
         </activity>
+        <activity
+            android:name="se.chalmers.eda397.team7.so.UserActivity"
+            android:label="@string/title_activity_user" >
+
+        </activity>
+        <activity
+            android:name="se.chalmers.eda397.team7.so.UserListActivity"
+            android:label="@string/title_activity_user_list" >
+        </activity>
     </application>
 
 </manifest>
