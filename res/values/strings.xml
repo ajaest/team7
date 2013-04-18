@@ -7,5 +7,9 @@
     <string name="title_activity_questions">QuestionsActivity</string>
     <string name="title_activity_user">UserActivity</string>
     <string name="title_activity_user_list">UserListActivity</string>
-
+    <string name="questioninfo">Question Information</string>
+    <string name="question_content">Questions Contents</string>
+    <string name="see_all_answers">See All Answers</string>
+    <string name="accepted_answer">Accepted Answer</string>
+    <string name="accepted_answer_contents">Accepted Answer Contents</string>
 </resources>
