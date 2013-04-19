@@ -16,6 +16,9 @@ public class HomeActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home);
 		final Button QButton = (Button) findViewById(R.id.home_question);
+		final Button UButton = (Button) findViewById(R.id.home_Users);
+		final Button MYButton = (Button) findViewById(R.id.home_myaccount);
+	
 		QButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -25,6 +28,28 @@ public class HomeActivity extends Activity {
 				
 			}
 		});
+		
+		UButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(HomeActivity.this, UserListActivity.class);
+				startActivity(intent);
+			}
+		});
+		
+		
+		MYButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(HomeActivity.this, UserActivity.class);
+				startActivity(intent);
+				
+			}
+		});
+		
+		
 	}
 
 	

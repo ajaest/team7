@@ -43,13 +43,13 @@
         android:layout_height="wrap_content" >
 
         <Button
-            android:id="@+id/home_User"
+            android:id="@+id/home_Users"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="User" />
+            android:text="Users" />
 
         <Button
-            android:id="@+id/button4"
+            android:id="@+id/home_myaccount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="My Account" />
