@@ -31,11 +31,14 @@
         <activity
             android:name="se.chalmers.eda397.team7.so.activities.UserActivity"
             android:label="@string/title_activity_user" >
-
         </activity>
         <activity
             android:name="se.chalmers.eda397.team7.so.activities.UserListActivity"
             android:label="@string/title_activity_user_list" >
+        </activity>
+        <activity
+            android:name="se.chalmers.eda397.team7.so.activities.HomeActivity"
+            android:label="@string/title_activity_home" >
         </activity>
     </application>
 
