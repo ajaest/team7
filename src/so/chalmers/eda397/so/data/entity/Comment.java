@@ -8,5 +8,10 @@ public class Comment extends Entity {
 		super(dl);
 	}
 
+	@Override
+	public boolean commit() {
+		return false;
+	}
+
 
 }

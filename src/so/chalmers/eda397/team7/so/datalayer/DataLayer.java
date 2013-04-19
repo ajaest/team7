@@ -2,9 +2,9 @@ package so.chalmers.eda397.team7.so.datalayer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import so.chalmers.eda397.so.data.entity.EntityFactory;
-
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
@@ -80,6 +80,50 @@ public abstract class DataLayer  <E> {
 		
 		return ins;
 		
+	}
+	
+	protected void queryInsertOrReplace(String tableName, Map<String, String> attValues, Map<String, String> key){
+		
+		StringBuilder query   ;
+		StringBuilder replace ;
+		List<String>  attList ;
+		Object[]      attArray;
+		 
+		query   = new StringBuilder("INSERT OR REPLACE INTO " + tableName + " (");
+		replace = new StringBuilder("(");
+		
+		attList = new ArrayList<String>();
+		for(String attName : attValues.keySet()){
+			query  .append(attName + ", ");
+			replace.append("?,"          );
+			
+			attList.add(attValues.get(attName));
+			
+		}
+		
+		query  .setLength(query  .length()-1);
+		replace.setLength(replace.length()-1);
+		
+		query  .append(") ");
+		replace.append(") ");
+		
+		query.append("VALUES (");
+		query.append(replace   );
+		
+		if(key.size()>0){
+			
+			query.append("WHERE ");
+			
+			for(String keyName: key.keySet()){
+				query.append(keyName + "=?");
+				attList.add(key.get(keyName));
+			}
+		}
+		
+		attArray = new Object[attValues.size()];
+		attArray = attList.toArray(attArray);
+		
+		this.getDbInstance().execSQL(query.toString(), attArray);
 	}
 	
 	////////////////////////////////////////////
