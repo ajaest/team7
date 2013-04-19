@@ -24,14 +24,14 @@ public class QuestionListAdapter extends ArrayAdapter<Question>{
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View row = convertView;
-		if (row==null){
+		//if (row==null){
 			LayoutInflater inflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
 			row=inflater.inflate(this.layout, parent, false);
 			TextView questionTitle =(TextView)row.findViewById(R.id.questionTitle);
 			TextView nAnswers = (TextView) row.findViewById(R.id.answersNumber);
 			questionTitle.setText(this.questionList.get(position).getTitle());
 			nAnswers.setText(Integer.toString(this.questionList.get(position).getnAnswers()) + " answers ");
-		}
+		//}
 		return(row);
 	}
 	
