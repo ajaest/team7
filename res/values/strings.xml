@@ -12,4 +12,7 @@
     <string name="see_all_answers">See All Answers</string>
     <string name="accepted_answer">Accepted Answer</string>
     <string name="accepted_answer_contents">Accepted Answer Contents</string>
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="home_search">Fake Search</string>
+
 </resources>

@@ -19,7 +19,7 @@ public class QuestionInformation extends Activity{
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		
-		QuestionHeader = (TextView) findViewById(R.id.tvQuestionHeader);
+		//QuestionHeader = (TextView) findViewById(R.id.tvQuestionHeader);
 		
 	}
 	
