@@ -169,7 +169,7 @@ public class LoginActivity extends Activity {
 			showProgress(true);
 			mAuthTask = new UserLoginTask();
 			mAuthTask.execute((Void) null);
-			Intent intent = new Intent(this, QuestionsActivity.class);
+			Intent intent = new Intent(this, UserListActivity.class);
 			startActivity(intent);
 		}
 	}
