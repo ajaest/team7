@@ -1,4 +1,4 @@
-package so.chalmers.eda397.team7.so.datalayer;
+package se.chalmers.eda397.team7.so.datalayer;
 
 import android.database.sqlite.SQLiteDatabase;
 

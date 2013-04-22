@@ -1,10 +1,10 @@
-package so.chalmers.eda397.team7.so.datalayer;
+package se.chalmers.eda397.team7.so.datalayer;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import so.chalmers.eda397.so.data.entity.Post;
+import se.chalmers.eda397.so.data.entity.Post;
 import android.annotation.SuppressLint;
 import android.database.Cursor;
 

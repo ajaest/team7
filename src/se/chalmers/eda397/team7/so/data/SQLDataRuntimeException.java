@@ -1,4 +1,4 @@
-package so.chalmers.eda397.team7.so.data;
+package se.chalmers.eda397.team7.so.data;
 
 public class SQLDataRuntimeException extends RuntimeException {
 

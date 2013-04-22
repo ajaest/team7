@@ -1,12 +1,12 @@
-package so.chalmers.eda397.so.data.entity;
+package se.chalmers.eda397.so.data.entity;
 
 import java.net.URL;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import so.chalmers.eda397.team7.so.datalayer.DataLayerFactory;
-import so.chalmers.eda397.team7.so.datalayer.UserDataLayer;
+import se.chalmers.eda397.team7.so.datalayer.DataLayerFactory;
+import se.chalmers.eda397.team7.so.datalayer.UserDataLayer;
 
 public class User extends Entity{
 

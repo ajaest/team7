@@ -1,4 +1,4 @@
-package so.chalmers.eda397.so.data.entity;
+package se.chalmers.eda397.so.data.entity;
 
 import java.text.MessageFormat;
 import java.util.Date;
@@ -6,9 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import so.chalmers.eda397.team7.so.datalayer.CommentDataLayer;
-import so.chalmers.eda397.team7.so.datalayer.DataLayerFactory;
-import so.chalmers.eda397.team7.so.datalayer.PostDataLayer;
+import se.chalmers.eda397.team7.so.datalayer.CommentDataLayer;
+import se.chalmers.eda397.team7.so.datalayer.DataLayerFactory;
+import se.chalmers.eda397.team7.so.datalayer.PostDataLayer;
 
 public class Post extends Entity {
 	

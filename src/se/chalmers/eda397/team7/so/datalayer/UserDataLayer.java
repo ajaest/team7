@@ -1,4 +1,4 @@
-package so.chalmers.eda397.team7.so.datalayer;
+package se.chalmers.eda397.team7.so.datalayer;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -6,8 +6,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import so.chalmers.eda397.so.data.entity.User;
-import so.chalmers.eda397.team7.so.data.SQLDataRuntimeException;
+import se.chalmers.eda397.so.data.entity.User;
+import se.chalmers.eda397.team7.so.data.SQLDataRuntimeException;
 import android.annotation.SuppressLint;
 import android.database.Cursor;
 

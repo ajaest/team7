@@ -1,10 +1,10 @@
-package so.chalmers.eda397.team7.so.datalayer;
+package se.chalmers.eda397.team7.so.datalayer;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import so.chalmers.eda397.so.data.entity.EntityFactory;
+import se.chalmers.eda397.so.data.entity.EntityFactory;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 

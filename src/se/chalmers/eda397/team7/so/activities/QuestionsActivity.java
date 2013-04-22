@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import se.chalmers.eda397.team7.so.Question;
 import se.chalmers.eda397.team7.so.QuestionListAdapter;
 import se.chalmers.eda397.team7.so.R;
-import so.chalmers.eda397.team7.so.data.SQLiteSODatabaseHelper;
+import se.chalmers.eda397.team7.so.data.SQLiteSODatabaseHelper;
 import android.os.Bundle;
 import android.app.Activity;
 import android.database.Cursor;

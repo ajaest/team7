@@ -1,10 +1,10 @@
-package so.chalmers.eda397.so.data.entity;
+package se.chalmers.eda397.so.data.entity;
 
 import java.net.URL;
 import java.util.Date;
 
-import so.chalmers.eda397.team7.so.datalayer.DataLayer;
-import so.chalmers.eda397.team7.so.datalayer.DataLayerFactory;
+import se.chalmers.eda397.team7.so.datalayer.DataLayer;
+import se.chalmers.eda397.team7.so.datalayer.DataLayerFactory;
 
 /**
  * This class creates raw entity instances that may not be synchronized in any
@@ -112,11 +112,24 @@ public class EntityFactory {
 		);
 	}
 	
-	public Comment createComment(/* TODO: filled with arguments */){
+	public Comment createComment(
+		Integer id           , 
+		Integer post_id      , 
+		Integer score        , 
+		String  text         , 
+		Date    creation_date, 
+		Integer user_id 
+	){
 		
 		return new Comment(
-			this.dlf
+			this.dlf,
 			/* Attributes */
-			/*, TODO: filled with arguments */);
+			id           , 
+			post_id      , 
+			score        , 
+			text         , 
+			creation_date, 
+			user_id 
+		);
 	}
 }

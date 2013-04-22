@@ -1,6 +1,6 @@
-package so.chalmers.eda397.so.data.entity;
+package se.chalmers.eda397.so.data.entity;
 
-import so.chalmers.eda397.team7.so.datalayer.DataLayerFactory;
+import se.chalmers.eda397.team7.so.datalayer.DataLayerFactory;
 
 public abstract class Entity {
 
