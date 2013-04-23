@@ -1,5 +1,6 @@
 package se.chalmers.eda397.team7.so.datalayer;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -70,5 +71,6 @@ public class CommentDataLayer extends DataLayer<Comment> {
 		
 		this.queryInsertOrReplace("comments", attValues, key);
 	}
+	
 	
 }
