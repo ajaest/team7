@@ -5,7 +5,7 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="8"
+        android:minSdkVersion="11"
         android:targetSdkVersion="17" />
     
     <instrumentation android:name=".test.data.DataInstrumentalizationRunner" android:targetPackage="se.chalmers.eda397.team7.so" android:label="data_tests"></instrumentation>

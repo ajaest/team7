@@ -10,50 +10,40 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".HomeActivity" >
 
-    <EditText
-        android:id="@+id/editText1"
+    <SearchView
+        android:id="@+id/searchView1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:text="@string/home_search" >
+        android:inputType="text"
+        android:queryHint="@string/home_query_hint" >
+        
+        
+        
 
-        <requestFocus />
-    </EditText>
+    </SearchView>
 
-    <LinearLayout
+    <Button
+        android:id="@+id/home_tag"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:text="@string/home_tag" />
 
-        <Button
-            android:id="@+id/button1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Tags" />
-
-        <Button
-            android:id="@+id/home_question"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Questions" />
-
-    </LinearLayout>
-
-    <LinearLayout
+    <Button
+        android:id="@+id/home_question"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:text="@string/home_questions" />
 
-        <Button
-            android:id="@+id/home_Users"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Users" />
+    <Button
+        android:id="@+id/home_Users"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/home_users" />
 
-        <Button
-            android:id="@+id/home_myaccount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="My Account" />
-
-    </LinearLayout>
+    <Button
+        android:id="@+id/home_myaccount"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/home_myacc" />
 
 </LinearLayout>

@@ -14,5 +14,10 @@
     <string name="accepted_answer_contents">Accepted Answer Contents</string>
     <string name="title_activity_home">HomeActivity</string>
     <string name="home_search">Fake Search</string>
+    <string name="home_tag">Tags</string>
+    <string name="home_questions">Questions</string>
+    <string name="home_users">Users</string>
+    <string name="home_myacc">My Account</string>
+    <string name="home_query_hint">Search for a post id</string>
 
 </resources>

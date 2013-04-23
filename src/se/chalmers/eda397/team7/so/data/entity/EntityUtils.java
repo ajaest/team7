@@ -7,7 +7,6 @@ import android.annotation.SuppressLint;
 import android.database.Cursor;
 
 public class EntityUtils {
-
 	@SuppressLint("UseValueOf")
 	@SuppressWarnings("deprecation")
 	public static Post createPostFromCursor(EntityFactory ef, Cursor cur){
