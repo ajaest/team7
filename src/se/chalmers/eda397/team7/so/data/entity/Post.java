@@ -1,6 +1,7 @@
 package se.chalmers.eda397.team7.so.data.entity;
 
 import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -170,8 +171,13 @@ public class Post extends Entity {
 		return title;
 	}
 
-	public String getTags() {
-		return tags;
+	public List<String> getTags() {
+		
+		String[] tags;
+		
+		tags = this.tags.substring(1, this.tags.length()-1).split("<>");
+		
+		return Arrays.asList(tags);
 	}
 
 	public Integer getAnswer_count() {
