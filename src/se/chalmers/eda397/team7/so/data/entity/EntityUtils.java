@@ -1,12 +1,14 @@
 package se.chalmers.eda397.team7.so.data.entity;
 
 import java.util.Calendar;
+import java.util.ArrayList;
 import java.util.Date;
 
 import android.annotation.SuppressLint;
 import android.database.Cursor;
 
 public class EntityUtils {
+
 	@SuppressLint("UseValueOf")
 	@SuppressWarnings("deprecation")
 	public static Post createPostFromCursor(EntityFactory ef, Cursor cur){

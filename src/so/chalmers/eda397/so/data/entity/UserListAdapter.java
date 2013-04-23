@@ -1,7 +1,9 @@
-package se.chalmers.eda397.team7.so;
+package so.chalmers.eda397.so.data.entity;
 
 import java.util.ArrayList;
 
+import se.chalmers.eda397.team7.so.R;
+import se.chalmers.eda397.team7.so.data.entity.User;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,11 +33,11 @@ public class UserListAdapter extends ArrayAdapter<User>{
 			TextView name =(TextView)row.findViewById(R.id.textViewUserNameList);
 			TextView votesUp = (TextView) row.findViewById(R.id.textViewVotesUp);
 			TextView votesDown = (TextView) row.findViewById(R.id.textViewVotesDown);
-			TextView reputation = (TextView) row.findViewById(R.id.textViewReputationUserList);
+			TextView reputation = (TextView) row.findViewById(R.id.textView14);
 
-			name.setText(this.userList.get(position).getName());
-			votesUp.setText(Integer.toString(this.userList.get(position).getVotesUp()));
-			votesDown.setText(Integer.toString(this.userList.get(position).getVotesDown()));
+			name.setText(this.userList.get(position).getDisplay_name());
+			votesUp.setText(Integer.toString(this.userList.get(position).getUp_votes()));
+			votesDown.setText(Integer.toString(this.userList.get(position).getDown_votes()));
 			reputation.setText(Integer.toString(this.userList.get(position).getReputation()));
 
 		//}

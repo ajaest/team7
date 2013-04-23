@@ -5,7 +5,7 @@ public class Question {
 
 	private String title;
 	private int nAnswers;
-	
+
 	public Question(String title, int nAnswers) {
 		super();
 		this.title = title;
@@ -27,7 +27,7 @@ public class Question {
 	public void setnAnswers(int nAnswers) {
 		this.nAnswers = nAnswers;
 	}
-	
 
-	
+
+
 }

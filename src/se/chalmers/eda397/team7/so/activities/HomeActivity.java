@@ -1,28 +1,20 @@
 package se.chalmers.eda397.team7.so.activities;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import se.chalmers.eda397.team7.so.Question;
 import se.chalmers.eda397.team7.so.R;
-import so.chalmers.eda397.so.data.entity.Comment;
-import so.chalmers.eda397.so.data.entity.Post;
-import so.chalmers.eda397.team7.so.data.SQLiteSODatabaseHelper;
-import so.chalmers.eda397.team7.so.datalayer.DataLayerFactory;
-import so.chalmers.eda397.team7.so.datalayer.PostDataLayer;
-import android.os.Bundle;
+import se.chalmers.eda397.team7.so.data.SQLiteSODatabaseHelper;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.SearchView;
-import android.widget.SearchView.OnCloseListener;
 import android.widget.SearchView.OnQueryTextListener;
 import android.widget.Toast;
 

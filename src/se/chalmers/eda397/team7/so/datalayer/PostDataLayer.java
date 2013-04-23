@@ -1,5 +1,6 @@
 package se.chalmers.eda397.team7.so.datalayer;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -100,6 +101,11 @@ public class PostDataLayer extends DataLayer<Post>{
 		
 		this.queryInsertOrReplace("posts", attValues, key);
 		
+	}
+	
+	public ArrayList<Post> getQuestionList(){
+		String queryString = "SELECT * FROM posts WHERE post_type_id=1 LIMIT 40";
+		return (ArrayList<Post>)this.querySortedInstanceSet(queryString, new String[]{});
 	}
 	
 }
