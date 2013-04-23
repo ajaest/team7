@@ -1,16 +1,21 @@
 package se.chalmers.eda397.team7.so.test.data;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedSet;
 
+import se.chalmers.eda397.team7.so.data.entity.Comment;
 import se.chalmers.eda397.team7.so.data.entity.EntityFactory;
 import se.chalmers.eda397.team7.so.data.entity.EntityUtils;
 import se.chalmers.eda397.team7.so.data.entity.Post;
-import se.chalmers.eda397.team7.so.data.entity.Comment;
 import se.chalmers.eda397.team7.so.datalayer.DataLayerFactory;
 import se.chalmers.eda397.team7.so.datalayer.PostDataLayer;
+import se.chalmers.eda397.team7.so.datalayer.PostDataLayer.PostIndexInformation;
 import android.annotation.SuppressLint;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -99,9 +104,35 @@ public class PostDataLayerTest extends InstrumentationTestCase {
 			
 			assertTrue("The id " + commentRow.get("id") + " is not in the retrieved set", commentsIds.keySet().contains(Integer.valueOf(commentRow.get("id"))));
 		}
+	}
+	
+	public void testFullText(){
+		//TODO:
+		Set<String> words = new HashSet<String>(Arrays.asList(new String[]{"php", "mysql", "apache"}));
+		
+		@SuppressWarnings("unused")
+		SortedSet<PostIndexInformation> indexResults = this.postDL.fullText(words);
+		
+	}
+	
+	public void testPagedFullText(){
+		
+		Set<String> words                       ;
+		List<PostIndexInformation> indexResults ;
 		
 		
+		words = new HashSet<String>(Arrays.asList(new String[]{"php", "mysql", "apache"}));
+		indexResults = new ArrayList<PostIndexInformation>(this.postDL.fullText(words));
 		
+		List<Post> postResults;
+		for(int i=0; i<(indexResults.size()/10); i++){
+			postResults = this.postDL.pagedFullText(words, 10, i);
+			
+			for(int j=0; j<postResults.size(); j++){
+				assertEquals(indexResults.get(i*10 + j).getPostId(), postResults.get(j).getId());
+			}
+		}
+
 	}
 	
 	//////////////////////////////////////////////////////////

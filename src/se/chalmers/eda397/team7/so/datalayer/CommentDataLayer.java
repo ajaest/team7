@@ -44,7 +44,7 @@ public class CommentDataLayer extends DataLayer<Comment> {
 		
 		split = cur.getString(cur.getColumnIndex("creation_date")).split("-");
 		creation_date = new Date();
-		creation_date.setYear (new Integer(split[0]));
+		creation_date.setYear (new Integer(split[0]) - 1900);
 		creation_date.setMonth(new Integer(split[1]));
 		creation_date.setDate (new Integer(split[2]));
 		

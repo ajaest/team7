@@ -351,4 +351,9 @@ public class Post extends Entity {
 	private String formatDate(Date d){
 		return MessageFormat.format("{0}{1}{2}", d.getMonth(), d.getMonth(), d.getDay());
 	}
+	
+	@Override
+	public String toString(){
+		return this.getId().toString();
+	}
 }

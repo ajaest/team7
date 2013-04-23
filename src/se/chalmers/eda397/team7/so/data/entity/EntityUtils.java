@@ -1,6 +1,5 @@
 package se.chalmers.eda397.team7.so.data.entity;
 
-import java.util.Calendar;
 import java.util.Date;
 
 import android.annotation.SuppressLint;
@@ -44,7 +43,7 @@ public class EntityUtils {
 		split = dateString.split("-");
 		if(split.length==3){
 			creation_date            = new Date();
-			creation_date.setYear (new Integer(split[0]) - Calendar.YEAR);
+			creation_date.setYear (new Integer(split[0]) - 1900);
 			creation_date.setMonth(new Integer(split[1]));
 			creation_date.setDate (new Integer(split[2]));
 		}else{
@@ -62,7 +61,7 @@ public class EntityUtils {
 		split = dateString.split("-");
 		if(split.length==3){
 			last_edit_date            = new Date();
-			last_edit_date.setYear (new Integer(split[0]) - Calendar.YEAR);
+			last_edit_date.setYear (new Integer(split[0]) - 1900);
 			last_edit_date.setMonth(new Integer(split[1]));
 			last_edit_date.setDate (new Integer(split[2]));
 		}else{
@@ -73,7 +72,7 @@ public class EntityUtils {
 		split = dateString.split("-");
 		if(split.length==3){
 			last_activity_date            = new Date();
-			last_activity_date.setYear (new Integer(split[0]) - Calendar.YEAR);
+			last_activity_date.setYear (new Integer(split[0]) - 1900);
 			last_activity_date.setMonth(new Integer(split[1]));
 			last_activity_date.setDate (new Integer(split[2]));
 		}else{
@@ -85,7 +84,7 @@ public class EntityUtils {
 		split = dateString.split("-");
 		if(split.length==3){
 			community_owned_date            = new Date();
-			community_owned_date.setYear (new Integer(split[0]) - Calendar.YEAR);
+			community_owned_date.setYear (new Integer(split[0]) - 1900);
 			community_owned_date.setMonth(new Integer(split[1]));
 			community_owned_date.setDate (new Integer(split[2]));
 		}else{
@@ -96,7 +95,7 @@ public class EntityUtils {
 		split = dateString.split("-");
 		if(split.length==3){
 			closed_date            = new Date();
-			closed_date.setYear (new Integer(split[0]) - Calendar.YEAR);
+			closed_date.setYear (new Integer(split[0]) - 1900);
 			closed_date.setMonth(new Integer(split[1]));
 			closed_date.setDate (new Integer(split[2]));
 		}else{
