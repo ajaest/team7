@@ -1,6 +1,9 @@
-package se.chalmers.eda397.team7.so;
+package so.chalmers.eda397.so.data.entity;
 
 import java.util.ArrayList;
+import se.chalmers.eda397.team7.so.R;
+import se.chalmers.eda397.team7.so.R.id;
+import se.chalmers.eda397.team7.so.R.layout;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,15 +11,15 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-public class QuestionListAdapter extends ArrayAdapter<Question>{
+public class PostListAdapter extends ArrayAdapter<Post>{
 
-	private ArrayList<Question> questionList;
+	private ArrayList<Post> postList;
 	private Context context;
 	private int layout;
 	
-	public QuestionListAdapter(Context context, ArrayList<Question> questionList, int layout) {
-		super( context, R.layout.question_item, questionList);
-		this.questionList = questionList;
+	public PostListAdapter(Context context, ArrayList<Post> postList, int layout) {
+		super( context, R.layout.question_item, postList);
+		this.postList = postList;
 		this.context = context;
 		this.layout = layout;
 	}
@@ -29,8 +32,8 @@ public class QuestionListAdapter extends ArrayAdapter<Question>{
 			row=inflater.inflate(this.layout, parent, false);
 			TextView questionTitle =(TextView)row.findViewById(R.id.questionTitle);
 			TextView nAnswers = (TextView) row.findViewById(R.id.answersNumber);
-			questionTitle.setText(this.questionList.get(position).getTitle());
-			nAnswers.setText(Integer.toString(this.questionList.get(position).getnAnswers()) + " answers ");
+			questionTitle.setText(this.postList.get(position).getTitle());
+			nAnswers.setText(Integer.toString(this.postList.get(position).getAnswer_count()) + " answers ");
 		//}
 		return(row);
 	}

@@ -3,17 +3,25 @@ package se.chalmers.eda397.team7.so.activities;
 import java.io.IOException;
 import java.util.ArrayList;
 
+
 import se.chalmers.eda397.team7.so.R;
-import se.chalmers.eda397.team7.so.User;
-import se.chalmers.eda397.team7.so.UserListAdapter;
+import so.chalmers.eda397.so.data.entity.User;
+import so.chalmers.eda397.so.data.entity.UserListAdapter;
 import so.chalmers.eda397.team7.so.data.SQLiteSODatabaseHelper;
+import so.chalmers.eda397.team7.so.datalayer.DataLayer;
+import so.chalmers.eda397.team7.so.datalayer.DataLayerFactory;
+import so.chalmers.eda397.team7.so.datalayer.UserDataLayer;
 import android.app.Activity;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.AdapterView.OnItemClickListener;
 
 public class UserListActivity extends Activity {
 
@@ -27,7 +35,16 @@ public class UserListActivity extends Activity {
 		userList = retrieveUsers();
 		userListView = (ListView)findViewById(R.id.listViewUsers);
 		userListView.setAdapter(new UserListAdapter(this, userList, R.layout.user_item));
-		
+		userListView.setOnItemClickListener(new OnItemClickListener(){
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id){
+
+				Integer ide = userList.get(position).getId();
+				Intent intent = new Intent(view.getContext(), UserActivity.class);
+				intent.putExtra("idUser", ide);
+				startActivity(intent);
+			}
+		});        
 	}
 
 	@Override
@@ -40,15 +57,13 @@ public class UserListActivity extends Activity {
 	
 	private ArrayList<User> retrieveUsers(){
 		ArrayList<User> users = new ArrayList<User>();
-		User user;
+		
 		try {
 			SQLiteSODatabaseHelper test = new SQLiteSODatabaseHelper(this.getApplicationContext());
 			SQLiteDatabase db = test.getWritableDatabase();
-			Cursor c = db.rawQuery("SELECT up_votes, down_votes, reputation, display_name FROM users LIMIT 40", new String[]{});
-				while(c.moveToNext()){
-					user = new User(Integer.parseInt(c.getString(0)), Integer.parseInt(c.getString(1)), Integer.parseInt(c.getString(2)), c.getString(3));
-					users.add(user);
-				}
+			DataLayerFactory factory = new DataLayerFactory(db);
+			UserDataLayer userDataLayer= factory.createUserDataLayer();
+			users = userDataLayer.getListUsers();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

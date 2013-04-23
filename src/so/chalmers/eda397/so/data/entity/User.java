@@ -127,7 +127,9 @@ public class User extends Entity{
 	}
 
 	public String getLocation() {
-		return location;
+	if (location.equals("NULL"))
+		return "";
+	return location;
 	}
 
 	public void setLocation(String location) {
@@ -145,6 +147,8 @@ public class User extends Entity{
 	}
 
 	public String getAbout_me() {
+		if (about_me.equals("NULL"))
+			return "";
 		return about_me;
 	}
 

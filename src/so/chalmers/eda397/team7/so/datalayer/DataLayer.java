@@ -73,9 +73,9 @@ public abstract class DataLayer  <E> {
 		
 		Cursor cur;
 		E      ins;
-		
+
 		cur = this.getDbInstance().rawQuery(query, queryArgs);
-		
+		cur.moveToFirst();
 		ins = this.createNotSyncronizedInstance(cur);
 		
 		return ins;

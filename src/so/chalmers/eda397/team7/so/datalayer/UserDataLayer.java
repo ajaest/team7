@@ -2,6 +2,7 @@ package so.chalmers.eda397.team7.so.datalayer;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,6 +19,11 @@ public class UserDataLayer extends DataLayer<User>{
 		super(dl);
 	}
 
+	public ArrayList<User> getListUsers(){
+		String query;
+		query = "SELECT * FROM users LIMIT 50";
+		return (ArrayList<User>) this.querySortedInstanceSet(query, null);
+	}
 	public User getUserById(Integer id){
 		
 		String query;
