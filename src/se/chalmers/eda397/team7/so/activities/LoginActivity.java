@@ -3,7 +3,7 @@ package se.chalmers.eda397.team7.so.activities;
 import java.io.IOException;
 
 import se.chalmers.eda397.team7.so.R;
-import so.chalmers.eda397.team7.so.data.SQLiteSODatabaseHelper;
+import se.chalmers.eda397.team7.so.data.SQLiteSODatabaseHelper;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;

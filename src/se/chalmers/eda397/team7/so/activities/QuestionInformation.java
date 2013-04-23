@@ -1,6 +1,5 @@
 package se.chalmers.eda397.team7.so.activities;
 
-import android.R;
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.Button;
