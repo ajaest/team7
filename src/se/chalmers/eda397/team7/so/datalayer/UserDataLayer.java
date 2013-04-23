@@ -6,8 +6,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import se.chalmers.eda397.so.data.entity.User;
 import se.chalmers.eda397.team7.so.data.SQLDataRuntimeException;
+import se.chalmers.eda397.team7.so.data.entity.User;
 import android.annotation.SuppressLint;
 import android.database.Cursor;
 
