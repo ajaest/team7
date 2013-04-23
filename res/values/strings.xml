@@ -19,5 +19,6 @@
     <string name="home_users">Users</string>
     <string name="home_myacc">My Account</string>
     <string name="home_query_hint">Search for a post id</string>
+    <string name="title_activity_question_information">Question information</string>
 
 </resources>

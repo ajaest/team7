@@ -11,6 +11,7 @@ import java.util.TreeSet;
 
 import se.chalmers.eda397.team7.so.data.entity.EntityUtils;
 import se.chalmers.eda397.team7.so.data.entity.Post;
+import se.chalmers.eda397.team7.so.data.entity.User;
 import android.annotation.SuppressLint;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -396,6 +397,14 @@ public class PostDataLayer extends DataLayer<Post>{
 	}
 	
 	
+
+	public User getOwnerQuestion(Integer idQuestion){
+		UserDataLayer userDataLayer = this.getDataLayerFactory().createUserDataLayer();
+		String queryString = "SELECT * FROM users where" +
+				" id = (SELECT owner_user_id FROM posts WHERE id=?)";
+		return userDataLayer.querySingleInstance(queryString, new String[]{idQuestion.toString()});
+	}
+
 }
 
 

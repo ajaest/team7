@@ -12,12 +12,10 @@ import se.chalmers.eda397.team7.so.datalayer.UserDataLayer;
 import android.app.Activity;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.text.Html;
-import android.text.Spanned;
-import android.util.Log;
 import android.view.Menu;
 import android.widget.TextView;
 import android.widget.TextView.BufferType;
+import se.chalmers.eda397.team7.so.data.entity.EntityUtils;
 
 public class UserActivity extends Activity {
 
@@ -74,13 +72,12 @@ public class UserActivity extends Activity {
 			textViewAge.setText(user.getAge().toString());
 		
 		SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.US);
-		Log.d("datees", "Creation date:"+ user.getCreation_date()+ ", last access:"+ user.getLast_access_date());
 		textViewMembershipTime.setText(df.format(user.getCreation_date()));
 		textViewLastVisit.setText(df.format(user.getLast_access_date()));
 		textViewProfileViews.setText(user.getViews().toString()+ " visits ");
 		
 		
-	    textViewAboutMe.setText(extractText(user.getAbout_me()), BufferType.SPANNABLE);
+	    textViewAboutMe.setText(EntityUtils.extractText(user.getAbout_me()), BufferType.SPANNABLE);
 	}
 
 	@Override
@@ -91,9 +88,5 @@ public class UserActivity extends Activity {
 	}
 
 
-	private Spanned extractText(String htmlText){
-		String noSlash = htmlText.replaceAll("\\\\.", " ");
-		Spanned spannedContent = Html.fromHtml(noSlash);
-		return spannedContent;
-	}
+
 }

@@ -43,6 +43,10 @@
             android:name="se.chalmers.eda397.team7.so.activities.HomeActivity"
             android:label="@string/title_activity_home" >
         </activity>
+                <activity
+            android:name="se.chalmers.eda397.team7.so.activities.QuestionInformation"
+            android:label="@string/title_activity_question_information" >
+        </activity>
     </application>
 
 </manifest>

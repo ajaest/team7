@@ -6,6 +6,8 @@ import java.util.Date;
 
 import android.annotation.SuppressLint;
 import android.database.Cursor;
+import android.text.Html;
+import android.text.Spanned;
 
 public class EntityUtils {
 
@@ -136,5 +138,12 @@ public class EntityUtils {
 		
 		return p;
 		
+	}
+	
+	
+	public static Spanned extractText(String htmlText){
+		String noSlash = htmlText.replaceAll("\\\\.", " ");
+		Spanned spannedContent = Html.fromHtml(noSlash);
+		return spannedContent;
 	}
 }

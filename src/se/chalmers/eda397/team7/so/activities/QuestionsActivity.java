@@ -10,10 +10,14 @@ import se.chalmers.eda397.team7.so.datalayer.DataLayerFactory;
 import se.chalmers.eda397.team7.so.datalayer.PostDataLayer;
 import so.chalmers.eda397.so.data.entity.PostListAdapter;
 import android.app.Activity;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.AdapterView.OnItemClickListener;
 
 public class QuestionsActivity extends Activity {
 
@@ -28,6 +32,16 @@ public class QuestionsActivity extends Activity {
 		questionList = retrieveList();
 		questionListView = (ListView)findViewById(R.id.listViewQuestions);
 		questionListView.setAdapter(new PostListAdapter(this, questionList, R.layout.question_item));
+		questionListView.setOnItemClickListener(new OnItemClickListener(){
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id){
+
+				Integer ide = questionList.get(position).getId();
+				Intent intent = new Intent(view.getContext(), QuestionInformation.class);
+				intent.putExtra("idQuestion", ide);
+				startActivity(intent);
+			}
+		});        
 	}
 
 	@Override
