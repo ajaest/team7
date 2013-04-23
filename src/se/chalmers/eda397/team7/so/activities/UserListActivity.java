@@ -6,12 +6,11 @@ import java.util.ArrayList;
 import se.chalmers.eda397.team7.so.R;
 import se.chalmers.eda397.team7.so.User;
 import se.chalmers.eda397.team7.so.UserListAdapter;
-import so.chalmers.eda397.team7.so.data.SQLiteSODatabaseHelper;
+import se.chalmers.eda397.team7.so.data.SQLiteSODatabaseHelper;
 import android.app.Activity;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.widget.ListView;
 

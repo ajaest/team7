@@ -1,11 +1,8 @@
 package se.chalmers.eda397.team7.so.activities;
 
 import se.chalmers.eda397.team7.so.R;
-import se.chalmers.eda397.team7.so.R.id;
-import se.chalmers.eda397.team7.so.R.layout;
-import se.chalmers.eda397.team7.so.R.menu;
-import android.os.Bundle;
 import android.app.Activity;
+import android.os.Bundle;
 import android.view.Menu;
 import android.widget.TextView;
 
