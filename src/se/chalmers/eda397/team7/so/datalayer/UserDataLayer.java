@@ -71,7 +71,7 @@ public class UserDataLayer extends DataLayer<User>{
 		
 		split = cur.getString(cur.getColumnIndex("creation_date")).split("-");
 		creation_date = new Date(
-			new Integer(split[0]), 
+			new Integer(split[0]) - 1900, 
 			new Integer(split[1]), 
 			new Integer(split[2])
 		);
@@ -80,7 +80,7 @@ public class UserDataLayer extends DataLayer<User>{
 		
 		split = cur.getString(cur.getColumnIndex("last_access_date")).split("-");
 		last_access_date = new Date(
-				new Integer(split[0]), 
+				new Integer(split[0]) - 1900, 
 				new Integer(split[1]), 
 				new Integer(split[2])
 			);
