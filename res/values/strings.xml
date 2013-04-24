@@ -20,5 +20,11 @@
     <string name="home_myacc">My Account</string>
     <string name="home_query_hint">Search for a post id</string>
     <string name="title_activity_question_information">Question information</string>
+    <string name="title_activity_search">SearchActivity</string>
+    <string name="adv_radio_question">Question</string>
+    <string name="avd_radio_tag">Tag</string>
+    <string name="avd_radio_tag1">Tag</string>
+    <string name="avd_radio_user">User</string>
+    <string name="home_text_advsearch">Advanced Search</string>
 
 </resources>
