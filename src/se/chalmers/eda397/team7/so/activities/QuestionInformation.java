@@ -7,21 +7,21 @@ import java.util.Locale;
 
 import se.chalmers.eda397.team7.so.R;
 import se.chalmers.eda397.team7.so.data.SQLiteSODatabaseHelper;
-import se.chalmers.eda397.team7.so.data.entity.Comment;
 import se.chalmers.eda397.team7.so.data.entity.EntityUtils;
 import se.chalmers.eda397.team7.so.data.entity.Post;
 import se.chalmers.eda397.team7.so.datalayer.DataLayerFactory;
 import se.chalmers.eda397.team7.so.datalayer.PostDataLayer;
-import so.chalmers.eda397.so.data.entity.CommentListAdapter;
+import so.chalmers.eda397.so.data.entity.AnswerListAdapter;
 import android.app.Activity;
-import android.app.ListFragment;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.TextView.BufferType;
+import android.widget.Toast;
 
 public class QuestionInformation extends Activity{
 	
@@ -33,12 +33,13 @@ public class QuestionInformation extends Activity{
 	private TextView dateQuestionTextView;
 	private TextView nViewsTextView;
 	private Button SeeAllAnswers;
-	private ListFragment answersFragment;
+	private ListView answersListView;
 	
 	private Bundle bundle;
+	private Integer idQuestion;
 	private Post question;
 	private PostDataLayer postDataLayer;
-	private ArrayList<Comment> answerList;
+	private ArrayList<Post> answerList;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +48,7 @@ public class QuestionInformation extends Activity{
 		setContentView(R.layout.question_info);
 
 		bundle = getIntent().getExtras();
-		Integer idQuestion = bundle.getInt("idQuestion");
+		idQuestion = bundle.getInt("idQuestion");
 		
 		try {
 			SQLiteSODatabaseHelper test = new SQLiteSODatabaseHelper(this.getApplicationContext());
@@ -67,7 +68,7 @@ public class QuestionInformation extends Activity{
 		nViewsTextView = (TextView) findViewById(R.id.textViewNumberViews);
 		tagListTextView = (TextView) findViewById(R.id.textViewTagList);
 		SeeAllAnswers = (Button) findViewById(R.id.buttonSeeAnswers);
-		answersFragment = (ListFragment)getFragmentManager().findFragmentById(R.id.fragmentAnswersQuestions);
+		answersListView = (ListView) findViewById(R.id.listViewAnswersOfQuestion);
 		
 		questionTitleTextView.setText(question.getTitle());
 		questionBodyTextView.setText(EntityUtils.extractText(question.getBody()),BufferType.SPANNABLE);
@@ -85,12 +86,39 @@ public class QuestionInformation extends Activity{
 		else 
 			SeeAllAnswers.setText("See " + question.getAnswer_count().toString() + " answers");
 		
-		answerList = (ArrayList<Comment>)question.getComments();
-		//We got no elements in answerList(getComments is wrong!!!!)
-		answersFragment.setListAdapter(new CommentListAdapter(this, answerList, R.layout.comment_item));
+		
 
 	}
 	
+	//Callback method for the button seeAnswers
+	public void showAnswers(View view){
+		
+		//To solve the problem of having the ListView inside a ScrollView
+		answersListView.setOnTouchListener(new ListView.OnTouchListener() {
+		        @Override
+		        public boolean onTouch(View v, MotionEvent event) {
+		            int action = event.getAction();
+		            switch (action) {
+		            case MotionEvent.ACTION_DOWN:
+		                // Disallow ScrollView to intercept touch events.
+		                v.getParent().requestDisallowInterceptTouchEvent(true);
+		                break;
+
+		            case MotionEvent.ACTION_UP:
+		                // Allow ScrollView to intercept touch events.
+		                v.getParent().requestDisallowInterceptTouchEvent(false);
+		                break;
+		            }
+
+		            // Handle ListView touch events.
+		            v.onTouchEvent(event);
+		            return true;
+		        }
+		    });
+		answerList = (ArrayList<Post>)postDataLayer.getAnswersByPostId(idQuestion);
+
+		answersListView.setAdapter(new AnswerListAdapter(this, answerList, R.layout.answer_item));
+	}
 	
 	
 

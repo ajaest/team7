@@ -404,6 +404,11 @@ public class PostDataLayer extends DataLayer<Post>{
 				" id = (SELECT owner_user_id FROM posts WHERE id=?)";
 		return userDataLayer.querySingleInstance(queryString, new String[]{idQuestion.toString()});
 	}
+	
+	public List<Post> getAnswersByPostId(Integer id){
+		String query = "SELECT * FROM posts WHERE parent_id = ? ";
+		return this.querySortedInstanceSet(query, new String[]{id.toString()});
+	}
 
 }
 

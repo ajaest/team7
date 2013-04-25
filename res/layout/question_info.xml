@@ -1,89 +1,95 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/scrollView1"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/scrollView1"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent">
 
-    <LinearLayout 
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical" >
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="15dp" >
+    
+         <LinearLayout
+             android:layout_width="fill_parent"
+             android:layout_height="wrap_content"
+             android:orientation="vertical" >
 
-        <ImageButton
-            android:id="@+id/imageButtonStarQuestion"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/star" />
+	    	<LinearLayout
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_margin="15dp" >
+		
+		        <ImageButton
+		            android:id="@+id/imageButtonStarQuestion"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:src="@drawable/star" />
+		
+		        <TextView
+		            android:id="@+id/textViewTitleQuestion"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:text="Large Text"
+		            android:textAppearance="?android:attr/textAppearanceLarge" />
+		
+		    </LinearLayout>
+		
+		    <TextView
+		        android:id="@+id/textViewBodyQuestion"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_margin="10dp"
+		        android:text="fdnfaoienfiodsnfdsnoidsfadslfldsfmldsflsdkfjlskdfjsdlkfnsldfnlskdfalkdsfjlksdjfsdjfoighrioghwroqtjo" />
+		
+		    <TextView
+		        android:id="@+id/textViewTagList"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_margin="10dp"
+		        android:text="TAG 1 TAG 2 TAG 3 TAG 4 TAG 5 TAG 6 TAG 7"
+		        android:textAppearance="?android:attr/textAppearanceMedium" />
+		
+		    <TextView
+		        android:id="@+id/textViewOwnerQuestion"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_gravity="right"
+		        android:layout_marginBottom="5dp"
+		        android:layout_marginRight="20dp"
+		        android:layout_marginTop="10dp"
+		        android:text="TextView" />
+		
+		    <TextView
+		        android:id="@+id/textViewDateQuestion"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_gravity="right"
+		        android:layout_marginBottom="5dp"
+		        android:layout_marginRight="20dp"
+		        android:layout_marginTop="5dp"
+		        android:text="TextView" />
+		
+		    <TextView
+		        android:id="@+id/textViewNumberViews"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_gravity="right"
+		        android:layout_marginBottom="10dp"
+		        android:layout_marginRight="20dp"
+		        android:layout_marginTop="5dp"
+		        android:text="TextView" />
+		
+		    <Button
+		        android:id="@+id/buttonSeeAnswers"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:onClick="showAnswers"
+		        android:text="See Answers" />
 
-        <TextView
-            android:id="@+id/textViewTitleQuestion"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Large Text"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+		    <ListView
+		        android:id="@+id/listViewAnswersOfQuestion"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_marginTop="10dp" >
 
-    </LinearLayout>
+		    </ListView>
 
-    <TextView
-        android:id="@+id/textViewBodyQuestion"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:text="fdnfaoienfiodsnfdsnoidsfadslfldsfmldsflsdkfjlskdfjsdlkfnsldfnlskdfalkdsfjlksdjfsdjfoighrioghwroqtjo" />
+	</LinearLayout>
 
-    <TextView
-        android:id="@+id/textViewTagList"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:text="TAG 1 TAG 2 TAG 3 TAG 4 TAG 5 TAG 6 TAG 7"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
-        android:id="@+id/textViewOwnerQuestion"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:layout_marginBottom="5dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="10dp"
-        android:text="TextView" />
-
-    <TextView
-        android:id="@+id/textViewDateQuestion"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:layout_marginBottom="5dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="5dp"
-        android:text="TextView" />
-
-    <TextView
-        android:id="@+id/textViewNumberViews"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:layout_marginBottom="10dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="5dp"
-        android:text="TextView" />
-
-    <Button
-        android:id="@+id/buttonSeeAnswers"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="See Answers" />
-
-    <fragment
-        android:id="@+id/fragmentAnswersQuestions"
-        android:name="android.app.ListFragment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-</LinearLayout>
 </ScrollView>

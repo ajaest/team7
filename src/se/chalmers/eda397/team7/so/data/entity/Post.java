@@ -106,7 +106,8 @@ public class Post extends Entity {
 
 		return this.commendDl.getComentsByPostId(this.getId());
 	}
-
+	
+	
 	public Integer getId() {
 		return id;
 	}
