@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import se.chalmers.eda397.team7.so.data.entity.Comment;
+import se.chalmers.eda397.team7.so.data.entity.Post;
 import android.annotation.SuppressLint;
 import android.database.Cursor;
 

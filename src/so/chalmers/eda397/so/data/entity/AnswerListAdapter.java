@@ -4,8 +4,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 
+
 import se.chalmers.eda397.team7.so.R;
-import se.chalmers.eda397.team7.so.data.entity.Comment;
+import se.chalmers.eda397.team7.so.data.entity.EntityUtils;
 import se.chalmers.eda397.team7.so.data.entity.Post;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -14,15 +15,15 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-public class CommentListAdapter extends ArrayAdapter<Comment>{
+public class AnswerListAdapter extends ArrayAdapter<Post>{
 
-	private ArrayList<Comment> commentList;
+	private ArrayList<Post> answerList;
 	private Context context;
 	private int layout;
 	
-	public CommentListAdapter(Context context, ArrayList<Comment> commentList, int layout) {
-		super( context, R.layout.question_item, commentList);
-		this.commentList = commentList;
+	public AnswerListAdapter(Context context, ArrayList<Post> answerList, int layout) {
+		super( context, R.layout.question_item, answerList);
+		this.answerList = answerList;
 		this.context = context;
 		this.layout = layout;
 	}
@@ -35,9 +36,9 @@ public class CommentListAdapter extends ArrayAdapter<Comment>{
 			row=inflater.inflate(this.layout, parent, false);
 			TextView answerTextView =(TextView)row.findViewById(R.id.textViewAnswer);
 			TextView dateTextView = (TextView) row.findViewById(R.id.textViewDateAnswer);
-			answerTextView.setText(this.commentList.get(position).getText());
+			answerTextView.setText(EntityUtils.extractText(this.answerList.get(position).getBody()));
 			SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.US);
-			dateTextView.setText(df.format(this.commentList.get(position).getCreation_date()));
+			dateTextView.setText(df.format(this.answerList.get(position).getCreation_date()));
 		//}
 		return(row);
 	}
