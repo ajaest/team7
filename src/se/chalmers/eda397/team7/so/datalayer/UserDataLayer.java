@@ -33,6 +33,14 @@ public class UserDataLayer extends DataLayer<User>{
 		return this.querySingleInstance(query, new String[]{id.toString()});
 	}
 	
+	
+	// Henriks stupid search
+	public ArrayList<User> searchForUser(String searchString){
+		String query;
+		query = "SELECT * FROM users WHERE display_name LIKE '%"+searchString+"%'";
+		return (ArrayList<User>) this.querySortedInstanceSet(query, null);
+	}
+	
 	public void updateUser(Integer id, Map<String, String> attValues) throws SQLDataRuntimeException{
 		
 		Map<String, String> key;

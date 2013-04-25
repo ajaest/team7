@@ -16,6 +16,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
@@ -41,6 +42,8 @@ public class HomeActivity extends Activity {
 		final Button TagButton = (Button) findViewById(R.id.home_tag);
 		final SearchView searchView = (SearchView) findViewById(R.id.searchView1);
 		final TextView advSearch = (TextView) findViewById(R.id.home_textview);
+		// just to get text underlined
+		advSearch.setPaintFlags(advSearch.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
 		// database stuff
 		Context ctx = this.getApplicationContext();
