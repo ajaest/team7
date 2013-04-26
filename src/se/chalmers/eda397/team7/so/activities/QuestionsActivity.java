@@ -8,11 +8,9 @@ package se.chalmers.eda397.team7.so.activities;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import se.chalmers.eda397.team7.so.R;
-import se.chalmers.eda397.team7.so.SearchActivity;
 import se.chalmers.eda397.team7.so.data.SQLiteSODatabaseHelper;
 import se.chalmers.eda397.team7.so.data.entity.Post;
 import se.chalmers.eda397.team7.so.datalayer.DataLayerFactory;
@@ -25,9 +23,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Toast;
+import android.widget.ListView;
 
 public class QuestionsActivity extends Activity {
 
@@ -92,7 +89,7 @@ public class QuestionsActivity extends Activity {
 	private ArrayList<Post> retrieveList(PostDataLayer postDataLayer){
 		ArrayList<Post> questions = new ArrayList<Post>();
 
-		questions = postDataLayer.getQuestionList();
+		questions = new ArrayList<Post>(postDataLayer.getQuestionList());
 
 		return questions;
 	}
