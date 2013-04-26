@@ -4,8 +4,10 @@ import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import se.chalmers.eda397.team7.so.datalayer.CommentDataLayer;
 import se.chalmers.eda397.team7.so.datalayer.DataLayerFactory;
@@ -171,13 +173,13 @@ public class Post extends Entity {
 		return title;
 	}
 
-	public List<String> getTags() {
+	public Set<String> getTags() {
 		
 		String[] tags;
 		
-		tags = this.tags.substring(1, this.tags.length()-1).split("<>");
+		tags = this.tags.substring(1, this.tags.length()-1).split("><");
 		
-		return Arrays.asList(tags);
+		return new HashSet<String>(Arrays.asList(tags));
 	}
 
 	public Integer getAnswer_count() {
