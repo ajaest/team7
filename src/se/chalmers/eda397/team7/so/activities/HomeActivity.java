@@ -99,7 +99,7 @@ public class HomeActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				Intent intent =  new Intent(HomeActivity.this, QuestionsActivity.class);
+				Intent intent =  new Intent(HomeActivity.this, Questions_Tab_Activity.class);
 				startActivity(intent);
 
 			}

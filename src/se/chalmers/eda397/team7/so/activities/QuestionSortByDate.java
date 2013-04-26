@@ -1,10 +1,5 @@
 package se.chalmers.eda397.team7.so.activities;
-/*
- * TypeSearch
- * 	1 = SearchFullText Question
- * 	2 = Search Tag Question
- *  3 = Search User 
- */ 
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -24,10 +19,10 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import android.widget.AdapterView.OnItemClickListener;
 
-public class QuestionsActivity extends Activity {
+public class QuestionSortByDate extends Activity{
 
 	private ListView questionListView;
 	private List<Post> questionList= new ArrayList<Post>();
@@ -65,11 +60,6 @@ public class QuestionsActivity extends Activity {
 		else {
 			questionList = retrieveList(postDataLayer);
 		}
-
-
-
-
-
 
 		questionListView = (ListView)findViewById(R.id.listViewQuestions);
 		questionListView.setAdapter(new PostListAdapter(this, questionList, R.layout.question_item));
@@ -123,5 +113,4 @@ public class QuestionsActivity extends Activity {
 		questions = postDataLayer.pagedTagSearch(wordSet, 50, 1);
 		return questions;
 	}
-
 }

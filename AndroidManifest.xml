@@ -56,6 +56,18 @@
             android:name="se.chalmers.eda397.team7.so.SearchActivity"
             android:label="@string/title_activity_search" >
         </activity>
+        <activity
+            android:name="se.chalmers.eda397.team7.so.activities.QuestionSortByDate"
+            android:label="@string/title_activity_search" >
+        </activity>
+        <activity
+            android:name="se.chalmers.eda397.team7.so.activities.QuestionSortByNoA"
+            android:label="@string/title_activity_search" >
+        </activity>
+        <activity
+            android:name="se.chalmers.eda397.team7.so.activities.Questions_Tab_Activity"
+            android:label="@string/title_activity_search" >
+        </activity>
     </application>
 
 </manifest>

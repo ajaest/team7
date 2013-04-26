@@ -495,6 +495,11 @@ public class PostDataLayer extends DataLayer<Post>{
 		return this.querySortedInstanceSet(query, new String[]{id.toString()});
 	}
 
+	public List<Post> getQuestionSortedBy(String sortCriteria){
+		String queryString = "SELECT * FROM posts WHERE post_type_id=1 ORDER BY "+ sortCriteria +" DESC LIMIT 40";
+		return this.querySortedInstanceSet(queryString, new String[]{});
+	}
+	
 	
 //	
 //	public List<String> getTags(Integer id){
