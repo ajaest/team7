@@ -160,6 +160,26 @@ public class PostDataLayerTest extends InstrumentationTestCase {
 		
 	}
 	
+	public void test_pagedTagSearch(){
+		
+		Set<String> words                       ;
+		List<PostIndexInformation> indexResults ;
+		
+		
+		words = new HashSet<String>(Arrays.asList(new String[]{"php", "mysql", "apache"}));
+		indexResults = new ArrayList<PostIndexInformation>(this.postDL.indexedTagSearch(words));
+		
+		List<Post> postResults;
+		for(int i=0; i<(indexResults.size()/10); i++){
+			postResults = this.postDL.pagedTagSearch(words, 10, i);
+			
+			for(int j=0; j<postResults.size(); j++){
+				assertEquals(indexResults.get(i*10 + j).getId(), postResults.get(j).getId());
+			}
+		}
+
+	}
+	
 	//////////////////////////////////////////////////////////
 	////////// Auxiliary methods
 	//////////////////////////////////////////////////////////

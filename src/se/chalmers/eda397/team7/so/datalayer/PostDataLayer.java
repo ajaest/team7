@@ -23,18 +23,21 @@ import android.util.Log;
 public class PostDataLayer extends DataLayer<Post>{
 	
 	/* Lazy retrievers */
-	private DataLayer.LazyRetriever<String, PostIndexInformation> indexedFullTextLazyRetriever; 	
+	private DataLayer.LazyRetriever<String, PostIndexInformation> indexedFullTextLazyRetriever;
+	private DataLayer.LazyRetriever<String, PostIndexInformation> indexedTagLazyRetriever     ; 	
 
 	/* Cache IDS */
 	private static final Integer CACHE_ID_pagedFullTextSearchCache;
+	private static final Integer CACHE_ID_pagedTagSearch          ;
 	static{
 		CACHE_ID_pagedFullTextSearchCache = "se.chalmers.eda397.team7.so.datalayer.PostDataLayer#pagedFullTextSearchCache(Set<String>, Integer, Integer)".hashCode();
+		CACHE_ID_pagedTagSearch           = "se.chalmers.eda397.team7.so.datalayer.PostDataLayer#pagedTagSearch          (Set<String>, Integer, Integer)".hashCode();
 	}
 		
 	protected PostDataLayer(DataLayerFactory dl) {
 		super(dl);
 		
-		final PostDataLayer                     thiz               = this;
+		final PostDataLayer thiz = this;
 		
 		indexedFullTextLazyRetriever = new 
 			DataLayer.LazyRetriever<String, PostIndexInformation>() {
@@ -45,6 +48,16 @@ public class PostDataLayer extends DataLayer<Post>{
 				}
 			}
 		;
+		
+		indexedTagLazyRetriever = new 
+				DataLayer.LazyRetriever<String, PostIndexInformation>() {
+					@Override
+					public Collection<PostIndexInformation> retrieve(Set<String> words) {
+						
+						return thiz.indexedTagSearch(words);
+					}
+				}
+			;
 		
 	}
 
@@ -140,6 +153,11 @@ public class PostDataLayer extends DataLayer<Post>{
 		return this.pagedSearch(words, pageSize, page, this.indexedFullTextLazyRetriever, PostDataLayer.CACHE_ID_pagedFullTextSearchCache);
 	}
 	
+	public List<Post> pagedTagSearch(Set<String> words, Integer pageSize, Integer page){
+		
+		return this.pagedSearch(words, pageSize, page, this.indexedTagLazyRetriever, PostDataLayer.CACHE_ID_pagedTagSearch);
+	}
+	
 	//////////////////////////////////////
 	/////////// Indexed searches
 	//////////////////////////////////////
@@ -183,120 +201,6 @@ public class PostDataLayer extends DataLayer<Post>{
 	 * @see PostIndexInformation
 	 * @see PostDataLayer#pagedFullTextSearch(Set, Integer, Integer)
 	 */
-//	@SuppressLint("UseSparseArrays")
-//	public SortedSet<PostIndexInformation> indexedfullTextSearch(Set<String> words){
-//		
-//		Map<Integer,PostIndexInformation> indexInfos    ;
-//		SortedSet<PostIndexInformation> sortedIndexInfos;
-//				
-//		SQLiteDatabase db ;
-//		Cursor         cur;
-//		
-//		String[] wordsArray;
-//		
-//		String titleIndexQuery    ;
-//		String postIndexQuery     ;
-//		String commentsIndexQuery ;
-//		String tagsIndexQuery     ;
-//		
-//		PostIndexInformation postInfo;
-//		Integer              postId  ;
-//		
-//		long tStart, tEnd;
-//		
-//		
-//		tStart = System.currentTimeMillis();
-//		
-//		titleIndexQuery    = generateSearchQuery(words.size(), "searchindex_post_titles", "word");
-//		tagsIndexQuery     = generateSearchQuery(words.size(), "searchindex_tags"       , "tag" );
-//		postIndexQuery     = generateSearchQuery(words.size(), "searchindex_posts"      , "word");
-//		commentsIndexQuery = generateSearchQuery(words.size(), "searchindex_comments"   , "word");
-//		
-//		indexInfos = new HashMap<Integer,PostIndexInformation>();
-//		
-//		db = this.getDbInstance();
-//		
-//		
-//		wordsArray = new String[words.size()];
-//		wordsArray = words.toArray(wordsArray);
-//		
-//		/* Post titles */
-//		cur = db.rawQuery(titleIndexQuery, wordsArray);
-//		
-//		while(cur.moveToNext()){
-//			postId = cur.getInt(0);
-//			
-//			postInfo = indexInfos.get(postId);
-//			
-//			if(postInfo==null){
-//				postInfo = new PostIndexInformation(this,postId);
-//				indexInfos.put(postId, postInfo);
-//			}
-//			
-//			postInfo.incrementTitleMatch();
-//		}
-//		
-//		/* Tags */
-//		cur = db.rawQuery(tagsIndexQuery, wordsArray);
-//		
-//		while(cur.moveToNext()){
-//			postId = cur.getInt(0);
-//			
-//			postInfo = indexInfos.get(postId);
-//			
-//			if(postInfo==null){
-//				postInfo = new PostIndexInformation(this,postId);
-//				indexInfos.put(postId, postInfo);
-//			}
-//			
-//			postInfo.incrementTagMatch();
-//		}
-//		
-//		/* Posts */
-//		cur = db.rawQuery(postIndexQuery, wordsArray);
-//		
-//		while(cur.moveToNext()){
-//			postId = cur.getInt(0);
-//			
-//			postInfo = indexInfos.get(postId);
-//			
-//			if(postInfo==null){
-//				postInfo = new PostIndexInformation(this,postId);
-//				indexInfos.put(postId, postInfo);
-//			}
-//			
-//			postInfo.incrementPostMatch();
-//		}
-//		
-//		/* Comments */
-//		cur = db.rawQuery(commentsIndexQuery, wordsArray);
-//		
-//		while(cur.moveToNext()){
-//			postId = cur.getInt(0);
-//			
-//			postInfo = indexInfos.get(postId);
-//			
-//			if(postInfo==null){
-//				postInfo = new PostIndexInformation(this,postId);
-//				indexInfos.put(postId, postInfo);
-//			}
-//			
-//			postInfo.incrementCommentMatch();
-//		}
-//		
-//		/* Now we sort the results */
-//		sortedIndexInfos = new TreeSet<PostDataLayer.PostIndexInformation>();
-//		sortedIndexInfos.addAll(indexInfos.values());
-//		
-//		/* And retrieve the posts in order */
-//		
-//		tEnd = System.currentTimeMillis();
-//		
-//		Log.d("se.chalmers.eda397.team7.so.datalayer.DataLayer#pagedSearch", "Finished retrieving a " + sortedIndexInfos.size() + " sized list from a full text search from the database in  " + (tEnd - tStart) + "ms");
-//		
-//		return sortedIndexInfos;
-//	}
-	
 	@SuppressLint("UseSparseArrays")
 	public SortedSet<PostIndexInformation> indexedfullTextSearch(Set<String> words){
 		
