@@ -1,5 +1,6 @@
 package se.chalmers.eda397.team7.so.datalayer;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
@@ -122,7 +123,7 @@ public class PostDataLayer extends DataLayer<Post>{
 	 */
 	public Post getPostById(Integer id){
 
-		return this.querySingleInstance("posts", new String[]{id.toString()});
+		return this.querySingleInstance("SELECT * FROM posts WHERE id = ?", new String[]{id.toString()});
 	}
 
 
