@@ -1,5 +1,6 @@
 package se.chalmers.eda397.team7.so.activities;
 
+
 import java.io.IOException;
 import java.util.List;
 

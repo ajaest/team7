@@ -9,6 +9,9 @@ import java.util.Set;
 import java.util.SortedSet;
 
 import se.chalmers.eda397.team7.so.R.id;
+import se.chalmers.eda397.team7.so.activities.HomeActivity;
+import se.chalmers.eda397.team7.so.activities.QuestionsActivity;
+import se.chalmers.eda397.team7.so.activities.UserListActivity;
 import se.chalmers.eda397.team7.so.data.SQLiteSODatabaseHelper;
 import se.chalmers.eda397.team7.so.data.entity.Post;
 import se.chalmers.eda397.team7.so.data.entity.User;
@@ -21,6 +24,7 @@ import android.provider.UserDictionary;
 import android.provider.UserDictionary.Words;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.view.Menu;
 import android.widget.RadioButton;
@@ -29,7 +33,12 @@ import android.widget.SearchView;
 import android.widget.SearchView.OnQueryTextListener;
 import android.widget.TextView;
 import android.widget.Toast;
-
+/*
+ * TypeSearch
+ * 	1 = SearchFullText Question
+ * 	2 = Search Tag Question
+ *  3 = Search User 
+ */ 
 public class SearchActivity extends Activity {
 
 	@Override
@@ -43,19 +52,6 @@ public class SearchActivity extends Activity {
 		final SearchView advSearch = (SearchView) findViewById(R.id.advSearchView);
 
 
-		Context ctx = this.getApplicationContext();
-		SQLiteSODatabaseHelper databaseHelper = null;
-		try {
-			databaseHelper = new SQLiteSODatabaseHelper(ctx);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		SQLiteDatabase db = databaseHelper.getWritableDatabase();
-		DataLayerFactory dlf = new DataLayerFactory(db);
-		final PostDataLayer postDL = dlf.createPostDataLayer();
-		final UserDataLayer userDL = dlf.createUserDataLayer();
-
 
 		advSearch.setOnQueryTextListener(new OnQueryTextListener() {
 
@@ -63,15 +59,20 @@ public class SearchActivity extends Activity {
 			public boolean onQueryTextSubmit(String query) {
 
 				if (radioQuestion.isChecked()) {
-
-					searchForQuestion(query,postDL);
+					Intent intent = new Intent(SearchActivity.this, QuestionsActivity.class);
+					intent.putExtra("typeSearch", 1);
+					intent.putExtra("query", query);
+					startActivity(intent);
 				}
 				else if (radioTag.isChecked()) {
-					searchForTags(query);	
+					
 				}
 
 				else if (radioUser.isChecked()){
-					searchForUser(query,userDL);
+					Intent intent = new Intent(SearchActivity.this, UserListActivity.class);
+					intent.putExtra("typeSearch", 3);
+					intent.putExtra("query", query);
+					startActivity(intent);
 
 				}
 
@@ -80,6 +81,7 @@ public class SearchActivity extends Activity {
 
 			@Override
 			public boolean onQueryTextChange(String newText) {
+
 
 				return false;
 			}
@@ -94,59 +96,6 @@ public class SearchActivity extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.search, menu);
 		return true;
-	}
-
-
-
-	public void searchForQuestion(String query, PostDataLayer postDL){
-		Set<String> wordSet = new HashSet<String>();
-		List<Post> foundPosts = new ArrayList<Post>();
-		String[] parts = query.split(" ");
-		for (String word : parts) {
-			wordSet.add(word);
-		}
-		foundPosts.addAll(postDL.pagedFullText(wordSet, 50, 1));
-
-		// testing to print to textview
-		final TextView testTextView = (TextView) findViewById(R.id.textView1);
-		testTextView.setText("test");
-		String tempString = "";
-		for (Post p : foundPosts){
-			if(p.getTitle() != "null"){
-				tempString = tempString + p.getTitle() + System.getProperty("line.separator");
-			}
-		}
-
-		testTextView.setText(tempString);
-
-
-
-
-
-	}
-
-	public void searchForTags(String query){
-		Toast.makeText(getApplicationContext(),"This is a tag " + query , Toast.LENGTH_LONG).show();
-
-
-
-	}
-
-	public void searchForUser(String query, UserDataLayer userDL){
-		ArrayList<User> userList = new ArrayList<User>();
-		userList.addAll(userDL.searchForUser(query));
-		
-		// testing to print to textview
-		final TextView testTextView = (TextView) findViewById(R.id.textView1);
-		testTextView.setText("test");
-		String tempString = "";
-		for (User u : userList){
-			tempString = tempString + u.getDisplay_name() + System.getProperty("line.separator");
-
-		}
-
-		testTextView.setText(tempString);
-
 	}
 
 

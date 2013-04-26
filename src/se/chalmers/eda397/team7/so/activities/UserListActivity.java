@@ -23,12 +23,45 @@ public class UserListActivity extends Activity {
 
 	private ArrayList<User> userList = new ArrayList<User>();
 	private ListView userListView;
+	private Bundle bundle;
+	String query="";
+	int typeSearch = 0;
+	UserDataLayer userDataLayer = null;
+
+
+
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_user_list);
 		
-		userList = retrieveUsers();
+		try {
+			SQLiteSODatabaseHelper test = new SQLiteSODatabaseHelper(this.getApplicationContext());
+			SQLiteDatabase db = test.getWritableDatabase();
+			DataLayerFactory factory = new DataLayerFactory(db);
+			userDataLayer= factory.createUserDataLayer();
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+
+		bundle = getIntent().getExtras();
+		if (bundle != null){
+			typeSearch = bundle.getInt("typeSearch");
+			query = bundle.getString("query");
+		}
+		if (typeSearch == 3){ // It user search
+			userList = retriveUsersByName(userDataLayer, query);
+		}
+		else {
+		
+			userList = retrieveUsers(userDataLayer);
+		}
+
+
 		userListView = (ListView)findViewById(R.id.listViewUsers);
 		userListView.setAdapter(new UserListAdapter(this, userList, R.layout.user_item));
 		userListView.setOnItemClickListener(new OnItemClickListener(){
@@ -50,20 +83,16 @@ public class UserListActivity extends Activity {
 		return true;
 	}
 
-	
-	private ArrayList<User> retrieveUsers(){
+
+	private ArrayList<User> retrieveUsers(UserDataLayer userDataLayer){
 		ArrayList<User> users = new ArrayList<User>();
-		
-		try {
-			SQLiteSODatabaseHelper test = new SQLiteSODatabaseHelper(this.getApplicationContext());
-			SQLiteDatabase db = test.getWritableDatabase();
-			DataLayerFactory factory = new DataLayerFactory(db);
-			UserDataLayer userDataLayer= factory.createUserDataLayer();
-			users = userDataLayer.getListUsers();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
+		users = userDataLayer.getListUsers();
+		return users;
+	}
+	private ArrayList<User> retriveUsersByName(UserDataLayer userDataLayer, String query){
+		ArrayList<User> users = new ArrayList<User>();
+		users = userDataLayer.searchForUser(query);
 		return users;
 	}
 }
