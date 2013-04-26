@@ -39,6 +39,7 @@ public class QuestionInformation extends Activity{
 	private Post question;
 	private PostDataLayer postDataLayer;
 	private ArrayList<Post> answerList;
+	private ArrayList<String> tagList;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +80,9 @@ public class QuestionInformation extends Activity{
 			nViewsTextView.setText("");
 		else
 			nViewsTextView.setText(question.getView_count().toString());
-		//GET TAGS!!!
+		
+		showTags();
+		
 		if (question.getAnswer_count()==0) 
 			SeeAllAnswers.setVisibility(View.GONE);
 		else 
@@ -120,5 +123,14 @@ public class QuestionInformation extends Activity{
 	}
 	
 	
+	//We show the list of tags in the view
+	private void showTags(){
+		tagList = (ArrayList<String>)postDataLayer.getTags(idQuestion);
+		StringBuilder sbBuilder = new StringBuilder("Tags: ");
+		for (String tag : tagList) {
+			sbBuilder.append(tag + " ");
+		}
+		tagListTextView.setText(sbBuilder.toString());
+	}
 
 }
