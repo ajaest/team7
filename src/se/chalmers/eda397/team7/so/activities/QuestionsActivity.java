@@ -101,7 +101,7 @@ public class QuestionsActivity extends Activity {
 		for (String word : parts) {
 			wordSet.add(word);
 		}
-		questions.addAll(postDataLayer.pagedFullText(wordSet, 50, 1));
+		questions.addAll(postDataLayer.pagedFullTextSearch(wordSet, 50, 1));
 
 
 		return questions; 

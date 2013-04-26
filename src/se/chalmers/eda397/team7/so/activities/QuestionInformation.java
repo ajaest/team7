@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Set;
 
 import se.chalmers.eda397.team7.so.R;
 import se.chalmers.eda397.team7.so.data.SQLiteSODatabaseHelper;
@@ -39,7 +40,7 @@ public class QuestionInformation extends Activity{
 	private Post question;
 	private PostDataLayer postDataLayer;
 	private ArrayList<Post> answerList;
-	private ArrayList<String> tagList;
+	private Set<String> tagSet;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -125,9 +126,9 @@ public class QuestionInformation extends Activity{
 	
 	//We show the list of tags in the view
 	private void showTags(){
-		tagList = (ArrayList<String>)postDataLayer.getTags(idQuestion);
+		tagSet = question.getTags();
 		StringBuilder sbBuilder = new StringBuilder("Tags: ");
-		for (String tag : tagList) {
+		for (String tag : tagSet) {
 			sbBuilder.append(tag + " ");
 		}
 		tagListTextView.setText(sbBuilder.toString());
