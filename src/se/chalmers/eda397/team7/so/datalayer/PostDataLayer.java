@@ -123,6 +123,7 @@ public class PostDataLayer extends DataLayer<Post>{
 	 */
 	public Post getPostById(Integer id){
 
+
 		return this.querySingleInstance("SELECT * FROM posts WHERE id=?", new String[]{id.toString()});
 	}
 
