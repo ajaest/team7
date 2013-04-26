@@ -24,18 +24,21 @@ import android.util.Log;
 public class PostDataLayer extends DataLayer<Post>{
 	
 	/* Lazy retrievers */
-	private DataLayer.LazyRetriever<String, PostIndexInformation> indexedFullTextLazyRetriever; 	
+	private DataLayer.LazyRetriever<String, PostIndexInformation> indexedFullTextLazyRetriever;
+	private DataLayer.LazyRetriever<String, PostIndexInformation> indexedTagLazyRetriever     ; 	
 
 	/* Cache IDS */
 	private static final Integer CACHE_ID_pagedFullTextSearchCache;
+	private static final Integer CACHE_ID_pagedTagSearch          ;
 	static{
 		CACHE_ID_pagedFullTextSearchCache = "se.chalmers.eda397.team7.so.datalayer.PostDataLayer#pagedFullTextSearchCache(Set<String>, Integer, Integer)".hashCode();
+		CACHE_ID_pagedTagSearch           = "se.chalmers.eda397.team7.so.datalayer.PostDataLayer#pagedTagSearch          (Set<String>, Integer, Integer)".hashCode();
 	}
 		
 	protected PostDataLayer(DataLayerFactory dl) {
 		super(dl);
 		
-		final PostDataLayer                     thiz               = this;
+		final PostDataLayer thiz = this;
 		
 		indexedFullTextLazyRetriever = new 
 			DataLayer.LazyRetriever<String, PostIndexInformation>() {
@@ -46,6 +49,16 @@ public class PostDataLayer extends DataLayer<Post>{
 				}
 			}
 		;
+		
+		indexedTagLazyRetriever = new 
+				DataLayer.LazyRetriever<String, PostIndexInformation>() {
+					@Override
+					public Collection<PostIndexInformation> retrieve(Set<String> words) {
+						
+						return thiz.indexedTagSearch(words);
+					}
+				}
+			;
 		
 	}
 
@@ -144,6 +157,11 @@ public class PostDataLayer extends DataLayer<Post>{
 	public List<Post> pagedFullTextSearch(Set<String> words, Integer pageSize, Integer page){
 		
 		return this.pagedSearch(words, pageSize, page, this.indexedFullTextLazyRetriever, PostDataLayer.CACHE_ID_pagedFullTextSearchCache);
+	}
+	
+	public List<Post> pagedTagSearch(Set<String> words, Integer pageSize, Integer page){
+		
+		return this.pagedSearch(words, pageSize, page, this.indexedTagLazyRetriever, PostDataLayer.CACHE_ID_pagedTagSearch);
 	}
 	
 	//////////////////////////////////////
