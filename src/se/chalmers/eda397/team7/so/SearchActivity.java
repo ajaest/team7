@@ -2,11 +2,9 @@ package se.chalmers.eda397.team7.so;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.SortedSet;
 
 import se.chalmers.eda397.team7.so.R.id;
 import se.chalmers.eda397.team7.so.data.SQLiteSODatabaseHelper;
@@ -14,14 +12,11 @@ import se.chalmers.eda397.team7.so.data.entity.Post;
 import se.chalmers.eda397.team7.so.data.entity.User;
 import se.chalmers.eda397.team7.so.datalayer.DataLayerFactory;
 import se.chalmers.eda397.team7.so.datalayer.PostDataLayer;
-import se.chalmers.eda397.team7.so.datalayer.PostDataLayer.PostIndexInformation;
 import se.chalmers.eda397.team7.so.datalayer.UserDataLayer;
-import android.os.Bundle;
-import android.provider.UserDictionary;
-import android.provider.UserDictionary.Words;
 import android.app.Activity;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
 import android.view.Menu;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;

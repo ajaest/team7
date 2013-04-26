@@ -62,7 +62,7 @@ public class PostDataLayerTest extends InstrumentationTestCase {
 	////////// Tests
 	//////////////////////////////////////////////////////////
 	
-	public void testGetPostById(){
+	public void test_getPostById(){
 		
 		Map<String,String> randomPostAttValues ;
 		Post               retPost             ;
@@ -74,7 +74,7 @@ public class PostDataLayerTest extends InstrumentationTestCase {
 		assertPostAttributeValue(randomPostAttValues, retPost);
 	}
 	
-	public void testGetComments(){
+	public void test_getComments(){
 		
 		Post           p        ;
 		List<Comment> comments  ;
@@ -106,33 +106,58 @@ public class PostDataLayerTest extends InstrumentationTestCase {
 		}
 	}
 	
-	public void testFullText(){
+	public void test_indexedfullTextSearch(){
 		//TODO:
 		Set<String> words = new HashSet<String>(Arrays.asList(new String[]{"php", "mysql", "apache"}));
 		
 		@SuppressWarnings("unused")
-		SortedSet<PostIndexInformation> indexResults = this.postDL.fullText(words);
-		
+		SortedSet<PostIndexInformation> indexResults = this.postDL.indexedfullTextSearch(words);
 	}
 	
-	public void testPagedFullText(){
+	public void test_pagedFullTextSearch(){
 		
 		Set<String> words                       ;
 		List<PostIndexInformation> indexResults ;
 		
 		
 		words = new HashSet<String>(Arrays.asList(new String[]{"php", "mysql", "apache"}));
-		indexResults = new ArrayList<PostIndexInformation>(this.postDL.fullText(words));
+		indexResults = new ArrayList<PostIndexInformation>(this.postDL.indexedfullTextSearch(words));
 		
 		List<Post> postResults;
 		for(int i=0; i<(indexResults.size()/10); i++){
-			postResults = this.postDL.pagedFullText(words, 10, i);
+			postResults = this.postDL.pagedFullTextSearch(words, 10, i);
 			
 			for(int j=0; j<postResults.size(); j++){
-				assertEquals(indexResults.get(i*10 + j).getPostId(), postResults.get(j).getId());
+				assertEquals(indexResults.get(i*10 + j).getId(), postResults.get(j).getId());
 			}
 		}
 
+	}
+	
+	
+	public void test_updatePost(){
+		
+		//TODO
+	}
+	
+	public void test_indexedTagSearch(){
+		
+		Set<String> words = new HashSet<String>(Arrays.asList(new String[]{"php", "mysql", "apache"}));
+		
+		SortedSet<PostIndexInformation> indexResults = this.postDL.indexedTagSearch(words);
+		
+		Post curPost;
+		Set<String> tagIntersection;
+		for(PostIndexInformation postIdx : indexResults){
+			curPost = postIdx.retrieveInstance();
+			 
+			tagIntersection = new HashSet<String>(words);
+			tagIntersection.retainAll(curPost.getTags());
+			
+			
+			assertEquals((Integer)tagIntersection.size(), postIdx.getTagsMatchs());			
+		}
+		
 	}
 	
 	//////////////////////////////////////////////////////////

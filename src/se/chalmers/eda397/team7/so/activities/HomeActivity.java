@@ -3,7 +3,6 @@ package se.chalmers.eda397.team7.so.activities;
 import java.io.IOException;
 import java.util.List;
 
-import se.chalmers.eda397.team7.so.Question;
 import se.chalmers.eda397.team7.so.R;
 import se.chalmers.eda397.team7.so.SearchActivity;
 import se.chalmers.eda397.team7.so.data.SQLiteSODatabaseHelper;
@@ -14,7 +13,6 @@ import se.chalmers.eda397.team7.so.datalayer.PostDataLayer;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Paint;
 import android.os.Bundle;

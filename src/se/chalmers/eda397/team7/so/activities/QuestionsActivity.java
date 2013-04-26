@@ -2,6 +2,7 @@ package se.chalmers.eda397.team7.so.activities;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import se.chalmers.eda397.team7.so.R;
 import se.chalmers.eda397.team7.so.data.SQLiteSODatabaseHelper;
@@ -22,7 +23,7 @@ import android.widget.AdapterView.OnItemClickListener;
 public class QuestionsActivity extends Activity {
 
 	private ListView questionListView;
-	private ArrayList<Post> questionList= new ArrayList<Post>();
+	private List<Post> questionList= new ArrayList<Post>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -51,8 +52,8 @@ public class QuestionsActivity extends Activity {
 		return true;
 	}
 	
-	private ArrayList<Post> retrieveList(){
-		ArrayList<Post> questions = new ArrayList<Post>();
+	private List<Post> retrieveList(){
+		List<Post> questions = new ArrayList<Post>();
 		try {
 			SQLiteSODatabaseHelper test = new SQLiteSODatabaseHelper(this.getApplicationContext());
 			SQLiteDatabase db = test.getWritableDatabase();
