@@ -73,6 +73,7 @@ public class PostDataLayerTest extends InstrumentationTestCase {
 		
 		assertPostAttributeValue(randomPostAttValues, retPost);
 	}
+
 	
 	public void test_getComments(){
 		
