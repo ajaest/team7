@@ -410,6 +410,19 @@ public class PostDataLayer extends DataLayer<Post>{
 		return this.querySortedInstanceSet(query, new String[]{id.toString()});
 	}
 
+	
+	
+	public List<String> getTags(Integer id){
+		List<String> tagsList = new ArrayList<String>();
+		String query = "SELECT tag FROM searchindex_tags WHERE id=?";
+		Cursor cur = this.getDbInstance().rawQuery(query, new String[]{id.toString()});
+		while(cur.moveToNext()){
+			tagsList.add(cur.getString(0));
+		}
+		
+		cur.close();
+		return tagsList;
+	}
 }
 
 
