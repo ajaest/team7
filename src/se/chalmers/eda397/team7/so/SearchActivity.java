@@ -60,7 +60,10 @@ public class SearchActivity extends Activity {
 					startActivity(intent);
 				}
 				else if (radioTag.isChecked()) {
-					
+					Intent intent = new Intent(SearchActivity.this, QuestionsActivity.class);
+					intent.putExtra("typeSearch", 2);
+					intent.putExtra("query", query);
+					startActivity(intent);
 				}
 
 				else if (radioUser.isChecked()){

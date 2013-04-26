@@ -171,12 +171,12 @@ public abstract class DataLayer  <E> {
 	}
 	
 	
-	protected E querySingleInstance(String table, String queryArgs[]){
+	protected E querySingleInstance(String query, String queryArgs[]){
 		
 		Cursor cur;
 		E      ins;
 
-		String query = "SELECT * FROM " + table + " WHERE id=?";
+
 		
 		cur = this.getDbInstance().rawQuery(query, queryArgs);
 		

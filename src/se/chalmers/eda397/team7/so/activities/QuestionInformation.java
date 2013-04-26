@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.TextView.BufferType;
 
 public class QuestionInformation extends Activity{
@@ -49,6 +50,7 @@ public class QuestionInformation extends Activity{
 
 		bundle = getIntent().getExtras();
 		idQuestion = bundle.getInt("idQuestion");
+		
 		
 		try {
 			SQLiteSODatabaseHelper test = new SQLiteSODatabaseHelper(this.getApplicationContext());
@@ -81,7 +83,7 @@ public class QuestionInformation extends Activity{
 		else
 			nViewsTextView.setText(question.getView_count().toString());
 		
-		showTags();
+		//showTags();
 		
 		if (question.getAnswer_count()==0) 
 			SeeAllAnswers.setVisibility(View.GONE);
@@ -124,13 +126,13 @@ public class QuestionInformation extends Activity{
 	
 	
 	//We show the list of tags in the view
-	private void showTags(){
-		tagList = (ArrayList<String>)postDataLayer.getTags(idQuestion);
-		StringBuilder sbBuilder = new StringBuilder("Tags: ");
-		for (String tag : tagList) {
-			sbBuilder.append(tag + " ");
-		}
-		tagListTextView.setText(sbBuilder.toString());
-	}
+//	private void showTags(){
+//		tagList = (ArrayList<String>)postDataLayer.getTags(idQuestion);
+//		StringBuilder sbBuilder = new StringBuilder("Tags: ");
+//		for (String tag : tagList) {
+//			sbBuilder.append(tag + " ");
+//		}
+//		tagListTextView.setText(sbBuilder.toString());
+//	}
 
 }

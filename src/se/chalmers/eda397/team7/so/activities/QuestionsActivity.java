@@ -8,6 +8,7 @@ package se.chalmers.eda397.team7.so.activities;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import se.chalmers.eda397.team7.so.R;
@@ -29,7 +30,7 @@ import android.widget.ListView;
 public class QuestionsActivity extends Activity {
 
 	private ListView questionListView;
-	private ArrayList<Post> questionList= new ArrayList<Post>();
+	private List<Post> questionList= new ArrayList<Post>();
 	private Bundle bundle;
 	String query="";
 	int typeSearch = 0;
@@ -55,6 +56,11 @@ public class QuestionsActivity extends Activity {
 		}
 		if (typeSearch == 1){ // It questions
 			questionList = retriveSearchList(postDataLayer, query);
+		}
+		
+		else if (typeSearch == 2){
+			questionList = retriveQuestionListByTag(postDataLayer, query);
+			
 		}
 		else {
 			questionList = retrieveList(postDataLayer);
@@ -101,15 +107,20 @@ public class QuestionsActivity extends Activity {
 		for (String word : parts) {
 			wordSet.add(word);
 		}
-		questions.addAll(postDataLayer.pagedFullText(wordSet, 50, 1));
+		questions.addAll(postDataLayer.pagedFullTextSearch(wordSet, 50, 1));
 
 
 		return questions; 
 	}
 	
-	private ArrayList<Post> retriveQuestionListByTag(PostDataLayer postDataLayer, String query){
-		ArrayList<Post> questions = new ArrayList<Post>();
-		//postDataLayer.
+	private List<Post> retriveQuestionListByTag(PostDataLayer postDataLayer, String query){
+		List<Post> questions = new ArrayList<Post>();
+		Set<String> wordSet = new HashSet<String>();
+		String[] parts = query.split(" ");
+		for (String word : parts) {
+			wordSet.add(word);
+		}
+		questions = postDataLayer.pagedTagSearch(wordSet, 50, 1);
 		return questions;
 	}
 

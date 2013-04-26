@@ -1,5 +1,6 @@
 package se.chalmers.eda397.team7.so.datalayer;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
@@ -122,7 +123,7 @@ public class PostDataLayer extends DataLayer<Post>{
 	 */
 	public Post getPostById(Integer id){
 
-		return this.querySingleInstance("posts", new String[]{id.toString()});
+		return this.querySingleInstance("SELECT * FROM posts WHERE id=?", new String[]{id.toString()});
 	}
 
 
@@ -145,10 +146,7 @@ public class PostDataLayer extends DataLayer<Post>{
 		return this.querySortedInstanceSet(queryString, new String[]{});
 	}
 	
-	public List<Post> pagedFullText(Set<String> words, Integer pageSize, Integer page){
-		
-		return pagedFullTextSearch(new HashSet<String>(Arrays.asList(new String[]{"java"})), 4, 1);
-	}
+
 
 	//////////////////////////////////////
 	/////////// Paged searches
@@ -497,18 +495,18 @@ public class PostDataLayer extends DataLayer<Post>{
 	}
 
 	
-	
-	public List<String> getTags(Integer id){
-		List<String> tagsList = new ArrayList<String>();
-		String query = "SELECT tag FROM searchindex_tags WHERE id=?";
-		Cursor cur = this.getDbInstance().rawQuery(query, new String[]{id.toString()});
-		while(cur.moveToNext()){
-			tagsList.add(cur.getString(0));
-		}
-		
-		cur.close();
-		return tagsList;
-	}
+//	
+//	public List<String> getTags(Integer id){
+//		List<String> tagsList = new ArrayList<String>();
+//		String query = "SELECT tag FROM searchindex_tags WHERE id=?";
+//		Cursor cur = this.getDbInstance().rawQuery(query, new String[]{id.toString()});
+//		while(cur.moveToNext()){
+//			tagsList.add(cur.getString(0));
+//		}
+//		
+//		cur.close();
+//		return tagsList;
+//	}
 }
 
 
