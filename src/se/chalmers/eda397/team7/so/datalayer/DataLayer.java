@@ -151,18 +151,19 @@ public abstract class DataLayer  <E> {
 	 *            "?" markers in the query
 	 * @return a list of the selected entities ordered by the query criteria
 	 */
-	protected List<E> querySortedInstanceSet(String query, String queryArgs[]){
+	@SuppressWarnings("unchecked")
+	protected <J extends E> List<J> querySortedInstanceSet(String query, String queryArgs[]){
 		
 		Cursor  cur    ;
-		List<E> result ;
+		List<J> result ;
 		
-		result = new ArrayList<E>();
+		result = new ArrayList<J>();
 		
 		cur = this.getDbInstance().rawQuery(query, queryArgs);
 		
 		
 		while(cur.moveToNext()){
-			result.add(this.createNotSyncronizedInstance(cur));
+			result.add((J) this.createNotSyncronizedInstance(cur));
 		}
 		
 		cur.close();
@@ -171,10 +172,10 @@ public abstract class DataLayer  <E> {
 	}
 	
 	
-	protected E querySingleInstance(String query, String queryArgs[]){
+	protected <J extends E> J querySingleInstance(String query, String queryArgs[]){
 		
 		Cursor cur;
-		E      ins;
+		J      ins;
 
 		
 		cur = this.getDbInstance().rawQuery(query, queryArgs);
@@ -329,7 +330,7 @@ public abstract class DataLayer  <E> {
 	 * <b>WARNING</b>: do nor move the current position of cur or data could be lost
 	 * in methods using this function! 
 	 */
-	protected abstract E createNotSyncronizedInstance(Cursor cur);
+	protected abstract <J extends E>  J createNotSyncronizedInstance(Cursor cur);
 	
 	/**
 	 * Returns the system's raw entity factory associated to this data layer

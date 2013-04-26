@@ -53,7 +53,7 @@ public class UserDataLayer extends DataLayer<User>{
 	}
 	
 	@SuppressLint("UseValueOf")
-	@SuppressWarnings("deprecation")
+	@SuppressWarnings({ "deprecation", "unchecked" })
 	@Override
 	protected User createNotSyncronizedInstance(Cursor cur) {
 		

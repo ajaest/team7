@@ -1,13 +1,12 @@
 package so.chalmers.eda397.so.data.entity;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
-
 import se.chalmers.eda397.team7.so.R;
+import se.chalmers.eda397.team7.so.data.entity.Answer;
 import se.chalmers.eda397.team7.so.data.entity.EntityUtils;
-import se.chalmers.eda397.team7.so.data.entity.Post;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,13 +14,13 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-public class AnswerListAdapter extends ArrayAdapter<Post>{
+public class AnswerListAdapter extends ArrayAdapter<Answer>{
 
-	private ArrayList<Post> answerList;
+	private List<Answer> answerList;
 	private Context context;
 	private int layout;
 	
-	public AnswerListAdapter(Context context, ArrayList<Post> answerList, int layout) {
+	public AnswerListAdapter(Context context, List<Answer> answerList, int layout) {
 		super( context, R.layout.question_item, answerList);
 		this.answerList = answerList;
 		this.context = context;

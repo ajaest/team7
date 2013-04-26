@@ -53,7 +53,7 @@
             android:label="@string/title_activity_question_information" >
         </activity>
         <activity
-            android:name="se.chalmers.eda397.team7.so.SearchActivity"
+            android:name="se.chalmers.eda397.team7.so.activities.SearchActivity"
             android:label="@string/title_activity_search" >
         </activity>
         <activity

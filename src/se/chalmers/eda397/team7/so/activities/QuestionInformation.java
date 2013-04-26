@@ -2,14 +2,14 @@ package se.chalmers.eda397.team7.so.activities;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 
 import se.chalmers.eda397.team7.so.R;
 import se.chalmers.eda397.team7.so.data.SQLiteSODatabaseHelper;
+import se.chalmers.eda397.team7.so.data.entity.Answer;
 import se.chalmers.eda397.team7.so.data.entity.EntityUtils;
-import se.chalmers.eda397.team7.so.data.entity.Post;
+import se.chalmers.eda397.team7.so.data.entity.Question;
 import se.chalmers.eda397.team7.so.datalayer.DataLayerFactory;
 import se.chalmers.eda397.team7.so.datalayer.PostDataLayer;
 import so.chalmers.eda397.so.data.entity.AnswerListAdapter;
@@ -21,7 +21,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.TextView.BufferType;
 
 public class QuestionInformation extends Activity{
@@ -38,10 +37,9 @@ public class QuestionInformation extends Activity{
 	
 	private Bundle bundle;
 	private Integer idQuestion;
-	private Post question;
+	private Question question;
 	private PostDataLayer postDataLayer;
-	private ArrayList<Post> answerList;
-	private Set<String> tagSet;
+	private List<Answer> answerList;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +56,7 @@ public class QuestionInformation extends Activity{
 			SQLiteDatabase db = test.getWritableDatabase();
 			DataLayerFactory factory = new DataLayerFactory(db);
 			postDataLayer= factory.createPostDataLayer();
-			question = postDataLayer.getPostById(idQuestion);
+			question = postDataLayer.getQuestionById(idQuestion);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -75,7 +73,7 @@ public class QuestionInformation extends Activity{
 		
 		questionTitleTextView.setText(question.getTitle());
 		questionBodyTextView.setText(EntityUtils.extractText(question.getBody()),BufferType.SPANNABLE);
-		ownerTextView.setText(postDataLayer.getOwnerQuestion(idQuestion).getDisplay_name());
+		ownerTextView.setText(question.getOwnerUser().getDisplay_name());
 		
 		SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.US);
 		dateQuestionTextView.setText(df.format(question.getCreation_date()));
@@ -120,21 +118,11 @@ public class QuestionInformation extends Activity{
 		            return true;
 		        }
 		    });
-		answerList = (ArrayList<Post>)postDataLayer.getAnswersByPostId(idQuestion);
+		answerList = postDataLayer.getAnswersByPostId(idQuestion);
 
 		answersListView.setAdapter(new AnswerListAdapter(this, answerList, R.layout.answer_item));
 	}
 	
-	
-	//We show the list of tags in the view
-	private void showTags(){
-		tagSet = question.getTags();
-		StringBuilder sbBuilder = new StringBuilder("Tags: ");
-		for (String tag : tagSet) {
-			sbBuilder.append(tag + " ");
-		}
-		tagListTextView.setText(sbBuilder.toString());
-	}
 
 
 }

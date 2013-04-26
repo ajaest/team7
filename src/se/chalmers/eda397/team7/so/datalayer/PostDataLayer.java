@@ -1,21 +1,19 @@
 package se.chalmers.eda397.team7.so.datalayer;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import se.chalmers.eda397.team7.so.data.entity.Answer;
 import se.chalmers.eda397.team7.so.data.entity.EntityUtils;
 import se.chalmers.eda397.team7.so.data.entity.Post;
-import se.chalmers.eda397.team7.so.data.entity.User;
+import se.chalmers.eda397.team7.so.data.entity.Question;
 import android.annotation.SuppressLint;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -63,11 +61,8 @@ public class PostDataLayer extends DataLayer<Post>{
 		
 	}
 
-	/**
-	 * In this method the Entity factory is used
-	 * @return
-	 */
-	public Post createPost(
+
+	public Question createQuestion(
 		Integer id                       ,
 		Integer post_type_id             ,
 		Integer parent_id                ,
@@ -89,9 +84,8 @@ public class PostDataLayer extends DataLayer<Post>{
 		Integer comment_count            ,
 		Integer favorite_count 		
 	){
-		Post p = this.getEntityFactory().createPost(
+		Question p = this.getEntityFactory().createQuestion(
 				id                       ,
-				post_type_id             ,
 				parent_id                ,
 				accepted_answer_id       ,
 				creation_date            ,
@@ -118,16 +112,17 @@ public class PostDataLayer extends DataLayer<Post>{
 		return p;
 	}
 	
-	/**
-	 * In this method ones use the sql objet
-	 */
-	public Post getPostById(Integer id){
+	public Question getQuestionById(Integer id){
 
 
 		return this.querySingleInstance("SELECT * FROM posts WHERE id=?", new String[]{id.toString()});
 	}
 
-
+	public List<Answer> getAnswersByPostId(Integer id){
+		String query = "SELECT * FROM posts WHERE parent_id = ? AND post_type_id";
+		
+		return this.querySortedInstanceSet(query, new String[]{id.toString()});
+	}
 
 	public void updatePost(Integer id, Map<String, String> attValues) {
 		
@@ -141,12 +136,13 @@ public class PostDataLayer extends DataLayer<Post>{
 		
 	}
 	
-	//TODO: remove, just for testing!
-	public List<Post> getQuestionList(){
-		String queryString = "SELECT * FROM posts WHERE post_type_id=1 LIMIT 40";
+	
+
+	public List<Question> getQuestionSortedBy(String sortCriteria){
+		String queryString = "SELECT * FROM posts WHERE post_type_id=1 ORDER BY "+ sortCriteria +" DESC LIMIT 40";
+		
 		return this.querySortedInstanceSet(queryString, new String[]{});
 	}
-	
 
 
 	//////////////////////////////////////
@@ -274,10 +270,21 @@ public class PostDataLayer extends DataLayer<Post>{
 	/////////// Private support classes
 	//////////////////////////////////////
 	
+	@SuppressWarnings("unchecked")
 	@Override
-	protected Post createNotSyncronizedInstance(Cursor cur) {
+	protected <E extends Post> E createNotSyncronizedInstance(Cursor cur) {
 		
-		return EntityUtils.createPostFromCursor(this.getEntityFactory(), cur);
+		Integer post_type_id = cur.getInt(cur.getColumnIndex("post_type_id"));
+		Question q;
+		Answer   a;
+		
+		if(post_type_id.equals(1)){
+			q = EntityUtils.createQuestionFromCur(this.getEntityFactory(), cur);
+			return (E) q;
+		}else{
+			a =  EntityUtils.createAnswerFromCur(this.getEntityFactory(), cur);
+			return (E) a;
+		}		
 	}
 	
 	private SortedSet<PostIndexInformation> extractSortedPostIndexesFromCursor(Cursor cur, EnumSet<INDEX_MODE> mode){
@@ -372,7 +379,7 @@ public class PostDataLayer extends DataLayer<Post>{
 
 		
 		public Post retrieveInstance(){
-			return this.pdl.getPostById(this.getId());
+			return this.pdl.getQuestionById(this.getId());
 		}
 		
 		public Integer getTitleMatchs() {
@@ -481,24 +488,7 @@ public class PostDataLayer extends DataLayer<Post>{
 	private enum INDEX_MODE{
 		TAG, TITLE, POST, COMMENT 
 	};
-	
 
-	public User getOwnerQuestion(Integer idQuestion){
-		UserDataLayer userDataLayer = this.getDataLayerFactory().createUserDataLayer();
-		String queryString = "SELECT * FROM users where" +
-				" id = (SELECT owner_user_id FROM posts WHERE id=?)";
-		return userDataLayer.querySingleInstance(queryString, new String[]{idQuestion.toString()});
-	}
-	
-	public List<Post> getAnswersByPostId(Integer id){
-		String query = "SELECT * FROM posts WHERE parent_id = ? ";
-		return this.querySortedInstanceSet(query, new String[]{id.toString()});
-	}
-
-	public List<Post> getQuestionSortedBy(String sortCriteria){
-		String queryString = "SELECT * FROM posts WHERE post_type_id=1 ORDER BY "+ sortCriteria +" DESC LIMIT 40";
-		return this.querySortedInstanceSet(queryString, new String[]{});
-	}
 	
 	
 //	

@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.List;
 
 import se.chalmers.eda397.team7.so.R;
-import se.chalmers.eda397.team7.so.SearchActivity;
 import se.chalmers.eda397.team7.so.data.SQLiteSODatabaseHelper;
 import se.chalmers.eda397.team7.so.data.entity.Comment;
 import se.chalmers.eda397.team7.so.data.entity.Post;
@@ -80,7 +79,7 @@ public class HomeActivity extends Activity {
 					return false;
 				}
 
-				Post p = postDL.getPostById(i);
+				Post p = postDL.getQuestionById(i);
 				if (p != null){
 					Toast.makeText(getApplicationContext(), p.getBody(), Toast.LENGTH_SHORT).show();	
 					List<Comment> comments = p.getComments();

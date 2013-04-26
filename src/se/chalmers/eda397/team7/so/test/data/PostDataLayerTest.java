@@ -69,7 +69,7 @@ public class PostDataLayerTest extends InstrumentationTestCase {
 		
 		
 		randomPostAttValues = generateRandomPostValues();
-		retPost = this.postDL.getPostById(Integer.valueOf(randomPostAttValues.get("id")));
+		retPost = this.postDL.getQuestionById(Integer.valueOf(randomPostAttValues.get("id")));
 		
 		assertPostAttributeValue(randomPostAttValues, retPost);
 	}
@@ -245,7 +245,7 @@ public class PostDataLayerTest extends InstrumentationTestCase {
 		
 		cur.moveToNext();
 		
-		Post p = EntityUtils.createPostFromCursor(this.entityFactory, cur);
+		Post p = EntityUtils.createQuestionFromCur(this.entityFactory, cur);
 		
 		return p;
 	}

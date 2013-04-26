@@ -12,12 +12,14 @@ import java.util.Set;
 import se.chalmers.eda397.team7.so.datalayer.CommentDataLayer;
 import se.chalmers.eda397.team7.so.datalayer.DataLayerFactory;
 import se.chalmers.eda397.team7.so.datalayer.PostDataLayer;
+import se.chalmers.eda397.team7.so.datalayer.UserDataLayer;
 
 public class Post extends Entity {
 	
 	/* Entity relation factories */
 	private final CommentDataLayer commendDl;
-	private final PostDataLayer    postDl   ; 
+	private final PostDataLayer    postDl   ;
+	private final UserDataLayer    userDl   ; 
 	
 	/* Attributes */
 	private  Integer id                       ;
@@ -69,6 +71,7 @@ public class Post extends Entity {
 		
 		this.commendDl = dataLayerFactory.createCommentDataLayer();
 		this.postDl    = dataLayerFactory.createPostDataLayer   ();
+		this.userDl    = dataLayerFactory.createUserDataLayer   ();
 		
 
 		this. id                         = id                       ;
@@ -142,8 +145,12 @@ public class Post extends Entity {
 		return body;
 	}
 
-	public Integer getOwner_user_id() {
+	protected Integer getOwner_user_id() {
 		return owner_user_id;
+	}
+	
+	public User getOwnerUser(){
+		return userDl.getUserById(this.owner_user_id);
 	}
 
 	public Integer getLast_editor_user_id() {

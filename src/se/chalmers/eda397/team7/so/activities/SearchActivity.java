@@ -1,33 +1,15 @@
-package se.chalmers.eda397.team7.so;
+package se.chalmers.eda397.team7.so.activities;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
+import se.chalmers.eda397.team7.so.R;
 import se.chalmers.eda397.team7.so.R.id;
-import se.chalmers.eda397.team7.so.activities.HomeActivity;
-import se.chalmers.eda397.team7.so.activities.QuestionsActivity;
-import se.chalmers.eda397.team7.so.activities.UserListActivity;
-import se.chalmers.eda397.team7.so.data.SQLiteSODatabaseHelper;
-import se.chalmers.eda397.team7.so.data.entity.Post;
-import se.chalmers.eda397.team7.so.data.entity.User;
-import se.chalmers.eda397.team7.so.datalayer.DataLayerFactory;
-import se.chalmers.eda397.team7.so.datalayer.PostDataLayer;
-import se.chalmers.eda397.team7.so.datalayer.UserDataLayer;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.Menu;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SearchView;
 import android.widget.SearchView.OnQueryTextListener;
-import android.widget.TextView;
-import android.widget.Toast;
 /*
  * TypeSearch
  * 	1 = SearchFullText Question
@@ -40,7 +22,7 @@ public class SearchActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_search);
-		final RadioGroup radrioGroup = (RadioGroup) findViewById(R.id.radioGroup);
+		final RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
 		final RadioButton radioQuestion = (RadioButton) findViewById(R.id.questionRadio);
 		final RadioButton radioTag = (RadioButton) findViewById(R.id.tagRadion);
 		final RadioButton radioUser = (RadioButton) findViewById(id.userRadio);

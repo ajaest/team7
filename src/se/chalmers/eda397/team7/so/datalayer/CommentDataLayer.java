@@ -24,7 +24,7 @@ public class CommentDataLayer extends DataLayer<Comment> {
 	}
 	
 	
-	@SuppressWarnings("deprecation")
+	@SuppressWarnings({ "deprecation", "unchecked" })
 	@Override
 	protected Comment createNotSyncronizedInstance(Cursor cur) {
 				
