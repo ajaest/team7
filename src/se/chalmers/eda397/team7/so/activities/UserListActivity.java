@@ -9,11 +9,13 @@ import se.chalmers.eda397.team7.so.data.entity.User;
 import se.chalmers.eda397.team7.so.datalayer.DataLayerFactory;
 import se.chalmers.eda397.team7.so.datalayer.UserDataLayer;
 import so.chalmers.eda397.so.data.entity.UserListAdapter;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -28,7 +30,7 @@ public class UserListActivity extends Activity {
 	int typeSearch = 0;
 	UserDataLayer userDataLayer = null;
 
-
+	private ActionBar actionBar;
 
 
 	@Override
@@ -36,6 +38,9 @@ public class UserListActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_user_list);
 		
+		actionBar = getActionBar();
+		actionBar.setDisplayShowTitleEnabled(true);
+		actionBar.setDisplayHomeAsUpEnabled(true);
 		try {
 			SQLiteSODatabaseHelper test = new SQLiteSODatabaseHelper(this.getApplicationContext());
 			SQLiteDatabase db = test.getWritableDatabase();
@@ -94,5 +99,17 @@ public class UserListActivity extends Activity {
 		ArrayList<User> users = new ArrayList<User>();
 		users = userDataLayer.searchForUser(query);
 		return users;
+	}
+	
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			onBackPressed();
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
 	}
 }

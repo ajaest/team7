@@ -11,6 +11,7 @@ import se.chalmers.eda397.team7.so.data.entity.Comment;
 import se.chalmers.eda397.team7.so.data.entity.Post;
 import se.chalmers.eda397.team7.so.datalayer.DataLayerFactory;
 import se.chalmers.eda397.team7.so.datalayer.PostDataLayer;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -28,11 +29,16 @@ import android.widget.Toast;
 
 public class HomeActivity extends Activity {
 
+	private ActionBar actionBar;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		/*
 		 * setting buttorns
 		 */
+		
+		actionBar = getActionBar();
+		actionBar.setDisplayShowTitleEnabled(true);
+		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home);
 		final Button QButton = (Button) findViewById(R.id.home_question);
