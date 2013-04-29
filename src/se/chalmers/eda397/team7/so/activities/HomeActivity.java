@@ -134,7 +134,8 @@ public class HomeActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				Toast.makeText(getApplicationContext(), "Please implement me ", Toast.LENGTH_SHORT).show();
+				Intent intent = new Intent(HomeActivity.this, TagCloudActivity.class);
+				startActivity(intent);
 
 			}
 		});
