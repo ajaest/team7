@@ -56,6 +56,10 @@
             android:name="se.chalmers.eda397.team7.so.SearchActivity"
             android:label="@string/title_activity_search" >
         </activity>
+        <activity
+            android:name="se.chalmers.eda397.team7.so.activities.TagCloudActivity"
+            android:label="@string/title_activity_search" >
+        </activity>
     </application>
 
 </manifest>
