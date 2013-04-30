@@ -39,8 +39,8 @@ public class UsersSortByAlphabeth extends Activity{
 		setContentView(R.layout.activity_user_list);
 		
 		actionBar = getActionBar();
-		actionBar.setDisplayShowTitleEnabled(true);
-		actionBar.setDisplayHomeAsUpEnabled(true);
+		//actionBar.setDisplayShowTitleEnabled(true);
+		//actionBar.setDisplayHomeAsUpEnabled(true);
 		try {
 			SQLiteSODatabaseHelper test = new SQLiteSODatabaseHelper(this.getApplicationContext());
 			SQLiteDatabase db = test.getWritableDatabase();
@@ -92,7 +92,7 @@ public class UsersSortByAlphabeth extends Activity{
 	private ArrayList<User> retrieveUsersAlphabetically(UserDataLayer userDataLayer){
 		ArrayList<User> users = new ArrayList<User>();
 
-		users = new ArrayList<User>(userDataLayer.getUserSortedByAlphabeth("dispaly_name"));
+		users = new ArrayList<User>(userDataLayer.getUserSortedByAlphabeth("display_name"));
 		return users;
 	}
 	
