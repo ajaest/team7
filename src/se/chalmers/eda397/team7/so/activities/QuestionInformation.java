@@ -10,6 +10,7 @@ import se.chalmers.eda397.team7.so.data.SQLiteSODatabaseHelper;
 import se.chalmers.eda397.team7.so.data.entity.Answer;
 import se.chalmers.eda397.team7.so.data.entity.EntityUtils;
 import se.chalmers.eda397.team7.so.data.entity.Question;
+import se.chalmers.eda397.team7.so.datalayer.AnswerDataLayer;
 import se.chalmers.eda397.team7.so.datalayer.DataLayerFactory;
 import se.chalmers.eda397.team7.so.datalayer.PostDataLayer;
 import so.chalmers.eda397.so.data.entity.AnswerListAdapter;
@@ -38,7 +39,8 @@ public class QuestionInformation extends Activity{
 	private Bundle bundle;
 	private Integer idQuestion;
 	private Question question;
-	private PostDataLayer postDataLayer;
+	private PostDataLayer   postDataLayer  ;
+	private AnswerDataLayer answerDataLayer;
 	private List<Answer> answerList;
 	
 	@Override
@@ -56,6 +58,7 @@ public class QuestionInformation extends Activity{
 			SQLiteDatabase db = test.getWritableDatabase();
 			DataLayerFactory factory = new DataLayerFactory(db);
 			postDataLayer= factory.createPostDataLayer();
+			answerDataLayer = factory.createAnswerDataLayer();
 			question = postDataLayer.getQuestionById(idQuestion);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -118,7 +121,7 @@ public class QuestionInformation extends Activity{
 		            return true;
 		        }
 		    });
-		answerList = postDataLayer.getAnswersByPostId(idQuestion);
+		answerList = answerDataLayer.getAnswersByPostId(idQuestion);
 
 		answersListView.setAdapter(new AnswerListAdapter(this, answerList, R.layout.answer_item));
 	}

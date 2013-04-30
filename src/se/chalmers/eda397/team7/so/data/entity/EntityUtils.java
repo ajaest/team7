@@ -38,7 +38,7 @@ public class EntityUtils {
 		
 		id                       = cur.getInt(cur.getColumnIndex("id"                ));
 		post_type_id             = cur.getInt(cur.getColumnIndex("post_type_id"      ));
-		if(!post_type_id.equals(1)){
+		if(post_type_id.equals(0)){
 			throw new EntityCreationException(
 					"The current cursor value for \"post_type_id\"is not \"0\", the Post (if it's really a Post) it's not an Answer. Is it a Question?");
 		}

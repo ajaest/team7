@@ -15,8 +15,12 @@ $pdo->query('BEGIN TRANSACTION');
 
 echo "==Extracting tag graph from post titles and bodies==\n";
 $progress=1;
-foreach($pdo->query("SELECT id, tags FROM posts ") as $row){
+foreach($pdo->query("SELECT id, tags, parent_id, post_type_id FROM posts ") as $row){
   
+  $post_type = $row['post_type_id'];
+  $post_id = $post_type=='1' ? 'id' : 'parent_id';
+  $post_id = $row[$post_id];
+
   $tagmap = extracttags($row['tags']);
 
   foreach($tagmap as $tag1){

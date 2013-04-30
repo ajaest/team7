@@ -13,6 +13,7 @@ import se.chalmers.eda397.team7.so.data.entity.Comment;
 import se.chalmers.eda397.team7.so.data.entity.EntityFactory;
 import se.chalmers.eda397.team7.so.data.entity.EntityUtils;
 import se.chalmers.eda397.team7.so.data.entity.Post;
+import se.chalmers.eda397.team7.so.data.entity.Question;
 import se.chalmers.eda397.team7.so.datalayer.DataLayerFactory;
 import se.chalmers.eda397.team7.so.datalayer.PostDataLayer;
 import se.chalmers.eda397.team7.so.datalayer.PostDataLayer.PostIndexInformation;
@@ -124,7 +125,7 @@ public class PostDataLayerTest extends InstrumentationTestCase {
 		words = new HashSet<String>(Arrays.asList(new String[]{"php", "mysql", "apache"}));
 		indexResults = new ArrayList<PostIndexInformation>(this.postDL.indexedfullTextSearch(words));
 		
-		List<Post> postResults;
+		List<Question> postResults;
 		for(int i=0; i<(indexResults.size()/10); i++){
 			postResults = this.postDL.pagedFullTextSearch(words, 10, i);
 			
@@ -170,7 +171,7 @@ public class PostDataLayerTest extends InstrumentationTestCase {
 		words = new HashSet<String>(Arrays.asList(new String[]{"php", "mysql", "apache"}));
 		indexResults = new ArrayList<PostIndexInformation>(this.postDL.indexedTagSearch(words));
 		
-		List<Post> postResults;
+		List<Question> postResults;
 		for(int i=0; i<(indexResults.size()/10); i++){
 			postResults = this.postDL.pagedTagSearch(words, 10, i);
 			
@@ -215,13 +216,13 @@ public class PostDataLayerTest extends InstrumentationTestCase {
 		Cursor cur  ;
 		Map<String, String> postRow;
 		
-		query = "SELECT * FROM posts WHERE rowid=(SELECT abs(random())%(SELECT count(*) FROM posts));";
+		query = "SELECT * FROM posts WHERE rowid=(SELECT abs(random())%(SELECT count(*) FROM posts)) AND post_type_id=1;";
 		
-		cur = null;
+		cur = this.db.rawQuery(query, new String[]{});
 		
-		while(cur==null || cur.getCount()==0){
+		do{
 			cur = this.db.rawQuery(query, new String[]{});
-		}
+		}while(cur.getCount()==0);
 		
 		postRow = new HashMap<String, String>(cur.getColumnCount());
 		cur.moveToNext();
@@ -237,14 +238,17 @@ public class PostDataLayerTest extends InstrumentationTestCase {
 		String query;
 		Cursor cur  ;
 		
-		query = "SELECT * FROM posts WHERE rowid=(SELECT abs(random())%(SELECT count(*) FROM posts));";
-		
-		cur = null;
-		
-		cur = this.db.rawQuery(query, new String[]{});
-		
+		do{
+			query = "SELECT * FROM posts WHERE rowid=(SELECT abs(random())%(SELECT count(*) FROM posts)) AND post_type_id=1;";
+			
+			cur = null;
+			
+			cur = this.db.rawQuery(query, new String[]{});
+			
+			
+		}while(cur.getCount()==0);
+			
 		cur.moveToNext();
-		
 		Post p = EntityUtils.createQuestionFromCur(this.entityFactory, cur);
 		
 		return p;

@@ -72,9 +72,18 @@ public abstract class DataLayer  <E> {
 	 *            with different {@code cacheId} are performed, the cache will
 	 *            be cleared twice (1- fill the cache, 2- clear cache for new
 	 *            call and fill, 3- clear cache for new call and fill)
+	 * @param filter
+	 * 			  filter by att expersion (for example, <att>=1)
 	 * @return
 	 */
-	public <A,T extends EntityIndex<E>> List<E> pagedSearch(Set<A> searchArgs, Integer pageSize, Integer page, LazyRetriever<A,T> lazyRetriever, Integer cacheId){
+	public <A,T extends EntityIndex<E>> List<E> pagedSearch(
+			Set<A> searchArgs, 
+			Integer pageSize, 
+			Integer page, 
+			LazyRetriever<A,T> lazyRetriever, 
+			Integer cacheId,
+			String filter
+	){
 		
 		List<E> retPost;
 		
@@ -114,10 +123,17 @@ public abstract class DataLayer  <E> {
 		for(EntityIndex<E> pIdx: cachedSearch.subList(startIdx, endIdx)){
 			if(null==(p=cachedPosts.get(pIdx.getId()))){
 				p = pIdx.retrieveInstance();
-				this.cachedPosts.put(pIdx.getId(),p);
+				if(p!=null){
+					this.cachedPosts.put(pIdx.getId(),p);
+				}
 			}
 			
-			retPost.add(p);
+			if(p!=null){
+				retPost.add(p);
+			}else{
+				Log.d("se.chalmers.eda397.team7.so.datalayer.DataLayer#pagedSearch", 
+						"WARNING: There were null result form index.retrieveInstance");
+			}
 		}
 		
 		//TODO: more smart caching strategy
@@ -126,8 +142,6 @@ public abstract class DataLayer  <E> {
 		}
 		
 		tEnd= System.currentTimeMillis();
-		
-		
 		
 		Log.d("se.chalmers.eda397.team7.so.datalayer.DataLayer#pagedSearch", "Finished retrieving " + (endIdx - startIdx) + " instances from the database in  " + (tEnd - tStart) + "ms");
 		
@@ -151,19 +165,18 @@ public abstract class DataLayer  <E> {
 	 *            "?" markers in the query
 	 * @return a list of the selected entities ordered by the query criteria
 	 */
-	@SuppressWarnings("unchecked")
-	protected <J extends E> List<J> querySortedInstanceSet(String query, String queryArgs[]){
+	protected List<E> querySortedInstanceSet(String query, String queryArgs[]){
 		
 		Cursor  cur    ;
-		List<J> result ;
+		List<E> result ;
 		
-		result = new ArrayList<J>();
+		result = new ArrayList<E>();
 		
 		cur = this.getDbInstance().rawQuery(query, queryArgs);
 		
 		
 		while(cur.moveToNext()){
-			result.add((J) this.createNotSyncronizedInstance(cur));
+			result.add(this.createNotSyncronizedInstance(cur));
 		}
 		
 		cur.close();
@@ -172,10 +185,10 @@ public abstract class DataLayer  <E> {
 	}
 	
 	
-	protected <J extends E> J querySingleInstance(String query, String queryArgs[]){
+	protected E querySingleInstance(String query, String queryArgs[]){
 		
 		Cursor cur;
-		J      ins;
+		E      ins;
 
 		
 		cur = this.getDbInstance().rawQuery(query, queryArgs);
@@ -191,6 +204,8 @@ public abstract class DataLayer  <E> {
 		
 	}
 	
+	
+	
 	/**
 	 * Returns a query with the following structure
 	 * 
@@ -202,11 +217,32 @@ public abstract class DataLayer  <E> {
 	 * NATURAL JOIN 
 	 * 		&lt;naturalJoinValue&gt; 
 	 * WHERE 
-	 * 		&lt;attName&gt;=?
-	 * 		(OR &lt;attName&gt;=?){&lt;wordCount&gt;-1}
+	 * 		&lt;attName&gt;=?  
+	 * 		OR &lt;attName&gt;=?){&lt;wordCount&gt;-1}
 	 * </pre>
 	 */
 	protected String generateIdSearchQuery(Integer wordCount, String tableName, String naturalJoinValue, String attName){
+		
+		return generateIdSearchQuery(wordCount, tableName, naturalJoinValue, attName, null);
+	}
+	
+	/**
+	 * Returns a query with the following structure
+	 * 
+	 * <pre>
+	 * SELECT 
+	 * 		id 
+	 * FROM 
+	 * 		&lt;tableName&gt; 
+	 * NATURAL JOIN 
+	 * 		&lt;naturalJoinValue&gt; 
+	 * WHERE 
+	 * 		(&lt;attName&gt;=? AND 
+	 * 		OR &lt;attName&gt;=?){&lt;wordCount&gt;-1})
+	 * 		AND <queryTail>
+	 * </pre>
+	 */
+	protected String generateIdSearchQuery(Integer wordCount, String tableName, String naturalJoinValue, String attName, String queryTail){
 		
 		StringBuilder sb = new StringBuilder("SELECT id FROM ");
 		sb.append(tableName);
@@ -214,20 +250,26 @@ public abstract class DataLayer  <E> {
 		if(naturalJoinValue!=null && naturalJoinValue.length()>0){
 			sb.append(" NATURAL JOIN ");
 			sb.append(naturalJoinValue);
-			sb.append(" ");
 		}
 		
-		sb.append(" WHERE ");
+		sb.append(" WHERE ( ");
 		
 		if(wordCount>0){
 			sb.append(attName);
-			sb.append("=?");
+			sb.append("=? ");
 			
 			for(int i=1; i<wordCount; i++){
 				sb.append(" OR ");
 				sb.append(attName);
 				sb.append("=?");
 			}
+		}
+		
+		sb.append(" ) ");
+		
+		if(queryTail!=null){
+			sb.append("AND ");
+			sb.append(queryTail);
 		}
 		
 		return sb.toString();
@@ -249,6 +291,25 @@ public abstract class DataLayer  <E> {
 	protected String generateSearchQuery(Integer wordCount, String tableName, String attName){
 		
 		return generateIdSearchQuery(wordCount, tableName, null, attName);
+	}
+	
+	/**
+	 * Returns a query with the following structure
+	 * 
+	 * <pre>
+	 * SELECT 
+	 * 		id 
+	 * FROM 
+	 * 		&lt;tableName&gt; 
+	 * WHERE 
+	 * 		(&lt;attName&gt;=?
+	 * 		OR &lt;attName&gt;=?){&lt;wordCount&gt;-1})
+	 *  AND <filter>
+	 * </pre>
+	 */
+	protected String generateSearchQuery(Integer wordCount, String tableName, String attName, String filter){
+		
+		return generateIdSearchQuery(wordCount, tableName, null, attName, filter);
 	}
 	
 	
@@ -330,7 +391,7 @@ public abstract class DataLayer  <E> {
 	 * <b>WARNING</b>: do nor move the current position of cur or data could be lost
 	 * in methods using this function! 
 	 */
-	protected abstract <J extends E>  J createNotSyncronizedInstance(Cursor cur);
+	protected abstract E createNotSyncronizedInstance(Cursor cur);
 	
 	/**
 	 * Returns the system's raw entity factory associated to this data layer

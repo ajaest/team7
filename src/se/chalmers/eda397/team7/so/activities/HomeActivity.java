@@ -7,7 +7,7 @@ import java.util.List;
 import se.chalmers.eda397.team7.so.R;
 import se.chalmers.eda397.team7.so.data.SQLiteSODatabaseHelper;
 import se.chalmers.eda397.team7.so.data.entity.Comment;
-import se.chalmers.eda397.team7.so.data.entity.Post;
+import se.chalmers.eda397.team7.so.data.entity.Question;
 import se.chalmers.eda397.team7.so.datalayer.DataLayerFactory;
 import se.chalmers.eda397.team7.so.datalayer.PostDataLayer;
 import android.app.ActionBar;
@@ -79,7 +79,7 @@ public class HomeActivity extends Activity {
 					return false;
 				}
 
-				Post p = postDL.getQuestionById(i);
+				Question p = postDL.getQuestionById(i);
 				if (p != null){
 					Toast.makeText(getApplicationContext(), p.getBody(), Toast.LENGTH_SHORT).show();	
 					List<Comment> comments = p.getComments();

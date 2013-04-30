@@ -8,7 +8,7 @@ import java.util.Set;
 
 import se.chalmers.eda397.team7.so.R;
 import se.chalmers.eda397.team7.so.data.SQLiteSODatabaseHelper;
-import se.chalmers.eda397.team7.so.data.entity.Post;
+import se.chalmers.eda397.team7.so.data.entity.Question;
 import se.chalmers.eda397.team7.so.datalayer.DataLayerFactory;
 import se.chalmers.eda397.team7.so.datalayer.PostDataLayer;
 import so.chalmers.eda397.so.data.entity.PostListAdapter;
@@ -19,13 +19,13 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
 
 public class QuestionSortByNoA extends Activity{
 
 	private ListView questionListView;
-	private List<Post> questionList= new ArrayList<Post>();
+	private List<Question> questionList= new ArrayList<Question>();
 	private Bundle bundle;
 	String query="";
 	int typeSearch = 0;
@@ -82,16 +82,16 @@ public class QuestionSortByNoA extends Activity{
 		return true;
 	}
 
-	private ArrayList<Post> retrieveList(PostDataLayer postDataLayer){
-		ArrayList<Post> questions = new ArrayList<Post>();
+	private List<Question> retrieveList(PostDataLayer postDataLayer){
+		List<Question> questions;
 
-		//questions = new ArrayList<Post>(postDataLayer.getQuestionList());
-		questions = new ArrayList<Post>(postDataLayer.getQuestionSortedBy("answer_count"));
+		
+		questions = new ArrayList<Question>(postDataLayer.getQuestionSortedBy("answer_count"));
 		return questions;
 	}
 
-	private ArrayList<Post> retriveSearchList(PostDataLayer postDataLayer, String query){
-		ArrayList<Post> questions = new ArrayList<Post>();
+	private List<Question> retriveSearchList(PostDataLayer postDataLayer, String query){
+		List<Question> questions = new ArrayList<Question>();
 		Set<String> wordSet = new HashSet<String>();
 		String[] parts = query.split(" ");
 		for (String word : parts) {
@@ -103,8 +103,8 @@ public class QuestionSortByNoA extends Activity{
 		return questions; 
 	}
 	
-	private List<Post> retriveQuestionListByTag(PostDataLayer postDataLayer, String query){
-		List<Post> questions = new ArrayList<Post>();
+	private List<Question> retriveQuestionListByTag(PostDataLayer postDataLayer, String query){
+		List<Question> questions = new ArrayList<Question>();
 		Set<String> wordSet = new HashSet<String>();
 		String[] parts = query.split(" ");
 		for (String word : parts) {

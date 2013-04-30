@@ -1,10 +1,9 @@
 package so.chalmers.eda397.so.data.entity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import se.chalmers.eda397.team7.so.R;
-import se.chalmers.eda397.team7.so.data.entity.Post;
+import se.chalmers.eda397.team7.so.data.entity.Question;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,13 +11,13 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-public class PostListAdapter extends ArrayAdapter<Post>{
+public class PostListAdapter extends ArrayAdapter<Question>{
 
-	private List<Post> postList;
+	private List<Question> postList;
 	private Context context;
 	private int layout;
 	
-	public PostListAdapter(Context context, List<Post> postList, int layout) {
+	public PostListAdapter(Context context, List<Question> postList, int layout) {
 		super( context, R.layout.question_item, postList);
 		this.postList = postList;
 		this.context = context;

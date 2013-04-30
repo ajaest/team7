@@ -150,11 +150,15 @@ public class Post extends Entity {
 	}
 	
 	public User getOwnerUser(){
-		return userDl.getUserById(this.owner_user_id);
+		return userDl.getUserById(this.getOwner_user_id());
 	}
 
-	public Integer getLast_editor_user_id() {
+	protected Integer getLast_editor_user_id() {
 		return last_editor_user_id;
+	}
+	
+	public User getLastEditorUser(){
+		return userDl.getUserById(this.getLast_editor_user_id());
 	}
 
 	public String getLast_editor_display_name() {
@@ -200,12 +204,6 @@ public class Post extends Entity {
 
 	public Integer getFavorite_count() {
 		return favorite_count;
-	}
-
-	public void setPost_type_id(Integer post_type_id) {
-		this.setDirty(true);
-
-		this.post_type_id = post_type_id;
 	}
 
 	public void setParent_id(Integer parent_id) {
@@ -254,12 +252,6 @@ public class Post extends Entity {
 		this.setDirty(true);
 
 		this.last_editor_user_id = last_editor_user_id;
-	}
-
-	public void setLast_editor_display_name(String last_editor_display_name) {
-		this.setDirty(true);
-
-		this.last_editor_display_name = last_editor_display_name;
 	}
 
 	public void setLast_edit_date(Date last_edit_date) {
