@@ -61,7 +61,7 @@ public abstract class DataLayer  <E> {
 	 *            the size of the list to be returned
 	 * @param page
 	 *            the offset of the page that it's going to be extracted from
-	 *            the index list
+	 *            the index list starting from 0.
 	 * @param lazyRetriever
 	 *            an implementation of a lazy index searcher
 	 * @param cacheId
