@@ -1,21 +1,23 @@
 package se.chalmers.eda397.team7.so.activities;
 
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 import se.chalmers.eda397.team7.so.R;
 import se.chalmers.eda397.team7.so.data.SQLiteSODatabaseHelper;
+import se.chalmers.eda397.team7.so.data.entity.User;
+import se.chalmers.eda397.team7.so.datalayer.DataLayerFactory;
+import se.chalmers.eda397.team7.so.datalayer.UserDataLayer;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
@@ -28,17 +30,12 @@ import android.widget.TextView;
  * well.
  */
 public class LoginActivity extends Activity {
-	/**
-	 * A dummy authentication store containing known user names and passwords.
-	 * TODO: remove after connecting to a real authentication system.
-	 */
-	private static final String[] DUMMY_CREDENTIALS = new String[] {
-			"foo@example.com:hello", "bar@example.com:world" };
-
+	
 	/**
 	 * The default email to populate the email field with.
 	 */
-	public static final String EXTRA_EMAIL = "com.example.android.authenticatordemo.extra.EMAIL";
+	public static final String USER_HASH_KEY = "se.chalmers.eda397.team7.so.activities.Activity::user_id";
+	public static final String USER_EMAIL    = "se.chalmers.eda397.team7.so.activities.Activity::user_email";
 
 	/**
 	 * Keep track of the login task to ensure we can cancel it if requested.
@@ -50,34 +47,32 @@ public class LoginActivity extends Activity {
 	private String mPassword;
 
 	// UI references.
+	private LoginActivity thiz;
 	private EditText mEmailView;
 	private EditText mPasswordView;
 	private View mLoginFormView;
 	private View mLoginStatusView;
 	private TextView mLoginStatusMessageView;
-
+	
+	//Data accessors
+	private UserDataLayer udl;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		/*TODO: REMOVE! test block*/
+		thiz = this;
+		
 		try {
-			SQLiteSODatabaseHelper test = new SQLiteSODatabaseHelper(this.getApplicationContext());
-			SQLiteDatabase db = test.getWritableDatabase();
-			Cursor c = db.rawQuery("SELECT location FROM users LIMIT 1", new String[]{});
-			c.moveToNext();
-			Log.d("se.chalmers.eda397.team7.so.activities", "We got some data! rows retrieved: " + c.getCount());
-			Log.d("se.chalmers.eda397.team7.so.activities", "We got some data!: " + c.getString(0));
+			udl = new DataLayerFactory(new SQLiteSODatabaseHelper(this.getApplicationContext()).getWritableDatabase()).createUserDataLayer();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		/* ************************/
 		
 		setContentView(R.layout.activity_login);
 
 		// Set up the login form.
-		mEmail = getIntent().getStringExtra(EXTRA_EMAIL);
+		mEmail = getIntent().getStringExtra(USER_EMAIL);
 		mEmailView = (EditText) findViewById(R.id.email);
 		mEmailView.setText(mEmail);
 
@@ -168,9 +163,8 @@ public class LoginActivity extends Activity {
 			mLoginStatusMessageView.setText(R.string.login_progress_signing_in);
 			showProgress(true);
 			mAuthTask = new UserLoginTask();
-			mAuthTask.execute((Void) null);
-			Intent intent = new Intent(this, HomeActivity.class);
-			startActivity(intent);
+			mAuthTask.execute(new String[]{mEmail,mPassword});
+			
 		}
 	}
 
@@ -219,38 +213,74 @@ public class LoginActivity extends Activity {
 	 * Represents an asynchronous login/registration task used to authenticate
 	 * the user.
 	 */
-	public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+	public class UserLoginTask extends AsyncTask<String, Void, User> {
 		@Override
-		protected Boolean doInBackground(Void... params) {
-			// TODO: attempt authentication against a network service.
-
+		protected User doInBackground(String... params) {
+			String mPassword, mEmail;
+			byte[] toDigest;
+			MessageDigest md;
+			
+			if(params.length!=2)
+				throw new RuntimeException("Login argument mismatch");
+			
+			
+			mEmail    = params[0];
+			mPassword = params[1];
+			
 			try {
-				// Simulate network access.
-				Thread.sleep(2000);
-			} catch (InterruptedException e) {
-				return false;
+				 md = MessageDigest.getInstance("MD5");
+			} catch (NoSuchAlgorithmException e) {
+				// If an algorithm doesn't exists it's a programming error, so
+				// it should be runtime
+				throw new RuntimeException(e);
 			}
-
-			for (String credential : DUMMY_CREDENTIALS) {
-				String[] pieces = credential.split(":");
-				if (pieces[0].equals(mEmail)) {
-					// Account exists, return true if the password matches.
-					return pieces[1].equals(mPassword);
+			
+			
+			toDigest = mEmail.getBytes();
+			toDigest = md.digest(toDigest);
+			mEmail = getHexString(toDigest);
+			
+			md.reset();
+			
+			toDigest = mPassword.getBytes();
+			toDigest = md.digest(toDigest);
+			mPassword = getHexString(toDigest);
+			
+			return udl.login(mEmail, mPassword);
+		}
+		
+		private String getHexString(byte[] bytes){
+			
+			StringBuilder sb = new StringBuilder();
+			
+			
+			String byteHexStr;
+			for(byte b: bytes){
+				Integer unsignedB = b & 0xFF;
+				
+				if(unsignedB<16){
+					sb.append('0');
 				}
+				byteHexStr = Integer.toHexString(unsignedB);
+				sb.append(byteHexStr);
 			}
-
-			// TODO: register the new account here.
-			return true;
+			
+			return sb.toString();
+			
 		}
 
 		@Override
-		protected void onPostExecute(final Boolean success) {
+		protected void onPostExecute(final User user) {
 			mAuthTask = null;
 			showProgress(false);
 
-			if (success) {
-				finish();
+			if (user!=null) {
+				Intent intent = new Intent(thiz, HomeActivity.class);
+				intent.putExtra(USER_HASH_KEY, user.getId());
+				intent.putExtra(USER_EMAIL   , user.getId());
 				
+				startActivity(intent);
+				finish();
 			} else {
 				mPasswordView
 						.setError(getString(R.string.error_incorrect_password));

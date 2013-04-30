@@ -24,6 +24,7 @@ public class UserDataLayer extends DataLayer<User>{
 		query = "SELECT * FROM users LIMIT 50";
 		return (ArrayList<User>) this.querySortedInstanceSet(query, null);
 	}
+	
 	public User getUserById(Integer id){
 		
 		String query;
@@ -31,6 +32,15 @@ public class UserDataLayer extends DataLayer<User>{
 		query = "SELECT * FROM users WHERE id=?";
 		
 		return this.querySingleInstance(query, new String[]{id.toString()});
+	}
+	
+	public User login(String userHash, String userPass){
+		//TODO userPass
+		String query;
+		
+		query = "SELECT * FROM users WHERE email_hash=?";
+		
+		return this.querySingleInstance(query, new String[]{userHash.toString()});
 	}
 	
 	
