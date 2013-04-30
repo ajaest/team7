@@ -9,7 +9,7 @@ import android.widget.TabHost.TabSpec;
 
 public class Users_Tab_Activity extends TabActivity{
 	
-	private static final String Alphabeth = "A-Z";
+	private static final String Alphabet = "A-Z";
 	private static final String Reputation = "Reputation";
 	
     @Override
@@ -20,12 +20,12 @@ public class Users_Tab_Activity extends TabActivity{
         TabHost tabHost = getTabHost();
         
         // Newer Tab
-        TabSpec alphabeth = tabHost.newTabSpec(Alphabeth);
+        TabSpec alphabet = tabHost.newTabSpec(Alphabet);
         // Tab Icon
-        alphabeth.setIndicator(Alphabeth);
+        alphabet.setIndicator(Alphabet);
         Intent inboxIntent = new Intent(this, UsersSortByAlphabeth.class);
         // Tab Content
-        alphabeth.setContent(inboxIntent);
+        alphabet.setContent(inboxIntent);
         
         // Number of answers Tab
         TabSpec reputation = tabHost.newTabSpec(Reputation);
@@ -34,8 +34,8 @@ public class Users_Tab_Activity extends TabActivity{
         reputation.setContent(outboxIntent);
         
         // Adding all TabSpec to TabHost
-        tabHost.addTab(alphabeth); // Adding Newer tab
-        tabHost.addTab(reputation); // Adding NoA tab
+        tabHost.addTab(alphabet); // Adding Alphabet tab
+        tabHost.addTab(reputation); // Adding reputation tab
     }
 
 }
