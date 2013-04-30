@@ -115,25 +115,7 @@ public class PostDataLayerTest extends InstrumentationTestCase {
 		SortedSet<PostIndexInformation> indexResults = this.postDL.indexedfullTextSearch(words);
 	}
 	
-	public void test_pagedFullTextSearch(){
-		
-		Set<String> words                       ;
-		List<PostIndexInformation> indexResults ;
-		
-		
-		words = new HashSet<String>(Arrays.asList(new String[]{"php", "mysql", "apache"}));
-		indexResults = new ArrayList<PostIndexInformation>(this.postDL.indexedfullTextSearch(words));
-		
-		List<Post> postResults;
-		for(int i=0; i<(indexResults.size()/10); i++){
-			postResults = this.postDL.pagedFullTextSearch(words, 10, i);
-			
-			for(int j=0; j<postResults.size(); j++){
-				assertEquals(indexResults.get(i*10 + j).getId(), postResults.get(j).getId());
-			}
-		}
-
-	}
+	
 	
 	
 	public void test_updatePost(){
@@ -141,7 +123,7 @@ public class PostDataLayerTest extends InstrumentationTestCase {
 		//TODO
 	}
 	
-	public void test_indexedTagSearch(){
+	public void test_indexedTagSearch1(){
 		
 		Set<String> words = new HashSet<String>(Arrays.asList(new String[]{"php", "mysql", "apache"}));
 		
@@ -161,23 +143,93 @@ public class PostDataLayerTest extends InstrumentationTestCase {
 		
 	}
 	
+	public void test_indexedTagSearch2(){
+		
+		Set<String> words = new HashSet<String>(Arrays.asList(new String[]{"eclipse"}));
+		
+		SortedSet<PostIndexInformation> indexResults = this.postDL.indexedTagSearch(words);
+		
+		assertTrue(indexResults.size()>0);
+		
+		Post curPost;
+		Set<String> tagIntersection;
+		for(PostIndexInformation postIdx : indexResults){
+			curPost = postIdx.retrieveInstance();
+			 
+			tagIntersection = new HashSet<String>(words);
+			tagIntersection.retainAll(curPost.getTags());
+			
+			
+			assertEquals((Integer)tagIntersection.size(), postIdx.getTagsMatchs());			
+		}
+		
+	}
+	
 	public void test_pagedTagSearch(){
 		
 		Set<String> words                       ;
 		List<PostIndexInformation> indexResults ;
-		
+		boolean enterLoop = true;;
 		
 		words = new HashSet<String>(Arrays.asList(new String[]{"php", "mysql", "apache"}));
 		indexResults = new ArrayList<PostIndexInformation>(this.postDL.indexedTagSearch(words));
 		
+		enterLoop = !(indexResults.size()>0);
+		
 		List<Post> postResults;
-		for(int i=0; i<(indexResults.size()/10); i++){
+		for(int i=0; i<(indexResults.size()/10+1); i++){
+			enterLoop = true;
 			postResults = this.postDL.pagedTagSearch(words, 10, i);
 			
 			for(int j=0; j<postResults.size(); j++){
 				assertEquals(indexResults.get(i*10 + j).getId(), postResults.get(j).getId());
 			}
 		}
+
+		assertTrue(enterLoop);
+	}
+	
+	public void test_pagedTagSearch1(){
+		
+		Set<String> words                       ;
+		List<PostIndexInformation> indexResults ;
+		boolean enterLoop;
+		
+		words = new HashSet<String>(Arrays.asList(new String[]{"eclipse"}));
+		indexResults = new ArrayList<PostIndexInformation>(this.postDL.indexedTagSearch(words));
+		
+		
+		enterLoop = !(indexResults.size()>0);
+		
+		assertTrue(indexResults.size()>0);
+		
+		List<Post> postResults;
+		for(int i=0; i<(indexResults.size()/50 + 1); i++){
+			postResults = this.postDL.pagedTagSearch(words, 50, i);
+			enterLoop = true;
+			
+			for(int j=0; j<postResults.size(); j++){
+				assertEquals(indexResults.get(i*10 + j).getId(), postResults.get(j).getId());
+			}
+		}
+		
+		assertTrue(enterLoop);
+		
+		/* Test cache */
+		enterLoop = !(indexResults.size()>0);
+		
+		assertTrue(indexResults.size()>0);
+		
+		for(int i=0; i<(indexResults.size()/50 + 1); i++){
+			postResults = this.postDL.pagedTagSearch(words, 50, i);
+			enterLoop = true;
+			
+			for(int j=0; j<postResults.size(); j++){
+				assertEquals(indexResults.get(i*10 + j).getId(), postResults.get(j).getId());
+			}
+		}
+		
+		assertTrue(enterLoop);
 
 	}
 	
@@ -251,7 +303,29 @@ public class PostDataLayerTest extends InstrumentationTestCase {
 	}
 	
 	
-	
+public void test_pagedFullTextSearch(){
+		
+		Set<String> words                       ;
+		List<PostIndexInformation> indexResults ;
+		boolean enterLoop;
+		
+		words = new HashSet<String>(Arrays.asList(new String[]{"php", "mysql", "apache"}));
+		indexResults = new ArrayList<PostIndexInformation>(this.postDL.indexedfullTextSearch(words));
+		
+		enterLoop = !(indexResults.size()>0);
+		
+		List<Post> postResults;
+		for(int i=0; i<(indexResults.size()/10); i++){
+			postResults = this.postDL.pagedFullTextSearch(words, 10, i);
+			enterLoop = true;
+			
+			for(int j=0; j<postResults.size(); j++){
+				assertEquals(indexResults.get(i*10 + j).getId(), postResults.get(j).getId());
+			}
+		}
+
+		assertTrue(enterLoop);
+	}	
 	
 
 	
