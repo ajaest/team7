@@ -115,7 +115,7 @@ public class HomeActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(HomeActivity.this, UserListActivity.class);
+				Intent intent = new Intent(HomeActivity.this, Users_Tab_Activity.class);
 				startActivity(intent);
 			}
 		});
