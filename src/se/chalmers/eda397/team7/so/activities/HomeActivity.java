@@ -92,6 +92,7 @@ public class HomeActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				Intent intent =  new Intent(HomeActivity.this, Questions_Tab_Activity.class);
+				intent.putExtra("tagPressed", " ");
 				startActivity(intent);
 
 			}

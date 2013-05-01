@@ -40,7 +40,7 @@ public class CommentDataLayer extends DataLayer<Comment> {
 		id      = cur.getInt   (cur.getColumnIndex("id"     ));
 		post_id = cur.getInt   (cur.getColumnIndex("post_id"));
 		score   = cur.getInt   (cur.getColumnIndex("score"  ));
-		text    = cur.getString(cur.getColumnIndex("score"  ));
+		text    = cur.getString(cur.getColumnIndex("text"  ));
 		
 		split = cur.getString(cur.getColumnIndex("creation_date")).split("-");
 		creation_date = new Date();
@@ -69,6 +69,11 @@ public class CommentDataLayer extends DataLayer<Comment> {
 		key.put("id", id.toString());
 		
 		this.queryInsertOrReplace("comments", attValues, key);
+	}
+	
+	public List<Comment> getCommentsByPostId(Integer idPost){
+		String query = "SELECT * FROM comments WHERE post_id = ? ";
+		return this.querySortedInstanceSet(query, new String[]{idPost.toString()});
 	}
 	
 	
