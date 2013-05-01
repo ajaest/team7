@@ -9,6 +9,7 @@ import java.util.Set;
 import se.chalmers.eda397.team7.so.R.id;
 import se.chalmers.eda397.team7.so.activities.HomeActivity;
 import se.chalmers.eda397.team7.so.activities.QuestionsActivity;
+import se.chalmers.eda397.team7.so.activities.Questions_Tab_Activity;
 import se.chalmers.eda397.team7.so.activities.UserListActivity;
 import se.chalmers.eda397.team7.so.data.SQLiteSODatabaseHelper;
 import se.chalmers.eda397.team7.so.data.entity.Post;
@@ -22,6 +23,12 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.ImageButton;
+import android.widget.MultiAutoCompleteTextView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SearchView;
@@ -40,63 +47,76 @@ public class SearchActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_search);
-		final RadioGroup radrioGroup = (RadioGroup) findViewById(R.id.radioGroup);
-		final RadioButton radioQuestion = (RadioButton) findViewById(R.id.questionRadio);
-		final RadioButton radioTag = (RadioButton) findViewById(R.id.tagRadion);
-		final RadioButton radioUser = (RadioButton) findViewById(id.userRadio);
-		final SearchView advSearch = (SearchView) findViewById(R.id.advSearchView);
+		// XML thingys
+		AutoCompleteTextView singelUserSearch = (AutoCompleteTextView) findViewById(R.id.singelUserSearch);
+		final MultiAutoCompleteTextView multiTagSearch = (MultiAutoCompleteTextView) findViewById(R.id.multiTagSearch);
+		ImageButton imgButton = (ImageButton) findViewById(R.id.multiTagButton);
+		
+		// SingelSeach
+		final String[] Users = new String[] {"Coincon", "eHenrik", "Murat", "Luis" };
+		ArrayAdapter<String> userAdapter = new ArrayAdapter<String>(this,
+				android.R.layout.simple_dropdown_item_1line, Users);
+		singelUserSearch.setAdapter(userAdapter);
+		// MultiSeach
+		final String[] Tags = new String[] {"Java", "XML", "HTML", "Android", "Facebook"
+		};
 
-
-
-		advSearch.setOnQueryTextListener(new OnQueryTextListener() {
-
+		ArrayAdapter<String> tagAdapter = new ArrayAdapter<String>(this,
+				android.R.layout.simple_dropdown_item_1line, Tags);
+		multiTagSearch.setAdapter(tagAdapter);
+		multiTagSearch.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
+		
+			
+		imgButton.setOnClickListener(new OnClickListener() {
+			
 			@Override
-			public boolean onQueryTextSubmit(String query) {
-
-				if (radioQuestion.isChecked()) {
-					Intent intent = new Intent(SearchActivity.this, QuestionsActivity.class);
-					intent.putExtra("typeSearch", 1);
-					intent.putExtra("query", query);
-					startActivity(intent);
-				}
-				else if (radioTag.isChecked()) {
-					Intent intent = new Intent(SearchActivity.this, QuestionsActivity.class);
-					intent.putExtra("typeSearch", 2);
-					intent.putExtra("query", query);
-					startActivity(intent);
-				}
-
-				else if (radioUser.isChecked()){
-					Intent intent = new Intent(SearchActivity.this, UserListActivity.class);
-					intent.putExtra("typeSearch", 3);
-					intent.putExtra("query", query);
-					startActivity(intent);
-
-				}
-
-				return false;
-			}
-
-			@Override
-			public boolean onQueryTextChange(String newText) {
-
-
-				return false;
+			public void onClick(View v) {
+				String query = "";
+				query = multiTagSearch.getText().toString();
+				query = query.replaceAll(",", "");
+				query=query.toLowerCase();
+				Toast.makeText(getApplicationContext(), query, Toast.LENGTH_LONG).show();
+				
+				Intent intent = new Intent(SearchActivity.this, Questions_Tab_Activity.class);
+				intent.putExtra("typeSearch", 2);
+				intent.putExtra("query", query);
+				startActivity(intent);
+				
 			}
 		});
-
-
-
+		
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.search, menu);
-		return true;
-	}
+
+
+
+
+
+
+
+@Override
+public boolean onCreateOptionsMenu(Menu menu) {
+	// Inflate the menu; this adds items to the action bar if it is present.
+	getMenuInflater().inflate(R.menu.search, menu);
+	return true;
+}
 
 
 
 
 }
+
+/*    *******Commet''''''''''''
+		else if (radioTag.isChecked()) {
+			Intent intent = new Intent(SearchActivity.this, QuestionsActivity.class);
+			intent.putExtra("typeSearch", 2);
+			intent.putExtra("query", query);
+			startActivity(intent);
+		}
+
+		else if (radioUser.isChecked()){
+			Intent intent = new Intent(SearchActivity.this, UserListActivity.class);
+			intent.putExtra("typeSearch", 3);
+			intent.putExtra("query", query);
+			startActivity(intent);
+ */

@@ -33,7 +33,7 @@ public class HomeActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		/*
-		 * setting buttorns
+		 * setting buttons
 		 */
 		
 		actionBar = getActionBar();
@@ -70,24 +70,10 @@ public class HomeActivity extends Activity {
 
 			@Override
 			public boolean onQueryTextSubmit(String query) {
-				Integer i = null;
-				try {
-					i = Integer.parseInt(query);
-
-				} catch (Exception e) {
-					Toast.makeText(getApplicationContext(),"Not a number", Toast.LENGTH_SHORT).show();
-					//System.out.println(e.getMessage());
-					return false;
-				}
-
-				Post p = postDL.getPostById(i);
-				if (p != null){
-					Toast.makeText(getApplicationContext(), p.getBody(), Toast.LENGTH_SHORT).show();	
-					List<Comment> comments = p.getComments();
-				}
-				else{
-					Toast.makeText(getApplicationContext(), "ID not in database", Toast.LENGTH_SHORT).show();	
-				}
+				Intent intent = new Intent(HomeActivity.this, Questions_Tab_Activity.class);
+				intent.putExtra("typeSearch", 1);
+				intent.putExtra("query", query);
+				startActivity(intent);
 				return false;
 
 
@@ -153,9 +139,6 @@ public class HomeActivity extends Activity {
 	
 
 	
-	
-
-
 
 
 

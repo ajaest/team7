@@ -18,7 +18,7 @@
     <string name="home_questions">Questions</string>
     <string name="home_users">Users</string>
     <string name="home_myacc">My Account</string>
-    <string name="home_query_hint">Search for a post id</string>
+    <string name="home_query_hint">Question Search</string>
     <string name="title_activity_question_information">Question information</string>
     <string name="title_activity_search">SearchActivity</string>
     <string name="adv_radio_question">Question</string>
@@ -26,5 +26,8 @@
     <string name="avd_radio_tag1">Tag</string>
     <string name="avd_radio_user">User</string>
     <string name="home_text_advsearch">Advanced Search</string>
+    <string name="title_activity_answer_item">Answer_item</string>
+    <string name="multiTagHint">Search for tags</string>
+    <string name="singelUserHint">Search for a user</string>
 
 </resources>

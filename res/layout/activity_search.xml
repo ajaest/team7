@@ -10,42 +10,42 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".SearchActivity" >
 
-    <SearchView
-        android:id="@+id/advSearchView"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
-    </SearchView>
 
-    <RadioGroup
-        android:id="@+id/radioGroup"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" >
-
-        <RadioButton
-            android:id="@+id/questionRadio"
+        <MultiAutoCompleteTextView
+            android:id="@+id/multiTagSearch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/adv_radio_question"
-            android:checked="true" />
-        	
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="@string/multiTagHint" >
 
-        <RadioButton
-            android:id="@+id/tagRadion"
+            <requestFocus />
+        </MultiAutoCompleteTextView>
+
+        <ImageButton
+            android:id="@+id/multiTagButton"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/avd_radio_tag1" />
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@drawable/ic_launcher" />
 
-        <RadioButton
-            android:id="@+id/userRadio"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/avd_radio_user" />
-    </RadioGroup>
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <AutoCompleteTextView
+            android:id="@+id/singelUserSearch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="@string/singelUserHint" />
+
+    </LinearLayout>
 
 </LinearLayout>
