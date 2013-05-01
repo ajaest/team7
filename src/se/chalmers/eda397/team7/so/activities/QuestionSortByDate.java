@@ -48,6 +48,7 @@ public class QuestionSortByDate extends Activity{
 		if (bundle != null){
 			typeSearch = bundle.getInt("typeSearch");
 			query = bundle.getString("query");
+			
 		}
 		if (typeSearch == 1){ // It questions
 			questionList = retriveSearchList(postDataLayer, query);
@@ -97,7 +98,7 @@ public class QuestionSortByDate extends Activity{
 		for (String word : parts) {
 			wordSet.add(word);
 		}
-		questions.addAll(postDataLayer.pagedFullTextSearch(wordSet, 50, 1));
+		questions.addAll(postDataLayer.pagedFullTextSearch(wordSet, 50, 0));
 
 
 		return questions; 
@@ -110,7 +111,7 @@ public class QuestionSortByDate extends Activity{
 		for (String word : parts) {
 			wordSet.add(word);
 		}
-		questions = postDataLayer.pagedTagSearch(wordSet, 50, 1);
+		questions = postDataLayer.pagedTagSearch(wordSet, 50, 0);
 		return questions;
 	}
 }

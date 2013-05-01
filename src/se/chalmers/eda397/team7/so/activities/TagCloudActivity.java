@@ -25,6 +25,7 @@ import se.chalmers.eda397.team7.so.R;
 import se.chalmers.eda397.team7.so.data.SQLiteSODatabaseHelper;
 import se.chalmers.eda397.team7.so.datalayer.DataLayerFactory;
 import android.app.ActionBar;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -36,10 +37,12 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -61,6 +64,7 @@ public class TagCloudActivity extends FragmentActivity {
     ViewPager mViewPager;
     private  List<String> tagList;
     private  static SQLiteDatabase db;
+    private int buttonPressed =-1;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,7 +98,18 @@ public class TagCloudActivity extends FragmentActivity {
         mViewPager.setAdapter(mDemoCollectionPagerAdapter);
     }
     
-    /*
+    
+    public int getButtonPressed() {
+		return buttonPressed;
+	}
+
+
+	public void setButtonPressed(int buttonPressed) {
+		this.buttonPressed = buttonPressed;
+	}
+
+
+	/*
      * Returns the list of tags in our system order by number of appearances 
      */
     private List<String> getAllTags(){
@@ -136,6 +151,7 @@ public class TagCloudActivity extends FragmentActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+    
 
     /**
      * A {@link android.support.v4.app.FragmentStatePagerAdapter} that returns a fragment
@@ -214,9 +230,30 @@ public class TagCloudActivity extends FragmentActivity {
             else 
 				bottomRightButton.setVisibility(View.GONE);
 
+            setButtonListener(centerButton);
+            setButtonListener(topLeftButton);
+            setButtonListener(topRightButton);
+            setButtonListener(bottomLeftButton);
+            setButtonListener(bottomRightButton);
+         
             return rootView;
         }
         
+        private void setButtonListener(Button button){
+        	final Context ctx = this.getActivity();
+        	final String tag = button.getText().toString();
+        	Log.d("testing","tag pressed:"+ tag);
+        	// button on click listers
+    		button.setOnClickListener(new OnClickListener() {
+    			@Override
+    			public void onClick(View v) {
+    				Intent intent =  new Intent(ctx, Questions_Tab_Activity.class);
+    				intent.putExtra("tagPressed", tag);
+    				startActivity(intent);
+
+    			}
+    		});
+        }
         /*
          * Gets the 4 tags more related to the given tag.
          */
