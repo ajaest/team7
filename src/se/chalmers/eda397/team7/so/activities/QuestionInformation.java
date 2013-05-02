@@ -20,7 +20,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TextView.BufferType;
@@ -36,7 +38,7 @@ public class QuestionInformation extends Activity{
 	private TextView nViewsTextView;
 	private Button SeeAllAnswers;
 	private ListView commentsListView;
-	
+	private ImageButton starButton;
 	private Bundle bundle;
 	private Integer idQuestion;
 	private Post question;
@@ -45,6 +47,7 @@ public class QuestionInformation extends Activity{
 	private ArrayList<Comment> commentList;
 	private Set<String> tagSet;
 	private SQLiteDatabase db;
+	boolean favoriteBool;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -76,11 +79,12 @@ public class QuestionInformation extends Activity{
 		tagListTextView = (TextView) findViewById(R.id.textViewTagList);
 		SeeAllAnswers = (Button) findViewById(R.id.buttonSeeAnswers);
 		commentsListView = (ListView) findViewById(R.id.listViewCommentsOfQuestion);
-		
+		starButton = (ImageButton) findViewById(R.id.imageButtonStarQuestion);
 		questionTitleTextView.setText(question.getTitle());
 		questionBodyTextView.setText(EntityUtils.extractText(question.getBody()),BufferType.SPANNABLE);
 		ownerTextView.setText(postDataLayer.getOwnerQuestion(idQuestion).getDisplay_name());
-		
+		favoriteBool = false;
+		starButton.setBackgroundResource(R.drawable.star);
 		SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.US);
 		dateQuestionTextView.setText(df.format(question.getCreation_date()));
 		if(question.getView_count()==0)
@@ -95,7 +99,25 @@ public class QuestionInformation extends Activity{
 		else 
 			SeeAllAnswers.setText("See " + question.getComment_count().toString() + " comments");
 		
-		
+		// StarImageButtonEventHandeler
+		starButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// Change the picture and later add to the table of favorites
+			    if (favoriteBool){
+			    	starButton.setBackgroundResource(R.drawable.yellowstar);
+			    }
+			    else{
+			    	starButton.setBackgroundResource(R.drawable.star);
+			    
+			    }
+			    favoriteBool = !favoriteBool;
+				
+			
+				
+			}
+		});
 
 	}
 	
@@ -128,6 +150,9 @@ public class QuestionInformation extends Activity{
 
 		commentsListView.setAdapter(new CommentListAdapter(this, commentList, R.layout.comment_item, db));
 	}
+	
+
+	
 	
 	
 	//We show the list of tags in the view
