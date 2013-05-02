@@ -14,11 +14,10 @@ import se.chalmers.eda397.team7.so.data.entity.Post;
 import se.chalmers.eda397.team7.so.datalayer.CommentDataLayer;
 import se.chalmers.eda397.team7.so.datalayer.DataLayerFactory;
 import se.chalmers.eda397.team7.so.datalayer.PostDataLayer;
-import so.chalmers.eda397.so.data.entity.CommentListAdapter;
 import android.app.Activity;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -121,38 +120,13 @@ public class QuestionInformation extends Activity{
 
 	}
 	
+	
 	//Callback method for the button seeAnswers
 	public void showComments(View view){
-		
-		//To solve the problem of having the ListView inside a ScrollView
-		commentsListView.setOnTouchListener(new ListView.OnTouchListener() {
-		        @Override
-		        public boolean onTouch(View v, MotionEvent event) {
-		            int action = event.getAction();
-		            switch (action) {
-		            case MotionEvent.ACTION_DOWN:
-		                // Disallow ScrollView to intercept touch events.
-		                v.getParent().requestDisallowInterceptTouchEvent(true);
-		                break;
-
-		            case MotionEvent.ACTION_UP:
-		                // Allow ScrollView to intercept touch events.
-		                v.getParent().requestDisallowInterceptTouchEvent(false);
-		                break;
-		            }
-
-		            // Handle ListView touch events.
-		            v.onTouchEvent(event);
-		            return true;
-		        }
-		    });
-		commentList = (ArrayList<Comment>)commentDataLayer.getCommentsByPostId(idQuestion);
-
-		commentsListView.setAdapter(new CommentListAdapter(this, commentList, R.layout.comment_item, db));
+		Intent intent = new Intent(this, CommentsActivity.class);
+		intent.putExtra("idPost", idQuestion);
+		startActivity(intent);
 	}
-	
-
-	
 	
 	
 	//We show the list of tags in the view

@@ -68,7 +68,8 @@
             android:name="se.chalmers.eda397.team7.so.activities.Questions_Tab_Activity"
             android:label="@string/home_questions" >
 		</activity>
-		<activity
+
+        <activity
             android:name="se.chalmers.eda397.team7.so.activities.TagCloudActivity"
             android:label="@string/title_activity_search" >
         </activity>
@@ -83,6 +84,18 @@
         <activity
             android:name="se.chalmers.eda397.team7.so.activities.Users_Tab_Activity"
             android:label="@string/title_activity_user_list" >
+        </activity>
+		<activity
+            android:name="se.chalmers.eda397.team7.so.activities.QuestionItemTab"
+            android:label="@string/title_activity_question_item_tab" >
+        </activity>
+        <activity
+            android:name="se.chalmers.eda397.team7.so.activities.AnswersActivity"
+            android:label="@string/title_activity_answers" >
+        </activity>
+        <activity
+            android:name="se.chalmers.eda397.team7.so.activities.CommentsActivity"
+            android:label="@string/title_activity_comments" >
         </activity>
     </application>
 

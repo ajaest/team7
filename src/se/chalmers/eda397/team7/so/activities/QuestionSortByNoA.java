@@ -68,7 +68,7 @@ public class QuestionSortByNoA extends Activity{
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id){
 
 				Integer ide = questionList.get(position).getId();
-				Intent intent = new Intent(view.getContext(), QuestionInformation.class);
+				Intent intent = new Intent(view.getContext(), QuestionItemTab.class);
 				intent.putExtra("idQuestion", ide);
 				startActivity(intent);
 			}
