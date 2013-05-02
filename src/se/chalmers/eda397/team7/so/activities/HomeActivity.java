@@ -1,21 +1,10 @@
 package se.chalmers.eda397.team7.so.activities;
 
 
-import java.io.IOException;
-import java.util.List;
-
 import se.chalmers.eda397.team7.so.R;
-import se.chalmers.eda397.team7.so.SearchActivity;
-import se.chalmers.eda397.team7.so.data.SQLiteSODatabaseHelper;
-import se.chalmers.eda397.team7.so.data.entity.Comment;
-import se.chalmers.eda397.team7.so.data.entity.Post;
-import se.chalmers.eda397.team7.so.datalayer.DataLayerFactory;
-import se.chalmers.eda397.team7.so.datalayer.PostDataLayer;
 import android.app.ActionBar;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.Menu;
@@ -50,31 +39,19 @@ public class HomeActivity extends Activity {
 		// just to get text underlined
 		advSearch.setPaintFlags(advSearch.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
-		// database stuff
-		Context ctx = this.getApplicationContext();
-		SQLiteSODatabaseHelper databaseHelper = null;
-		try {
-			databaseHelper = new SQLiteSODatabaseHelper(ctx);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		SQLiteDatabase db = databaseHelper.getWritableDatabase();
-		DataLayerFactory dlf = new DataLayerFactory(db);
-		final PostDataLayer postDL = dlf.createPostDataLayer();
-
-
 
 		// search listener
 		searchView.setOnQueryTextListener(new OnQueryTextListener() {
 
 			@Override
 			public boolean onQueryTextSubmit(String query) {
+				
 				Intent intent = new Intent(HomeActivity.this, Questions_Tab_Activity.class);
 				intent.putExtra("typeSearch", 1);
 				intent.putExtra("tagPressed",query);
 				intent.putExtra("query", query);
 				startActivity(intent);
+
 				return false;
 
 

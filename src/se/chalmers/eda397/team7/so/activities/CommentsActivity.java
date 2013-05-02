@@ -8,7 +8,7 @@ import se.chalmers.eda397.team7.so.data.SQLiteSODatabaseHelper;
 import se.chalmers.eda397.team7.so.data.entity.Comment;
 import se.chalmers.eda397.team7.so.datalayer.CommentDataLayer;
 import se.chalmers.eda397.team7.so.datalayer.DataLayerFactory;
-import so.chalmers.eda397.so.data.entity.CommentListAdapter;
+import so.chalmers.eda397.team7.so.widget.CommentListAdapter;
 import android.app.Activity;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;

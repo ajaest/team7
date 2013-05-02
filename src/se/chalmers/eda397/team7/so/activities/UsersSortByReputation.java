@@ -8,8 +8,7 @@ import se.chalmers.eda397.team7.so.data.SQLiteSODatabaseHelper;
 import se.chalmers.eda397.team7.so.data.entity.User;
 import se.chalmers.eda397.team7.so.datalayer.DataLayerFactory;
 import se.chalmers.eda397.team7.so.datalayer.UserDataLayer;
-import so.chalmers.eda397.so.data.entity.UserListAdapter;
-import android.app.ActionBar;
+import so.chalmers.eda397.team7.so.widget.UserListAdapter;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -18,8 +17,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
 
 public class UsersSortByReputation extends Activity{
 
@@ -30,7 +29,6 @@ public class UsersSortByReputation extends Activity{
 	int typeSearch = 0;
 	UserDataLayer userDataLayer = null;
 
-	private ActionBar actionBar;
 
 
 	@Override
@@ -38,7 +36,6 @@ public class UsersSortByReputation extends Activity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_user_list);
 		
-		actionBar = getActionBar();
 		//actionBar.setDisplayShowTitleEnabled(true);
 		//actionBar.setDisplayHomeAsUpEnabled(true);
 		try {

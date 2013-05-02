@@ -23,10 +23,7 @@ import java.util.List;
 
 import se.chalmers.eda397.team7.so.R;
 import se.chalmers.eda397.team7.so.data.SQLiteSODatabaseHelper;
-import se.chalmers.eda397.team7.so.datalayer.DataLayerFactory;
-import android.R.integer;
 import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -43,11 +40,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
 
 public class TagCloudActivity extends FragmentActivity {
 
@@ -74,13 +69,13 @@ public class TagCloudActivity extends FragmentActivity {
 
         try {
 			SQLiteSODatabaseHelper test = new SQLiteSODatabaseHelper(this.getApplicationContext());
-			this.db = test.getWritableDatabase();
+			TagCloudActivity.db = test.getWritableDatabase();
 		
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        this.tagList = getAllTags();
+        TagCloudActivity.tagList = getAllTags();
         // Create an adapter that when requested, will return a fragment representing an object in
         // the collection.
         // 
@@ -133,7 +128,8 @@ public class TagCloudActivity extends FragmentActivity {
     	return tagsList;
     }
 
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
@@ -247,7 +243,6 @@ public class TagCloudActivity extends FragmentActivity {
         }
         
         private void setButtonListener2(Button button){
-        	final Context ctx = this.getActivity();
         	final String tag = button.getText().toString();
         	Log.d("testing","tag pressed:"+ tag);
         	// button on click listers

@@ -1,28 +1,26 @@
 package se.chalmers.eda397.team7.so.datalayer;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import se.chalmers.eda397.team7.so.data.entity.EntityCreationException;
 import se.chalmers.eda397.team7.so.data.entity.EntityUtils;
-import se.chalmers.eda397.team7.so.data.entity.Post;
-import se.chalmers.eda397.team7.so.data.entity.User;
+import se.chalmers.eda397.team7.so.data.entity.Question;
 import android.annotation.SuppressLint;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 @SuppressLint("UseValueOf")
-public class PostDataLayer extends DataLayer<Post>{
+public class PostDataLayer extends DataLayer<Question>{
 	
 	/* Lazy retrievers */
 	private DataLayer.LazyRetriever<String, PostIndexInformation> indexedFullTextLazyRetriever;
@@ -63,11 +61,8 @@ public class PostDataLayer extends DataLayer<Post>{
 		
 	}
 
-	/**
-	 * In this method the Entity factory is used
-	 * @return
-	 */
-	public Post createPost(
+
+	public Question createQuestion(
 		Integer id                       ,
 		Integer post_type_id             ,
 		Integer parent_id                ,
@@ -89,9 +84,8 @@ public class PostDataLayer extends DataLayer<Post>{
 		Integer comment_count            ,
 		Integer favorite_count 		
 	){
-		Post p = this.getEntityFactory().createPost(
+		Question p = this.getEntityFactory().createQuestion(
 				id                       ,
-				post_type_id             ,
 				parent_id                ,
 				accepted_answer_id       ,
 				creation_date            ,
@@ -118,13 +112,10 @@ public class PostDataLayer extends DataLayer<Post>{
 		return p;
 	}
 	
-	/**
-	 * In this method ones use the sql objet
-	 */
-	public Post getPostById(Integer id){
+	public Question getQuestionById(Integer id){
 
 
-		return this.querySingleInstance("SELECT * FROM posts WHERE id=?", new String[]{id.toString()});
+		return this.querySingleInstance("SELECT * FROM posts WHERE id=? AND post_type_id=1", new String[]{id.toString()});
 	}
 	
 	public ArrayList<String> getListOfTags(){
@@ -142,8 +133,6 @@ public class PostDataLayer extends DataLayer<Post>{
 		return tempString;
 	}
 
-
-
 	public void updatePost(Integer id, Map<String, String> attValues) {
 		
 		Map<String, String> key;
@@ -155,27 +144,27 @@ public class PostDataLayer extends DataLayer<Post>{
 		this.queryInsertOrReplace("posts", attValues, key);
 		
 	}
-	
-	//TODO: remove, just for testing!
-	public List<Post> getQuestionList(){
-		String queryString = "SELECT * FROM posts WHERE post_type_id=1 LIMIT 40";
+
+	public List<Question> getQuestionSortedBy(String sortCriteria){
+		String queryString = "SELECT * FROM posts WHERE post_type_id=1 ORDER BY "+ sortCriteria +" DESC LIMIT 40";
+		
 		return this.querySortedInstanceSet(queryString, new String[]{});
 	}
-	
-
 
 	//////////////////////////////////////
 	/////////// Paged searches
 	//////////////////////////////////////	
 	
-	public List<Post> pagedFullTextSearch(Set<String> words, Integer pageSize, Integer page){
+	public List<Question> pagedFullTextSearch(Set<String> words, Integer pageSize, Integer page){
 		
-		return this.pagedSearch(words, pageSize, page, this.indexedFullTextLazyRetriever, PostDataLayer.CACHE_ID_pagedFullTextSearchCache);
+		
+		return this.pagedSearch(words, pageSize, page, this.indexedFullTextLazyRetriever, PostDataLayer.CACHE_ID_pagedFullTextSearchCache, "post_type_id=1");
 	}
 	
-	public List<Post> pagedTagSearch(Set<String> words, Integer pageSize, Integer page){
+	public List<Question> pagedTagSearch(Set<String> words, Integer pageSize, Integer page){
 		
-		return this.pagedSearch(words, pageSize, page, this.indexedTagLazyRetriever, PostDataLayer.CACHE_ID_pagedTagSearch);
+				
+		return this.pagedSearch(words, pageSize, page, this.indexedTagLazyRetriever, PostDataLayer.CACHE_ID_pagedTagSearch, "post_type_id=1");
 	}
 	
 	//////////////////////////////////////
@@ -232,10 +221,11 @@ public class PostDataLayer extends DataLayer<Post>{
 		
 		String[] wordsArray;
 		
-		String titleIndexQuery    ;
-		String postIndexQuery     ;
-		String commentsIndexQuery ;
-		String tagsIndexQuery     ;
+		String titleIndexQuery     ;
+		String postIndexQuery      ;
+		String responsesIndexQuery ;
+		String commentsIndexQuery  ;
+		String tagsIndexQuery      ;
 
 		EnumSet<INDEX_MODE> mode ;
 		
@@ -243,10 +233,11 @@ public class PostDataLayer extends DataLayer<Post>{
 		
 		tStart = System.currentTimeMillis();
 		
-		titleIndexQuery    = generateSearchQuery(words.size(), "searchindex_post_titles", "word");
-		tagsIndexQuery     = generateSearchQuery(words.size(), "searchindex_tags"       , "tag" );
-		postIndexQuery     = generateSearchQuery(words.size(), "searchindex_posts"      , "word");
-		commentsIndexQuery = generateSearchQuery(words.size(), "searchindex_comments"   , "word");
+		titleIndexQuery       = generateSearchQuery(words.size(), "searchindex_question_titles", "word");
+		tagsIndexQuery        = generateSearchQuery(words.size(), "searchindex_tags"           , "tag" );
+		postIndexQuery        = generateSearchQuery(words.size(), "searchindex_questions"      , "word");
+		responsesIndexQuery   = generateSearchQuery(words.size(), "searchindex_responses"      , "word");
+		commentsIndexQuery    = generateSearchQuery(words.size(), "searchindex_comments"       , "word");
 		
 		indexInfos = new HashMap<Integer,PostIndexInformation>();
 		
@@ -265,13 +256,18 @@ public class PostDataLayer extends DataLayer<Post>{
 		extractMappedPostIndexesFromCursor(cur,mode,indexInfos);
 		
 		/* Posts */
-		mode = EnumSet.of(INDEX_MODE.POST);
+		mode = EnumSet.of(INDEX_MODE.QUESTION);
 		cur = db.rawQuery(postIndexQuery, wordsArray);
 		extractMappedPostIndexesFromCursor(cur,mode,indexInfos);
 		
 		/* Comments */
 		mode = EnumSet.of(INDEX_MODE.COMMENT);
 		cur = db.rawQuery(commentsIndexQuery, wordsArray);
+		extractMappedPostIndexesFromCursor(cur,mode,indexInfos);
+		
+		/* Responses */
+		mode = EnumSet.of(INDEX_MODE.RESPONSE);
+		cur = db.rawQuery(responsesIndexQuery, wordsArray);
 		extractMappedPostIndexesFromCursor(cur,mode,indexInfos);
 		
 		/* Now we sort the results */
@@ -290,9 +286,9 @@ public class PostDataLayer extends DataLayer<Post>{
 	//////////////////////////////////////
 	
 	@Override
-	protected Post createNotSyncronizedInstance(Cursor cur) {
+	protected Question createNotSyncronizedInstance(Cursor cur) {
 		
-		return EntityUtils.createPostFromCursor(this.getEntityFactory(), cur);
+		return EntityUtils.createQuestionFromCur(this.getEntityFactory(), cur);		
 	}
 	
 	private SortedSet<PostIndexInformation> extractSortedPostIndexesFromCursor(Cursor cur, EnumSet<INDEX_MODE> mode){
@@ -332,11 +328,14 @@ public class PostDataLayer extends DataLayer<Post>{
 			if(mode.contains(INDEX_MODE.TITLE)){
 				current.incrementTitleMatch();
 			}
-			if(mode.contains(INDEX_MODE.POST)){
+			if(mode.contains(INDEX_MODE.QUESTION)){
 				current.incrementPostMatch();
 			}
 			if(mode.contains(INDEX_MODE.COMMENT)){
 				current.incrementCommentMatch();
+			}
+			if(mode.contains(INDEX_MODE.RESPONSE)){
+				current.incrementResponseMatch();
 			}
 		}
 		
@@ -347,14 +346,15 @@ public class PostDataLayer extends DataLayer<Post>{
 	/////////// Public internal clases
 	//////////////////////////////////////
 	
-	public static class PostIndexInformation extends DataLayer.EntityIndex<Post> implements Comparable<PostIndexInformation>{
+	public static class PostIndexInformation extends DataLayer.EntityIndex<Question> implements Comparable<PostIndexInformation>{
 				
 		private final PostDataLayer pdl;
 		
-		private Integer titleMatchs   ;
-		private Integer postMatchs    ;
-		private Integer tagsMatchs    ;
-		private Integer commentsMatchs;
+		private Integer titleMatchs     ;
+		private Integer questionMatchs      ;
+		private Integer responseMatchs  ;
+		private Integer tagsMatchs      ;
+		private Integer commentsMatchs  ;
 		
 		protected PostIndexInformation(PostDataLayer pdl,Integer postId){
 			super(postId);
@@ -364,9 +364,15 @@ public class PostDataLayer extends DataLayer<Post>{
 			titleMatchs = 0;
 			tagsMatchs = 0;
 			commentsMatchs = 0;
-			postMatchs= 0;
+			questionMatchs= 0;
+			responseMatchs = 0;
 			
 			
+		}
+		
+
+		public void incrementResponseMatch(){
+			this.responseMatchs++;
 		}
 		
 		public void incrementTitleMatch(){
@@ -374,7 +380,7 @@ public class PostDataLayer extends DataLayer<Post>{
 		}
 		
 		public void incrementPostMatch(){
-			this.postMatchs++;
+			this.questionMatchs++;
 		}
 		
 		public void incrementTagMatch(){
@@ -386,16 +392,27 @@ public class PostDataLayer extends DataLayer<Post>{
 		}
 
 		
-		public Post retrieveInstance(){
-			return this.pdl.getPostById(this.getId());
+		public Question retrieveInstance(){
+			
+			Question q = this.pdl.getQuestionById(this.getId());;
+			
+			if(q==null){
+				throw new EntityCreationException("The created task");
+			}
+			
+			return q;
 		}
 		
 		public Integer getTitleMatchs() {
 			return titleMatchs;
 		}
 
-		public Integer getPostMatchs() {
-			return postMatchs;
+		public Integer getQuestionMatchs() {
+			return questionMatchs;
+		}
+		
+		public Integer getResponseMatchs() {
+			return questionMatchs;
 		}
 
 		public Integer getTagsMatchs() {
@@ -409,7 +426,7 @@ public class PostDataLayer extends DataLayer<Post>{
 		@Override
 		public String toString(){
 			
-			return "<[" + this.getId() + "]{" + this.titleMatchs + "," + this.tagsMatchs + "," + this.postMatchs + "," + this.commentsMatchs + "}>";
+			return "<[" + this.getId() + "]{" + this.titleMatchs + "," + this.tagsMatchs + "," + this.questionMatchs + "," + this.responseMatchs + "," + this.commentsMatchs + "}>";
 		}		
 		
 
@@ -420,15 +437,19 @@ public class PostDataLayer extends DataLayer<Post>{
 			result = prime
 					* result
 					+ ((commentsMatchs == null) ? 0 : commentsMatchs.hashCode());
-			result = prime * result + ((pdl == null) ? 0 : pdl.hashCode());
-			result = prime * result
-					+ ((postMatchs == null) ? 0 : postMatchs.hashCode());
+			result = prime
+					* result
+					+ ((questionMatchs == null) ? 0 : questionMatchs.hashCode());
+			result = prime
+					* result
+					+ ((responseMatchs == null) ? 0 : responseMatchs.hashCode());
 			result = prime * result
 					+ ((tagsMatchs == null) ? 0 : tagsMatchs.hashCode());
 			result = prime * result
 					+ ((titleMatchs == null) ? 0 : titleMatchs.hashCode());
 			return result;
 		}
+
 
 		@Override
 		public boolean equals(Object obj) {
@@ -444,15 +465,15 @@ public class PostDataLayer extends DataLayer<Post>{
 					return false;
 			} else if (!commentsMatchs.equals(other.commentsMatchs))
 				return false;
-			if (pdl == null) {
-				if (other.pdl != null)
+			if (questionMatchs == null) {
+				if (other.questionMatchs != null)
 					return false;
-			} else if (!pdl.equals(other.pdl))
+			} else if (!questionMatchs.equals(other.questionMatchs))
 				return false;
-			if (postMatchs == null) {
-				if (other.postMatchs != null)
+			if (responseMatchs == null) {
+				if (other.responseMatchs != null)
 					return false;
-			} else if (!postMatchs.equals(other.postMatchs))
+			} else if (!responseMatchs.equals(other.responseMatchs))
 				return false;
 			if (tagsMatchs == null) {
 				if (other.tagsMatchs != null)
@@ -467,6 +488,7 @@ public class PostDataLayer extends DataLayer<Post>{
 			return true;
 		}
 
+
 		@Override
 		public int compareTo(PostIndexInformation  rhs){
 			int compare = 0;
@@ -477,14 +499,19 @@ public class PostDataLayer extends DataLayer<Post>{
 				compare = this.tagsMatchs.compareTo(rhs.tagsMatchs);
 				
 				if(compare==0){
-					compare = this.postMatchs.compareTo(rhs.postMatchs);
 					
+					compare = this.questionMatchs.compareTo(rhs.questionMatchs);
 					if(compare==0){
-						compare = this.postMatchs.compareTo(rhs.postMatchs);
 						
-							if(compare==0){
-								compare = this.getId().compareTo(rhs.getId());
+						compare = this.responseMatchs.compareTo(rhs.responseMatchs);
+						if(compare==0){
+							
+							compare = this.commentsMatchs.compareTo(rhs.commentsMatchs);
+							
+								if(compare==0){
+									compare = this.getId().compareTo(rhs.getId());
 							}
+						}
 					}
 				}
 			}
@@ -494,40 +521,8 @@ public class PostDataLayer extends DataLayer<Post>{
 	}
 	
 	private enum INDEX_MODE{
-		TAG, TITLE, POST, COMMENT 
+		TAG, TITLE, QUESTION, RESPONSE, COMMENT 
 	};
-	
-
-	public User getOwnerQuestion(Integer idQuestion){
-		UserDataLayer userDataLayer = this.getDataLayerFactory().createUserDataLayer();
-		String queryString = "SELECT * FROM users where" +
-				" id = (SELECT owner_user_id FROM posts WHERE id=?)";
-		return userDataLayer.querySingleInstance(queryString, new String[]{idQuestion.toString()});
-	}
-	
-	public List<Post> getAnswersByPostId(Integer id){
-		String query = "SELECT * FROM posts WHERE parent_id = ? ";
-		return this.querySortedInstanceSet(query, new String[]{id.toString()});
-	}
-
-	public List<Post> getQuestionSortedBy(String sortCriteria){
-		String queryString = "SELECT * FROM posts WHERE post_type_id=1 ORDER BY "+ sortCriteria +" DESC LIMIT 40";
-		return this.querySortedInstanceSet(queryString, new String[]{});
-	}
-	
-	
-//	
-//	public List<String> getTags(Integer id){
-//		List<String> tagsList = new ArrayList<String>();
-//		String query = "SELECT tag FROM searchindex_tags WHERE id=?";
-//		Cursor cur = this.getDbInstance().rawQuery(query, new String[]{id.toString()});
-//		while(cur.moveToNext()){
-//			tagsList.add(cur.getString(0));
-//		}
-//		
-//		cur.close();
-//		return tagsList;
-//	}
 }
 
 

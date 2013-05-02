@@ -7,6 +7,7 @@ public class DataLayerFactory {
 	private PostDataLayer    postDl    = null;
 	private UserDataLayer    userDl    = null;
 	private CommentDataLayer commentDl = null;
+	private AnswerDataLayer  answerDl  = null;
 	
 	private final SQLiteDatabase db ;
 	
@@ -39,6 +40,15 @@ public class DataLayerFactory {
 		}
 		
 		return this.commentDl;
+	}
+	
+	public AnswerDataLayer createAnswerDataLayer(){
+		
+		if(this.answerDl==null){
+			this.answerDl = new AnswerDataLayer(this);
+		}
+		
+		return this.answerDl;
 	}
 
 	protected SQLiteDatabase getDB() {

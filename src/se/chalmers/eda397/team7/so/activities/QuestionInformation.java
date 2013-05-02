@@ -2,16 +2,13 @@ package se.chalmers.eda397.team7.so.activities;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Set;
 
 import se.chalmers.eda397.team7.so.R;
 import se.chalmers.eda397.team7.so.data.SQLiteSODatabaseHelper;
-import se.chalmers.eda397.team7.so.data.entity.Comment;
 import se.chalmers.eda397.team7.so.data.entity.EntityUtils;
 import se.chalmers.eda397.team7.so.data.entity.Post;
-import se.chalmers.eda397.team7.so.datalayer.CommentDataLayer;
 import se.chalmers.eda397.team7.so.datalayer.DataLayerFactory;
 import se.chalmers.eda397.team7.so.datalayer.PostDataLayer;
 import android.app.Activity;
@@ -22,7 +19,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TextView.BufferType;
 
@@ -36,21 +32,17 @@ public class QuestionInformation extends Activity{
 	private TextView dateQuestionTextView;
 	private TextView nViewsTextView;
 	private Button SeeAllAnswers;
-	private ListView commentsListView;
 	private ImageButton starButton;
 	private Bundle bundle;
 	private Integer idQuestion;
 	private Post question;
 	private PostDataLayer postDataLayer;
-	private CommentDataLayer commentDataLayer;
-	private ArrayList<Comment> commentList;
 	private Set<String> tagSet;
 	private SQLiteDatabase db;
 	boolean favoriteBool;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.question_info);
 
@@ -63,10 +55,8 @@ public class QuestionInformation extends Activity{
 			db = test.getWritableDatabase();
 			DataLayerFactory factory = new DataLayerFactory(db);
 			postDataLayer= factory.createPostDataLayer();
-			commentDataLayer = factory.createCommentDataLayer();
-			question = postDataLayer.getPostById(idQuestion);
+			question = postDataLayer.getQuestionById(idQuestion);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -77,11 +67,10 @@ public class QuestionInformation extends Activity{
 		nViewsTextView = (TextView) findViewById(R.id.textViewNumberViews);
 		tagListTextView = (TextView) findViewById(R.id.textViewTagList);
 		SeeAllAnswers = (Button) findViewById(R.id.buttonSeeAnswers);
-		commentsListView = (ListView) findViewById(R.id.listViewCommentsOfQuestion);
 		starButton = (ImageButton) findViewById(R.id.imageButtonStarQuestion);
 		questionTitleTextView.setText(question.getTitle());
 		questionBodyTextView.setText(EntityUtils.extractText(question.getBody()),BufferType.SPANNABLE);
-		ownerTextView.setText(postDataLayer.getOwnerQuestion(idQuestion).getDisplay_name());
+		ownerTextView.setText(question.getOwnerUser().getDisplay_name());
 		favoriteBool = false;
 		starButton.setBackgroundResource(R.drawable.star);
 		SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.US);

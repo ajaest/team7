@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 
+@SuppressWarnings("deprecation")
 public class QuestionItemTab extends TabActivity {
 
 	private static final String INFO = "Info";

@@ -8,7 +8,7 @@ import se.chalmers.eda397.team7.so.data.SQLiteSODatabaseHelper;
 import se.chalmers.eda397.team7.so.data.entity.User;
 import se.chalmers.eda397.team7.so.datalayer.DataLayerFactory;
 import se.chalmers.eda397.team7.so.datalayer.UserDataLayer;
-import so.chalmers.eda397.so.data.entity.UserListAdapter;
+import so.chalmers.eda397.team7.so.widget.UserListAdapter;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;

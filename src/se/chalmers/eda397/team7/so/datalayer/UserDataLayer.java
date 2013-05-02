@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 
 import se.chalmers.eda397.team7.so.data.SQLDataRuntimeException;
-import se.chalmers.eda397.team7.so.data.entity.Post;
 import se.chalmers.eda397.team7.so.data.entity.User;
 import android.annotation.SuppressLint;
 import android.database.Cursor;
@@ -94,7 +93,7 @@ public class UserDataLayer extends DataLayer<User>{
 	}
 	
 	@SuppressLint("UseValueOf")
-	@SuppressWarnings("deprecation")
+	@SuppressWarnings({ "deprecation"})
 	@Override
 	protected User createNotSyncronizedInstance(Cursor cur) {
 		

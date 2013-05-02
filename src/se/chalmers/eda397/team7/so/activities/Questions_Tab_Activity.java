@@ -8,6 +8,7 @@ import android.util.Log;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 
+@SuppressWarnings("deprecation")
 public class Questions_Tab_Activity extends TabActivity{
 
 	private static final String NEWER = "Newer";

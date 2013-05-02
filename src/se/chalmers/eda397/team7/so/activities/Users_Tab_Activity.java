@@ -7,17 +7,18 @@ import android.os.Bundle;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 
+@SuppressWarnings("deprecation")
 public class Users_Tab_Activity extends TabActivity{
 	
 	private static final String Alphabet = "A-Z";
 	private static final String Reputation = "Reputation";
 	
-    @Override
+	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_sort_main);
         
-        TabHost tabHost = getTabHost();
+		TabHost tabHost = getTabHost();
         
         // Newer Tab
         TabSpec alphabet = tabHost.newTabSpec(Alphabet);
