@@ -24,7 +24,9 @@ import java.util.List;
 import se.chalmers.eda397.team7.so.R;
 import se.chalmers.eda397.team7.so.data.SQLiteSODatabaseHelper;
 import se.chalmers.eda397.team7.so.datalayer.DataLayerFactory;
+import android.R.integer;
 import android.app.ActionBar;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -61,8 +63,8 @@ public class TagCloudActivity extends FragmentActivity {
     /**
      * The {@link android.support.v4.view.ViewPager} that will display the object collection.
      */
-    ViewPager mViewPager;
-    private  List<String> tagList;
+    static ViewPager mViewPager;
+    private  static List<String> tagList;
     private  static SQLiteDatabase db;
     private int buttonPressed =-1;
 
@@ -84,6 +86,7 @@ public class TagCloudActivity extends FragmentActivity {
         // 
         // ViewPager and its adapters use support library fragments, so we must use
         // getSupportFragmentManager.
+        mViewPager = (ViewPager) findViewById(R.id.pager);
         mDemoCollectionPagerAdapter = new DemoCollectionPagerAdapter(getSupportFragmentManager(),tagList);
 
         // Set up action bar.
@@ -94,15 +97,19 @@ public class TagCloudActivity extends FragmentActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         // Set up the ViewPager, attaching the adapter.
-        mViewPager = (ViewPager) findViewById(R.id.pager);
+       
         mViewPager.setAdapter(mDemoCollectionPagerAdapter);
     }
+   
     
     
     public int getButtonPressed() {
 		return buttonPressed;
 	}
 
+    public static ViewPager getViewPager(){
+    	return mViewPager;
+    }
 
 	public void setButtonPressed(int buttonPressed) {
 		this.buttonPressed = buttonPressed;
@@ -116,7 +123,7 @@ public class TagCloudActivity extends FragmentActivity {
     	Cursor cur;
     	List<String> tagsList = new ArrayList<String>();
   
-		cur = db.rawQuery("SELECT tag, count(*) FROM searchindex_tags GROUP BY tag ORDER BY 2 desc", null);
+		cur = db.rawQuery("SELECT tag, count(*) FROM searchindex_tags GROUP BY tag ORDER BY 1 ", null);
 		while(cur.moveToNext())
 			if (!cur.getString(0).equals("UL")) { //Problems with this tag, what is it??
 				tagsList.add(cur.getString(0));
@@ -163,6 +170,7 @@ public class TagCloudActivity extends FragmentActivity {
         public DemoCollectionPagerAdapter(FragmentManager fm, List<String> tagList) {
         	super(fm);
         	this.tagList = tagList;
+        	
         }
 
         @Override
@@ -177,7 +185,6 @@ public class TagCloudActivity extends FragmentActivity {
 
         @Override
         public int getCount() {
-            // For this contrived example, we have a 100-object collection.
             return tagList.size();
         }
 
@@ -187,9 +194,9 @@ public class TagCloudActivity extends FragmentActivity {
         } 
     }
 
-    /**
-     * A dummy fragment representing a section of the app, but that simply displays dummy text.
-     */
+
+    
+    
     public static class DemoObjectFragment extends Fragment {
 
         private Button centerButton;
@@ -205,13 +212,13 @@ public class TagCloudActivity extends FragmentActivity {
             Bundle args = getArguments();
             String centerTag = args.getString("center_tag");
             List<String> closeTagsList = getCloseTags(centerTag);
+            
             centerButton = (Button) rootView.findViewById(R.id.buttonCenter);
             topLeftButton = (Button) rootView.findViewById(R.id.buttonTopLeft);
             topRightButton = (Button) rootView.findViewById(R.id.buttonTopRight);
             bottomLeftButton = (Button) rootView.findViewById(R.id.buttonBottomLeft);
             bottomRightButton = (Button) rootView.findViewById(R.id.buttonBottomRight);
 
-            
             centerButton.setText(centerTag);
             if (closeTagsList.size()>0) 
 				topLeftButton.setText(closeTagsList.get(0));
@@ -231,12 +238,27 @@ public class TagCloudActivity extends FragmentActivity {
 				bottomRightButton.setVisibility(View.GONE);
 
             setButtonListener(centerButton);
-            setButtonListener(topLeftButton);
-            setButtonListener(topRightButton);
-            setButtonListener(bottomLeftButton);
-            setButtonListener(bottomRightButton);
+            setButtonListener2(topLeftButton);
+            setButtonListener2(topRightButton);
+            setButtonListener2(bottomLeftButton);
+            setButtonListener2(bottomRightButton);
          
             return rootView;
+        }
+        
+        private void setButtonListener2(Button button){
+        	final Context ctx = this.getActivity();
+        	final String tag = button.getText().toString();
+        	Log.d("testing","tag pressed:"+ tag);
+        	// button on click listers
+    		button.setOnClickListener(new OnClickListener() {
+    			@Override
+    			public void onClick(View v) {
+    				int pos = tagList.indexOf(tag);
+    				mViewPager.setCurrentItem(pos);
+
+    			}
+    		});
         }
         
         private void setButtonListener(Button button){

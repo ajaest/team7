@@ -16,6 +16,7 @@ import se.chalmers.eda397.team7.so.datalayer.DataLayerFactory;
 import se.chalmers.eda397.team7.so.datalayer.PostDataLayer;
 import so.chalmers.eda397.so.data.entity.CommentListAdapter;
 import android.app.Activity;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -101,8 +102,11 @@ public class QuestionInformation extends Activity{
 	
 	//Callback method for the button seeAnswers
 	public void showComments(View view){
+		Intent intent = new Intent(this, CommentsActivity.class);
+		intent.putExtra("idPost", idQuestion);
+		startActivity(intent);
 		
-		//To solve the problem of having the ListView inside a ScrollView
+	/*	//To solve the problem of having the ListView inside a ScrollView
 		commentsListView.setOnTouchListener(new ListView.OnTouchListener() {
 		        @Override
 		        public boolean onTouch(View v, MotionEvent event) {
@@ -126,7 +130,7 @@ public class QuestionInformation extends Activity{
 		    });
 		commentList = (ArrayList<Comment>)commentDataLayer.getCommentsByPostId(idQuestion);
 
-		commentsListView.setAdapter(new CommentListAdapter(this, commentList, R.layout.comment_item, db));
+		commentsListView.setAdapter(new CommentListAdapter(this, commentList, R.layout.comment_item, db));*/
 	}
 	
 	

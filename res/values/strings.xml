@@ -29,5 +29,8 @@
     <string name="title_activity_answer_item">Answer_item</string>
     <string name="multiTagHint">Search for tags</string>
     <string name="singelUserHint">Search for a user</string>
+    <string name="title_activity_question_item_tab">QuestionItemTab</string>
+    <string name="title_activity_answers">AnswersActivity</string>
+    <string name="title_activity_comments">CommentsActivity</string>
 
 </resources>
