@@ -58,19 +58,31 @@
         </activity>
         <activity
             android:name="se.chalmers.eda397.team7.so.activities.QuestionSortByDate"
-            android:label="@string/title_activity_search" >
+            android:label="@string/home_questions" >
         </activity>
         <activity
             android:name="se.chalmers.eda397.team7.so.activities.QuestionSortByNoA"
-            android:label="@string/title_activity_search" >
+            android:label="@string/home_questions" >
         </activity>
         <activity
             android:name="se.chalmers.eda397.team7.so.activities.Questions_Tab_Activity"
-            android:label="@string/title_activity_search" >
+            android:label="@string/home_questions" >
 		</activity>
 		<activity
             android:name="se.chalmers.eda397.team7.so.activities.TagCloudActivity"
             android:label="@string/title_activity_search" >
+        </activity>
+        <activity
+            android:name="se.chalmers.eda397.team7.so.activities.UsersSortByAlphabeth"
+            android:label="@string/title_activity_user_list" >
+        </activity>
+        <activity
+            android:name="se.chalmers.eda397.team7.so.activities.UsersSortByReputation"
+            android:label="@string/title_activity_user_list" >
+        </activity>
+        <activity
+            android:name="se.chalmers.eda397.team7.so.activities.Users_Tab_Activity"
+            android:label="@string/title_activity_user_list" >
         </activity>
     </application>
 

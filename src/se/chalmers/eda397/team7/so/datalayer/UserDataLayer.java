@@ -5,9 +5,11 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import se.chalmers.eda397.team7.so.data.SQLDataRuntimeException;
+import se.chalmers.eda397.team7.so.data.entity.Post;
 import se.chalmers.eda397.team7.so.data.entity.User;
 import android.annotation.SuppressLint;
 import android.database.Cursor;
@@ -24,6 +26,7 @@ public class UserDataLayer extends DataLayer<User>{
 		query = "SELECT * FROM users LIMIT 50";
 		return (ArrayList<User>) this.querySortedInstanceSet(query, null);
 	}
+
 	
 	public ArrayList<String> getDistinctListOfUsers(){
 		ArrayList<String> tempString = new ArrayList<String>();
@@ -40,6 +43,7 @@ public class UserDataLayer extends DataLayer<User>{
 		return tempString;
 	}
 	
+
 	public User getUserById(Integer id){
 		
 		String query;
@@ -49,6 +53,7 @@ public class UserDataLayer extends DataLayer<User>{
 		return this.querySingleInstance(query, new String[]{id.toString()});
 	}
 	
+
 	public User login(String userHash, String userPass){
 		//TODO userPass
 		String query;
@@ -57,8 +62,19 @@ public class UserDataLayer extends DataLayer<User>{
 		
 		return this.querySingleInstance(query, new String[]{userHash.toString()});
 	}
+
+	//user sorting criteria
+	public List<User> getUserSortedByAlphabeth(String sortCriteria){
+		String queryString = "SELECT * FROM users ORDER BY "+ sortCriteria +" ASC LIMIT 50";
+		return this.querySortedInstanceSet(queryString, new String[]{});
+	}
 	
-	
+	//user sorting criteria
+		public List<User> getUserSortedByReputation(String sortCriteria){
+			String queryString = "SELECT * FROM users ORDER BY "+ sortCriteria +" DESC LIMIT 50";
+			return this.querySortedInstanceSet(queryString, new String[]{});
+		}
+		
 	// Henriks stupid search
 	public ArrayList<User> searchForUser(String searchString){
 		String query;
