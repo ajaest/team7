@@ -25,6 +25,21 @@ public class UserDataLayer extends DataLayer<User>{
 		return (ArrayList<User>) this.querySortedInstanceSet(query, null);
 	}
 	
+	public ArrayList<String> getDistinctListOfUsers(){
+		ArrayList<String> tempString = new ArrayList<String>();
+		
+		String query = "SELECT DISTINCT  display_name FROM users";
+		Cursor cur = this.getDbInstance().rawQuery(query, null);
+		
+		while(cur.moveToNext()){		
+			tempString.add(cur.getString(0));
+			
+		}
+	
+			
+		return tempString;
+	}
+	
 	public User getUserById(Integer id){
 		
 		String query;

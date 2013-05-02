@@ -72,6 +72,7 @@ public class HomeActivity extends Activity {
 			public boolean onQueryTextSubmit(String query) {
 				Intent intent = new Intent(HomeActivity.this, Questions_Tab_Activity.class);
 				intent.putExtra("typeSearch", 1);
+				intent.putExtra("tagPressed",query);
 				intent.putExtra("query", query);
 				startActivity(intent);
 				return false;

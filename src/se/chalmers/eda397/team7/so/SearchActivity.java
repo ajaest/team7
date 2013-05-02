@@ -25,6 +25,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageButton;
@@ -48,21 +50,50 @@ public class SearchActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_search);
 		// XML thingys
-		AutoCompleteTextView singelUserSearch = (AutoCompleteTextView) findViewById(R.id.singelUserSearch);
+		final AutoCompleteTextView singelUserSearch = (AutoCompleteTextView) findViewById(R.id.singelUserSearch);
 		final MultiAutoCompleteTextView multiTagSearch = (MultiAutoCompleteTextView) findViewById(R.id.multiTagSearch);
 		ImageButton imgButton = (ImageButton) findViewById(R.id.multiTagButton);
+		Context ctx = this.getApplicationContext();
+		SQLiteSODatabaseHelper databaseHelper = null;
+		try {
+			databaseHelper = new SQLiteSODatabaseHelper(ctx);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		SQLiteDatabase db = databaseHelper.getWritableDatabase();
+		DataLayerFactory dlf = new DataLayerFactory(db);
+		final PostDataLayer postDL = dlf.createPostDataLayer();
+		final UserDataLayer userDL = dlf.createUserDataLayer();
+
+		
+		
 		
 		// SingelSeach
-		final String[] Users = new String[] {"Coincon", "eHenrik", "Murat", "Luis" };
+		
 		ArrayAdapter<String> userAdapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_dropdown_item_1line, Users);
+				android.R.layout.simple_dropdown_item_1line, userDL.getDistinctListOfUsers());
 		singelUserSearch.setAdapter(userAdapter);
+		
+		singelUserSearch.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				Intent intent = new Intent(SearchActivity.this, UserListActivity.class);
+				intent.putExtra("typeSearch", 3);
+				intent.putExtra("query", singelUserSearch.getText().toString());
+				startActivity(intent);
+			
+				
+			}
+		});
 		// MultiSeach
-		final String[] Tags = new String[] {"Java", "XML", "HTML", "Android", "Facebook"
-		};
+	
+
 
 		ArrayAdapter<String> tagAdapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_dropdown_item_1line, Tags);
+				android.R.layout.simple_dropdown_item_1line, postDL.getListOfTags());
 		multiTagSearch.setAdapter(tagAdapter);
 		multiTagSearch.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
 		
@@ -73,17 +104,22 @@ public class SearchActivity extends Activity {
 			public void onClick(View v) {
 				String query = "";
 				query = multiTagSearch.getText().toString();
+				
 				query = query.replaceAll(",", "");
 				query=query.toLowerCase();
 				Toast.makeText(getApplicationContext(), query, Toast.LENGTH_LONG).show();
 				
+				
 				Intent intent = new Intent(SearchActivity.this, Questions_Tab_Activity.class);
 				intent.putExtra("typeSearch", 2);
 				intent.putExtra("query", query);
+				intent.putExtra("tagPressed",query);
 				startActivity(intent);
+				
 				
 			}
 		});
+		
 		
 	}
 

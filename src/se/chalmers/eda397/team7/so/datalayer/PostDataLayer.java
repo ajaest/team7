@@ -126,6 +126,21 @@ public class PostDataLayer extends DataLayer<Post>{
 
 		return this.querySingleInstance("SELECT * FROM posts WHERE id=?", new String[]{id.toString()});
 	}
+	
+	public ArrayList<String> getListOfTags(){
+		ArrayList<String> tempString = new ArrayList<String>();
+		
+		String query = "SELECT DISTINCT  tag FROM searchindex_tags";
+		Cursor cur = this.getDbInstance().rawQuery(query, null);
+		
+		while(cur.moveToNext()){		
+			tempString.add(cur.getString(0));
+			
+		}
+	
+			
+		return tempString;
+	}
 
 
 
