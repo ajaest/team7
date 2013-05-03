@@ -171,15 +171,41 @@ public class PostDataLayer extends DataLayer<Question>{
 	/////////// Indexed searches
 	//////////////////////////////////////
 	
-	
 	public SortedSet<PostIndexInformation> indexedTagSearch(Set<String> words){
 		
-		String query;		
+		return indexedTagSearch(words, null);
+	}
+	
+	enum OrderCriteria{
+		CREATION_DATE;
+		
+		@Override
+		public String toString(){
+			
+			switch (this) {
+			case CREATION_DATE:
+				
+				return "creation_date";
+				
+			default:
+				throw new RuntimeException("WTF! you forgot to add an OrderCriteria !");
+			}
+		}		
+	}
+	
+	public SortedSet<PostIndexInformation> indexedTagSearch(Set<String> words, OrderCriteria orderCriteria){
+		
+		String query, orderTail;		
 		Cursor cur;
 		SortedSet<PostIndexInformation> postIds;
 		
+		if(orderCriteria!=null )
+			orderTail = " ORDER BY "  + orderCriteria.toString();
+		else
+			orderTail = null; 
+		
 		if(words.size()>0){		
-			query = generateIdSearchQuery(words.size(), "searchindex_tags", "posts", "tag");
+			query = generateIdSearchQuery(words.size(), "searchindex_tags", "posts", "tag", orderTail);
 			
 			cur = this.getDbInstance().rawQuery(query, words.toArray(new String[0]));
 			
