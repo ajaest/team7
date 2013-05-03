@@ -13,11 +13,16 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ListView;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
 
 public class AnswersActivity extends Activity {
 
@@ -46,6 +51,7 @@ public class AnswersActivity extends Activity {
 		}
 		answersList = (ArrayList<Post>)postDataLayer.getAnswersByPostId(idQuestion);
 		answersListView = (ListView) findViewById(R.id.listViewAnswers);
+		this.registerForContextMenu(answersListView);//For the floating menu
 		answersListView.setAdapter(new AnswerListAdapter(this, answersList, R.layout.answer_item));
 		answersListView.setOnItemClickListener(new OnItemClickListener(){
 			@Override
@@ -59,6 +65,31 @@ public class AnswersActivity extends Activity {
 		});        
 	}
 
+	
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v,
+	                                ContextMenuInfo menuInfo) {
+	    super.onCreateContextMenu(menu, v, menuInfo);
+	    MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.context_menu_answers, menu);
+	}
+	
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+	    AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+	    //info.position is the position in the list
+	    switch (item.getItemId()) {
+	        case R.id.voteUpAnswer:
+	            
+	            return true;
+	        case R.id.voteDownAnswer:
+	            
+	            return true;
+	        default:
+	            return super.onContextItemSelected(item);
+	    }
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
