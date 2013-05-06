@@ -25,7 +25,8 @@ public class PostDataLayer extends DataLayer<Question>{
 	/* Lazy retrievers */
 	private DataLayer.LazyRetriever<String, PostIndexInformation> indexedFullTextLazyRetriever;
 	private DataLayer.LazyRetriever<String, PostIndexInformation> indexedTagLazyRetriever     ; 	
-
+	
+	private OrderCriteria currentOrderCriteria = OrderCriteria.CREATION_DATE;
 	/* Cache IDS */
 	private static final Integer CACHE_ID_pagedFullTextSearchCache;
 	private static final Integer CACHE_ID_pagedTagSearch          ;
@@ -51,15 +52,28 @@ public class PostDataLayer extends DataLayer<Question>{
 		
 		indexedTagLazyRetriever = new 
 				DataLayer.LazyRetriever<String, PostIndexInformation>() {
+			
 					@Override
 					public Collection<PostIndexInformation> retrieve(Set<String> words) {
 						
-						return thiz.indexedTagSearch(words);
+						return thiz.indexedTagSearch(words, thiz.currentOrderCriteria);
 					}
+					
+					@Override
+					public int hashCode(){
+						
+						int hashcode = super.hashCode();
+						hashcode += thiz.currentOrderCriteria.hashCode() * 31;						
+						return hashcode;
+						
+					}
+				
 				}
 			;
 		
 	}
+	
+
 
 
 	public Question createQuestion(
@@ -161,8 +175,9 @@ public class PostDataLayer extends DataLayer<Question>{
 		return this.pagedSearch(words, pageSize, page, this.indexedFullTextLazyRetriever, PostDataLayer.CACHE_ID_pagedFullTextSearchCache, "post_type_id=1");
 	}
 	
-	public List<Question> pagedTagSearch(Set<String> words, Integer pageSize, Integer page){
+	public List<Question> pagedTagSearch(Set<String> words,OrderCriteria criteria, Integer pageSize, Integer page){
 		
+		this.currentOrderCriteria = criteria;
 				
 		return this.pagedSearch(words, pageSize, page, this.indexedTagLazyRetriever, PostDataLayer.CACHE_ID_pagedTagSearch, "post_type_id=1");
 	}

@@ -94,7 +94,7 @@ public abstract class DataLayer  <E> {
 		
 		tStart = System.currentTimeMillis();
 		
-		wordsHashCode = searchArgs.hashCode() + 31*cacheId;
+		wordsHashCode = searchArgs.hashCode() + 31*cacheId + 37* lazyRetriever.hashCode();
 		
 		if(this.cacheHash==null || !this.cacheHash.equals(wordsHashCode)){
 			cacheHash    = wordsHashCode;
