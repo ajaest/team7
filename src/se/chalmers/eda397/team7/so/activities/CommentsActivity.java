@@ -10,9 +10,14 @@ import se.chalmers.eda397.team7.so.datalayer.CommentDataLayer;
 import se.chalmers.eda397.team7.so.datalayer.DataLayerFactory;
 import so.chalmers.eda397.team7.so.widget.CommentListAdapter;
 import android.app.Activity;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.ListView;
 
 public class CommentsActivity extends Activity {
@@ -23,6 +28,7 @@ public class CommentsActivity extends Activity {
 	private SQLiteDatabase db;
 	private CommentDataLayer commentDataLayer;
 	private ArrayList<Comment> commentList;
+	private Button commentButton;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +36,7 @@ public class CommentsActivity extends Activity {
 		setContentView(R.layout.activity_comments);
 		
 		commentsListView = (ListView) findViewById(R.id.listViewComments);
+		commentButton = (Button) findViewById(R.id.buttonCommentPost);
 		
 		bundle = getIntent().getExtras();
 		idPost = bundle.getInt("idPost");
@@ -44,6 +51,18 @@ public class CommentsActivity extends Activity {
 		}
 		commentList = (ArrayList<Comment>)commentDataLayer.getComentsByPostId(idPost);
 		commentsListView.setAdapter(new CommentListAdapter(this, commentList, R.layout.comment_item, db));
+		
+		commentButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Intent intent =  new Intent(CommentsActivity.this, PopupAnswerOrCommentActivity.class);
+				intent.putExtra("idPost", idPost);
+				intent.putExtra("isComment", true);
+				startActivity(intent);
+
+			}
+		});
 	}
 
 	@Override

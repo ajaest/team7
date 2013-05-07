@@ -82,14 +82,6 @@
 		        android:onClick="showComments"
 		        android:text="See Comments" />
 
-		    <ListView
-		        android:id="@+id/listViewCommentsOfQuestion"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:layout_marginTop="10dp" >
-
-		    </ListView>
-
 	</LinearLayout>
 
 </ScrollView>

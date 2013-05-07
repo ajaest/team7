@@ -23,7 +23,7 @@ public class Questions_Tab_Activity extends TabActivity{
         bundle = getIntent().getExtras();
         ///Get the tag pressed from the tag cloud
         tagPressed = bundle.getString("tagPressed");
-        Log.d("testing","tag pressed tab activity:"+ tagPressed);
+        
         TabHost tabHost = getTabHost();
         
         // Newer Tab

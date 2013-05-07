@@ -16,6 +16,7 @@ import se.chalmers.eda397.team7.so.data.entity.Post;
 import se.chalmers.eda397.team7.so.data.entity.Question;
 import se.chalmers.eda397.team7.so.datalayer.DataLayerFactory;
 import se.chalmers.eda397.team7.so.datalayer.PostDataLayer;
+import se.chalmers.eda397.team7.so.datalayer.PostDataLayer.OrderCriteria;
 import se.chalmers.eda397.team7.so.datalayer.PostDataLayer.PostIndexInformation;
 import android.annotation.SuppressLint;
 import android.database.Cursor;
@@ -180,7 +181,7 @@ public class PostDataLayerTest extends InstrumentationTestCase {
 		for(int i=0; i<(indexResults.size()/10+1); i++){
 			enterLoop = true;
 
-			postResults = this.postDL.pagedTagSearch(words, 10, i);
+			postResults = this.postDL.pagedTagSearch(words, OrderCriteria.CREATION_DATE,10, i);
 			
 			for(int j=0; j<postResults.size(); j++){
 				assertEquals(indexResults.get(i*10 + j).getId(), postResults.get(j).getId());
@@ -206,7 +207,7 @@ public class PostDataLayerTest extends InstrumentationTestCase {
 		
 		List<Question> postResults;
 		for(int i=0; i<(indexResults.size()/50 + 1); i++){
-			postResults = this.postDL.pagedTagSearch(words, 50, i);
+			postResults = this.postDL.pagedTagSearch(words,OrderCriteria.CREATION_DATE, 50, i);
 			enterLoop = true;
 			
 			for(int j=0; j<postResults.size(); j++){
@@ -222,7 +223,7 @@ public class PostDataLayerTest extends InstrumentationTestCase {
 		assertTrue(indexResults.size()>0);
 		
 		for(int i=0; i<(indexResults.size()/50 + 1); i++){
-			postResults = this.postDL.pagedTagSearch(words, 50, i);
+			postResults = this.postDL.pagedTagSearch(words,OrderCriteria.CREATION_DATE, 50, i);
 			enterLoop = true;
 			
 			for(int j=0; j<postResults.size(); j++){

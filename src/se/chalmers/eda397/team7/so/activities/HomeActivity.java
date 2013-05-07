@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.webkit.WebView.FindListener;
 import android.widget.Button;
 import android.widget.SearchView;
 import android.widget.SearchView.OnQueryTextListener;
@@ -30,6 +31,7 @@ public class HomeActivity extends Activity {
 		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home);
+		final Button askButton = (Button) findViewById(R.id.home_make_question);
 		final Button QButton = (Button) findViewById(R.id.home_question);
 		final Button UButton = (Button) findViewById(R.id.home_Users);
 		final Button MYButton = (Button) findViewById(R.id.home_myaccount);
@@ -75,6 +77,17 @@ public class HomeActivity extends Activity {
 
 			}
 		});
+		
+		askButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Intent intent =  new Intent(HomeActivity.this, AskQuestionActivity.class);
+				
+				startActivity(intent);
+
+			}
+		});
 
 		UButton.setOnClickListener(new OnClickListener() {
 
@@ -90,8 +103,8 @@ public class HomeActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				Toast.makeText(getApplicationContext(), "Please implement me ", Toast.LENGTH_SHORT).show();
-
+				Intent intent = new Intent(HomeActivity.this, ProfileActivity.class);
+				startActivity(intent);
 			}
 		});
 

@@ -191,8 +191,9 @@ public class PostDataLayer extends DataLayer<Question>{
 		return indexedTagSearch(words, null);
 	}
 	
-	enum OrderCriteria{
-		CREATION_DATE;
+	public enum OrderCriteria{
+		CREATION_DATE,
+		ANSWER_COUNT;
 		
 		@Override
 		public String toString(){
@@ -201,7 +202,8 @@ public class PostDataLayer extends DataLayer<Question>{
 			case CREATION_DATE:
 				
 				return "creation_date";
-				
+			case ANSWER_COUNT:
+				return "answer_count";
 			default:
 				throw new RuntimeException("WTF! you forgot to add an OrderCriteria !");
 			}
@@ -215,7 +217,7 @@ public class PostDataLayer extends DataLayer<Question>{
 		SortedSet<PostIndexInformation> postIds;
 		
 		if(orderCriteria!=null )
-			orderTail = " ORDER BY "  + orderCriteria.toString();
+			orderTail = " 1=1 ORDER BY "  + orderCriteria.toString();
 		else
 			orderTail = null; 
 		

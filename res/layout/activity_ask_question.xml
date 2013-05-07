@@ -1,0 +1,54 @@
+ <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/scrollViewAskQuestion"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+    <LinearLayout 
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/textViewTitleAskQuestion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="Title:" />
+
+    <EditText
+        android:id="@+id/editTextTitleQuestion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10" >
+
+<!--         <requestFocus /> -->
+    </EditText>
+
+    <TextView
+        android:id="@+id/textViewTagAskQuestion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="Tags:" />
+
+    <EditText
+        android:id="@+id/editTextTagsQuestion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="at least one tag such as(regex java c++), max 5 tags" />
+
+    <TextView
+        android:id="@+id/textViewBodyAskQuestion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Body:" />
+
+    <EditText
+        android:id="@+id/editTextBodyQuestion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textMultiLine" />
+
+</LinearLayout>
+</ScrollView>

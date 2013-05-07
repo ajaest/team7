@@ -12,8 +12,10 @@
     <string name="see_all_answers">See All Answers</string>
     <string name="accepted_answer">Accepted Answer</string>
     <string name="accepted_answer_contents">Accepted Answer Contents</string>
+    <string name="menu_create"> Create question</string>
     <string name="title_activity_home">HomeActivity</string>
     <string name="home_search">Fake Search</string>
+    <string name="home_make_question">Ask a question</string>
     <string name="home_tag">Tags</string>
     <string name="home_questions">Questions</string>
     <string name="home_users">Users</string>
@@ -32,5 +34,9 @@
     <string name="title_activity_question_item_tab">QuestionItemTab</string>
     <string name="title_activity_answers">AnswersActivity</string>
     <string name="title_activity_comments">CommentsActivity</string>
+    <string name="title_activity_ask_question">Ask Question</string>
+    <string name="title_activity_popup_answer_question">PopupAnswerQuestionActivity</string>
+    <string name="title_activity_profile">ProfileActivity</string>
+    <string name="title_activity_profile_posts">ProfilePostsActivity</string>
 
 </resources>
