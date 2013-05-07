@@ -11,6 +11,7 @@ import se.chalmers.eda397.team7.so.data.SQLiteSODatabaseHelper;
 import se.chalmers.eda397.team7.so.data.entity.Question;
 import se.chalmers.eda397.team7.so.datalayer.DataLayerFactory;
 import se.chalmers.eda397.team7.so.datalayer.PostDataLayer;
+import se.chalmers.eda397.team7.so.datalayer.PostDataLayer.OrderCriteria;
 import so.chalmers.eda397.team7.so.widget.PostListAdapter;
 import android.app.Activity;
 import android.content.Intent;
@@ -113,7 +114,7 @@ public class QuestionSortByNoA extends Activity{
 		for (String word : parts) {
 			wordSet.add(word);
 		}
-		questions = postDataLayer.pagedTagSearch(wordSet, 50, 0);
+		questions = postDataLayer.pagedTagSearch(wordSet, OrderCriteria.ANSWER_COUNT, 50, 0);
 		return questions;
 	}
 }

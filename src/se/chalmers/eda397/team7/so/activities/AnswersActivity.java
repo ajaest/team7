@@ -14,13 +14,16 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.View.OnClickListener;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
@@ -34,6 +37,7 @@ public class AnswersActivity extends Activity {
 	private SQLiteDatabase db;
 	private PostDataLayer postDataLayer;
 	private Question question;
+	private Button answerQuestionButton;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +56,7 @@ public class AnswersActivity extends Activity {
 			e.printStackTrace();
 		}
 		
+		answerQuestionButton = (Button) findViewById(R.id.buttonAnswerQuestion);
 		question = postDataLayer.getQuestionById(idQuestion);
 		answersList = question.getAnswers();
 		answersListView = (ListView) findViewById(R.id.listViewAnswers);
@@ -67,6 +72,19 @@ public class AnswersActivity extends Activity {
 				startActivity(intent);
 			}
 		});        
+		
+		answerQuestionButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Intent intent =  new Intent(AnswersActivity.this, PopupAnswerOrCommentActivity.class);
+				Log.d("mytest", "id "+idQuestion.toString());
+				intent.putExtra("idPost", idQuestion);
+				intent.putExtra("isComment", false);
+				startActivity(intent);
+
+			}
+		});
 	}
 
 	

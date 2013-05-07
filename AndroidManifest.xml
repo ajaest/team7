@@ -67,8 +67,7 @@
         <activity
             android:name="se.chalmers.eda397.team7.so.activities.Questions_Tab_Activity"
             android:label="@string/home_questions" >
-		</activity>
-
+        </activity>
         <activity
             android:name="se.chalmers.eda397.team7.so.activities.TagCloudActivity"
             android:label="@string/title_activity_search" >
@@ -85,7 +84,7 @@
             android:name="se.chalmers.eda397.team7.so.activities.Users_Tab_Activity"
             android:label="@string/title_activity_user_list" >
         </activity>
-		<activity
+        <activity
             android:name="se.chalmers.eda397.team7.so.activities.QuestionItemTab"
             android:label="@string/title_activity_question_item_tab" >
         </activity>
@@ -96,6 +95,25 @@
         <activity
             android:name="se.chalmers.eda397.team7.so.activities.CommentsActivity"
             android:label="@string/title_activity_comments" >
+        </activity>
+        <activity
+            android:name="se.chalmers.eda397.team7.so.activities.AskQuestionActivity"
+            android:label="@string/title_activity_ask_question"
+            android:uiOptions="splitActionBarWhenNarrow" >
+        </activity>
+        <activity
+            android:name="se.chalmers.eda397.team7.so.activities.PopupAnswerOrCommentActivity"
+            android:label="@string/title_activity_popup_answer_question"
+            android:theme="@android:style/Theme.Holo.Dialog"
+            android:uiOptions="splitActionBarWhenNarrow" >
+        </activity>
+        <activity
+            android:name="se.chalmers.eda397.team7.so.activities.ProfileActivity"
+            android:label="@string/title_activity_profile" >
+        </activity>
+        <activity
+            android:name="se.chalmers.eda397.team7.so.activities.ProfilePostsActivity"
+            android:label="@string/title_activity_profile_posts" >
         </activity>
     </application>
 
