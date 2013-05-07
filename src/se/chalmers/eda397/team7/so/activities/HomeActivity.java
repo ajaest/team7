@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class HomeActivity extends Activity {
+	int userID;
 
 	private ActionBar actionBar;
 	@Override
@@ -38,7 +39,12 @@ public class HomeActivity extends Activity {
 		final TextView advSearch = (TextView) findViewById(R.id.home_textview);
 		// just to get text underlined
 		advSearch.setPaintFlags(advSearch.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+		Bundle bundle;
+		
+		bundle = getIntent().getExtras();
 
+			userID = bundle.getInt("UserID");
+	
 
 		// search listener
 		searchView.setOnQueryTextListener(new OnQueryTextListener() {
@@ -50,6 +56,8 @@ public class HomeActivity extends Activity {
 				intent.putExtra("typeSearch", 1);
 				intent.putExtra("tagPressed",query);
 				intent.putExtra("query", query);
+				intent.putExtra("UserID", userID);
+
 				startActivity(intent);
 
 				return false;
@@ -64,13 +72,14 @@ public class HomeActivity extends Activity {
 			}
 		});
 
-		// button on click listers
+		// qustionButton on click listers
 		QButton.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				Intent intent =  new Intent(HomeActivity.this, Questions_Tab_Activity.class);
 				intent.putExtra("tagPressed", " ");
+				intent.putExtra("UserID", userID);
 				startActivity(intent);
 
 			}
@@ -81,6 +90,7 @@ public class HomeActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(HomeActivity.this, Users_Tab_Activity.class);
+				intent.putExtra("UserID", userID);
 				startActivity(intent);
 			}
 		});
@@ -100,6 +110,7 @@ public class HomeActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(HomeActivity.this, TagCloudActivity.class);
+				intent.putExtra("UserID", userID);
 				startActivity(intent);
 
 			}
@@ -110,6 +121,7 @@ public class HomeActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(HomeActivity.this, SearchActivity.class);
+				intent.putExtra("UserID", userID);
 				startActivity(intent);
 				
 			}

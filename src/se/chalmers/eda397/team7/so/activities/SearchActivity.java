@@ -52,7 +52,11 @@ public class SearchActivity extends Activity {
 		DataLayerFactory dlf = new DataLayerFactory(db);
 		final PostDataLayer postDL = dlf.createPostDataLayer();
 		final UserDataLayer userDL = dlf.createUserDataLayer();
-
+		Bundle bundle;
+		final int userID;
+		bundle = getIntent().getExtras();
+    	userID = bundle.getInt("UserID");
+    	
 		
 		
 		
@@ -70,6 +74,7 @@ public class SearchActivity extends Activity {
 					long arg3) {
 				Intent intent = new Intent(SearchActivity.this, UserListActivity.class);
 				intent.putExtra("typeSearch", 3);
+				intent.putExtra("UserID", userID);
 				intent.putExtra("query", singelUserSearch.getText().toString());
 				startActivity(intent);
 			
@@ -102,6 +107,7 @@ public class SearchActivity extends Activity {
 				Intent intent = new Intent(SearchActivity.this, Questions_Tab_Activity.class);
 				intent.putExtra("typeSearch", 2);
 				intent.putExtra("query", query);
+				intent.putExtra("UserID", userID);
 				intent.putExtra("tagPressed",query);
 				startActivity(intent);
 				
@@ -131,17 +137,3 @@ public boolean onCreateOptionsMenu(Menu menu) {
 
 }
 
-/*    *******Commet''''''''''''
-		else if (radioTag.isChecked()) {
-			Intent intent = new Intent(SearchActivity.this, QuestionsActivity.class);
-			intent.putExtra("typeSearch", 2);
-			intent.putExtra("query", query);
-			startActivity(intent);
-		}
-
-		else if (radioUser.isChecked()){
-			Intent intent = new Intent(SearchActivity.this, UserListActivity.class);
-			intent.putExtra("typeSearch", 3);
-			intent.putExtra("query", query);
-			startActivity(intent);
- */

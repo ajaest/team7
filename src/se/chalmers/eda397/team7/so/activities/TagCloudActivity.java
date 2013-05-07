@@ -59,6 +59,7 @@ public class TagCloudActivity extends FragmentActivity {
      * The {@link android.support.v4.view.ViewPager} that will display the object collection.
      */
     static ViewPager mViewPager;
+    
     private  static List<String> tagList;
     private  static SQLiteDatabase db;
     private int buttonPressed =-1;

@@ -10,7 +10,7 @@ import android.widget.TabHost.TabSpec;
 
 @SuppressWarnings("deprecation")
 public class Questions_Tab_Activity extends TabActivity{
-
+	int userID;
 	private static final String NEWER = "Newer";
 	private static final String NoA = "Number Of Answers";
 	private Bundle bundle;
@@ -20,7 +20,12 @@ public class Questions_Tab_Activity extends TabActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.question_sort_main);
         
-        bundle = getIntent().getExtras();
+    	bundle = getIntent().getExtras();
+    	userID = bundle.getInt("UserID");
+    	
+			
+		
+
         ///Get the tag pressed from the tag cloud
         tagPressed = bundle.getString("tagPressed");
         Log.d("testing","tag pressed tab activity:"+ tagPressed);
@@ -31,9 +36,11 @@ public class Questions_Tab_Activity extends TabActivity{
         // Tab Icon
         Newer.setIndicator(NEWER);
         Intent inboxIntent = new Intent(this, QuestionSortByDate.class);
+        inboxIntent.putExtra("UserID", userID);
         if (!tagPressed.equals(" ")) { //We came from the tag cloud
         	inboxIntent.putExtra("typeSearch", 2);
             inboxIntent.putExtra("query", tagPressed);
+         
 		}
         	
         // Tab Content
@@ -43,9 +50,11 @@ public class Questions_Tab_Activity extends TabActivity{
         TabSpec numberOfAnswers = tabHost.newTabSpec(NoA);
         numberOfAnswers.setIndicator(NoA);
         Intent outboxIntent = new Intent(this, QuestionSortByNoA.class);
+        outboxIntent.putExtra("UserID", userID);
         if (!tagPressed.equals(" ")) { //We came from the tag cloud
         	outboxIntent.putExtra("query", tagPressed);
         	outboxIntent.putExtra("typeSearch", 2);
+   
         }
        
         numberOfAnswers.setContent(outboxIntent);

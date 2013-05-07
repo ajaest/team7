@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.TextView.BufferType;
+import android.widget.Toast;
 
 public class QuestionInformation extends Activity{
 	
@@ -39,21 +40,26 @@ public class QuestionInformation extends Activity{
 	private PostDataLayer postDataLayer;
 	private Set<String> tagSet;
 	private SQLiteDatabase db;
-	boolean favoriteBool;
+	
+
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.question_info);
-
+		
+		final int userID;
 		bundle = getIntent().getExtras();
 		idQuestion = bundle.getInt("idQuestion");
+		userID = bundle.getInt("UserID");
+		
 		
 		
 		try {
 			SQLiteSODatabaseHelper test = new SQLiteSODatabaseHelper(this.getApplicationContext());
 			db = test.getWritableDatabase();
 			DataLayerFactory factory = new DataLayerFactory(db);
+
 			postDataLayer= factory.createPostDataLayer();
 			question = postDataLayer.getQuestionById(idQuestion);
 		} catch (IOException e) {
@@ -71,8 +77,17 @@ public class QuestionInformation extends Activity{
 		questionTitleTextView.setText(question.getTitle());
 		questionBodyTextView.setText(EntityUtils.extractText(question.getBody()),BufferType.SPANNABLE);
 		ownerTextView.setText(question.getOwnerUser().getDisplay_name());
-		favoriteBool = false;
-		starButton.setBackgroundResource(R.drawable.star);
+		Toast.makeText(getApplicationContext(), ((Integer)userID).toString(), Toast.LENGTH_SHORT).show();
+	    if (postDataLayer.isFavourite(question.getId(), userID)){
+	    	starButton.setBackgroundResource(R.drawable.yellowstar);
+
+	    }
+	    else{
+	    	starButton.setBackgroundResource(R.drawable.star);
+
+
+	    			    
+	    }
 		SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.US);
 		dateQuestionTextView.setText(df.format(question.getCreation_date()));
 		if(question.getView_count()==0)
@@ -93,21 +108,29 @@ public class QuestionInformation extends Activity{
 			@Override
 			public void onClick(View v) {
 				// Change the picture and later add to the table of favorites
-			    if (favoriteBool){
-			    	starButton.setBackgroundResource(R.drawable.yellowstar);
+				Toast.makeText(getApplicationContext(), ((Integer)(postDataLayer.getAllFavourite(userID).size())).toString(), Toast.LENGTH_SHORT).show();
+			    if (postDataLayer.isFavourite(question.getId(), userID)){
+			    	postDataLayer.removeFavourite(question.getId(), userID);
+			    	starButton.setBackgroundResource(R.drawable.star);
+			    	
 			    }
 			    else{
-			    	starButton.setBackgroundResource(R.drawable.star);
 			    
+			    	postDataLayer.addFavourite(question.getId(), userID);
+			    	starButton.setBackgroundResource(R.drawable.yellowstar);
+			        
 			    }
-			    favoriteBool = !favoriteBool;
+			    
 				
 			
 				
 			}
 		});
+		
 
 	}
+
+
 	
 	
 	//Callback method for the button seeAnswers

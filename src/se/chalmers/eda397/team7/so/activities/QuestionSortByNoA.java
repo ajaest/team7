@@ -28,6 +28,7 @@ public class QuestionSortByNoA extends Activity{
 	private List<Question> questionList= new ArrayList<Question>();
 	private Bundle bundle;
 	String query="";
+	int userID;
 	int typeSearch = 0;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +49,7 @@ public class QuestionSortByNoA extends Activity{
 		if (bundle != null){
 			typeSearch = bundle.getInt("typeSearch");
 			query = bundle.getString("query");
+			userID = bundle.getInt("UserID");
 		}
 		if (typeSearch == 1){ // It questions
 			questionList = retriveSearchList(postDataLayer, query);
@@ -70,6 +72,7 @@ public class QuestionSortByNoA extends Activity{
 				Integer ide = questionList.get(position).getId();
 				Intent intent = new Intent(view.getContext(), QuestionItemTab.class);
 				intent.putExtra("idQuestion", ide);
+				intent.putExtra("UserID", userID);
 				startActivity(intent);
 			}
 		});        

@@ -81,6 +81,8 @@ public class UserDataLayer extends DataLayer<User>{
 		return (ArrayList<User>) this.querySortedInstanceSet(query, null);
 	}
 	
+	
+	
 	public void updateUser(Integer id, Map<String, String> attValues) throws SQLDataRuntimeException{
 		
 		Map<String, String> key;

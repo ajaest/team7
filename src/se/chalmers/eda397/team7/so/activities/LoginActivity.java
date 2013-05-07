@@ -278,9 +278,10 @@ public class LoginActivity extends Activity {
 				Intent intent = new Intent(thiz, HomeActivity.class);
 				intent.putExtra(USER_HASH_KEY, user.getId());
 				intent.putExtra(USER_EMAIL   , user.getId());
+				intent.putExtra("UserID", user.getId());
 				
 				startActivity(intent);
-				finish();
+				//finish();
 			} else {
 				mPasswordView
 						.setError(getString(R.string.error_incorrect_password));

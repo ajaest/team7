@@ -19,6 +19,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+
 @SuppressLint("UseValueOf")
 public class PostDataLayer extends DataLayer<Question>{
 	
@@ -72,8 +73,6 @@ public class PostDataLayer extends DataLayer<Question>{
 			;
 		
 	}
-	
-
 
 
 	public Question createQuestion(
@@ -142,7 +141,7 @@ public class PostDataLayer extends DataLayer<Question>{
 			tempString.add(cur.getString(0));
 			
 		}
-	
+		cur.close();
 			
 		return tempString;
 	}
@@ -164,6 +163,67 @@ public class PostDataLayer extends DataLayer<Question>{
 		
 		return this.querySortedInstanceSet(queryString, new String[]{});
 	}
+	//////////////////////////////////////
+	/////////// Favorite posts things
+	//////////////////////////////////////	
+	public void addFavourite(int post_id, int user_id)
+	{
+		String query ="";
+		query = "INSERT INTO favourite_posts (post_id,user_id) VALUES ("+ post_id+","+user_id+");";
+		this.getDbInstance().execSQL(query);
+		
+	}
+	
+	public List<Question> getAllFavourite(int user_id){
+		String query="";
+		List<Question> retList = new ArrayList<Question>();
+		query = "SELECT * FROM favourite_posts JOIN posts ON post_id=id WHERE user_id=?";
+		retList = this.querySortedInstanceSet(query, new String[]{""+user_id});
+		return retList;
+		
+	}
+	
+	public boolean isFavourite(int post_id,int user_id){
+		String query = "";
+		boolean exist = false;
+		
+		query = "SELECT count(*) FROM favourite_posts WHERE post_id=? AND user_id=?"; 
+		
+		Cursor cur = this.getDbInstance().rawQuery(query, new String[]{"" + post_id, "" + user_id});
+		cur.moveToNext();
+		exist = cur.getInt(0)>0;
+		cur.close();
+		return exist;
+
+	}
+	
+	/***********************************
+	 * TestFunction**********************
+	**************************************/
+	public String isFavouriteS(int post_id,int user_id){
+		String query = "";
+		query ="SELECT EXISTS(SELECT 1 FROM favourite_posts WHERE post_id="+post_id+" AND user_id="+user_id+" LIMIT 1);";
+		this.getDbInstance().rawQuery(query, null);
+		Cursor cur = this.getDbInstance().rawQuery(query, null);
+		String test = "";
+
+	
+		while(cur.moveToNext()){		
+			test = test + (cur.getString(0));		
+		}
+		cur.close();
+		return test;
+
+	}
+	
+	
+	public void removeFavourite(int post_id,int user_id){
+		String query ="";
+		query = "DELETE FROM favourite_posts WHERE post_id="+post_id+" AND user_id="+user_id+";";
+		this.getDbInstance().execSQL(query);
+		
+	}
+	
 
 	//////////////////////////////////////
 	/////////// Paged searches
@@ -173,6 +233,11 @@ public class PostDataLayer extends DataLayer<Question>{
 		
 		
 		return this.pagedSearch(words, pageSize, page, this.indexedFullTextLazyRetriever, PostDataLayer.CACHE_ID_pagedFullTextSearchCache, "post_type_id=1");
+	}
+	
+	public List<Question> pagedTagSearch(Set<String> words, Integer pageSize, Integer page){
+		
+		return this.pagedTagSearch(words, OrderCriteria.CREATION_DATE, pageSize, page);
 	}
 	
 	public List<Question> pagedTagSearch(Set<String> words,OrderCriteria criteria, Integer pageSize, Integer page){
@@ -191,7 +256,7 @@ public class PostDataLayer extends DataLayer<Question>{
 		return indexedTagSearch(words, null);
 	}
 	
-	enum OrderCriteria{
+	public enum OrderCriteria{
 		CREATION_DATE;
 		
 		@Override

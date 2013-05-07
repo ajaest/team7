@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import se.chalmers.eda397.team7.so.R;
 import se.chalmers.eda397.team7.so.data.SQLiteSODatabaseHelper;
 import se.chalmers.eda397.team7.so.data.entity.Question;
@@ -28,6 +27,7 @@ public class QuestionSortByDate extends Activity{
 	private List<Question> questionList= new ArrayList<Question>();
 	private Bundle bundle;
 	String query="";
+	int userID;
 	int typeSearch = 0;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +48,7 @@ public class QuestionSortByDate extends Activity{
 		if (bundle != null){
 			typeSearch = bundle.getInt("typeSearch");
 			query = bundle.getString("query");
+			userID = bundle.getInt("UserID");
 			
 		}
 		if (typeSearch == 1){ // It questions
@@ -71,6 +72,7 @@ public class QuestionSortByDate extends Activity{
 				Integer ide = questionList.get(position).getId();
 				Intent intent = new Intent(view.getContext(), QuestionItemTab.class);
 				intent.putExtra("idQuestion", ide);
+				intent.putExtra("UserID", userID);
 				startActivity(intent);
 			}
 		});        

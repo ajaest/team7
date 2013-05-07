@@ -120,7 +120,7 @@ public class QuestionsActivity extends Activity {
 		for (String word : parts) {
 			wordSet.add(word);
 		}
-		questions = postDataLayer.pagedTagSearch(wordSet, 50, 1);
+		questions = postDataLayer.pagedTagSearch(wordSet, 50, 0);
 		return questions;
 	}
 
