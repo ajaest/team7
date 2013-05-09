@@ -22,7 +22,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageButton;
 import android.widget.MultiAutoCompleteTextView;
-import android.widget.Toast;
+
 /*
  * TypeSearch
  * 	1 = SearchFullText Question
@@ -101,7 +101,6 @@ public class SearchActivity extends Activity {
 				
 				query = query.replaceAll(",", "");
 				query=query.toLowerCase();
-				Toast.makeText(getApplicationContext(), query, Toast.LENGTH_LONG).show();
 				
 				
 				Intent intent = new Intent(SearchActivity.this, Questions_Tab_Activity.class);

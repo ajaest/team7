@@ -7,6 +7,7 @@ import se.chalmers.eda397.team7.so.R;
 import se.chalmers.eda397.team7.so.data.SQLiteSODatabaseHelper;
 import se.chalmers.eda397.team7.so.data.entity.Answer;
 import se.chalmers.eda397.team7.so.data.entity.Question;
+import se.chalmers.eda397.team7.so.datalayer.AnswerDataLayer;
 import se.chalmers.eda397.team7.so.datalayer.DataLayerFactory;
 import se.chalmers.eda397.team7.so.datalayer.PostDataLayer;
 import so.chalmers.eda397.team7.so.widget.AnswerListAdapter;
@@ -27,6 +28,8 @@ import android.widget.Button;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import android.widget.TextView;
+
 
 public class AnswersActivity extends Activity {
 
@@ -36,14 +39,16 @@ public class AnswersActivity extends Activity {
 	private Integer idQuestion;
 	private SQLiteDatabase db;
 	private PostDataLayer postDataLayer;
+	private AnswerDataLayer answerDataLayer;
 	private Question question;
 	private Button answerQuestionButton;
+
+
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_answers);
-		
 		bundle = getIntent().getExtras();
 		idQuestion = bundle.getInt("idQuestion");
 		
@@ -52,10 +57,10 @@ public class AnswersActivity extends Activity {
 			db = test.getWritableDatabase();
 			DataLayerFactory factory = new DataLayerFactory(db);
 			postDataLayer= factory.createPostDataLayer();
+			answerDataLayer = factory.createAnswerDataLayer();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
 		answerQuestionButton = (Button) findViewById(R.id.buttonAnswerQuestion);
 		question = postDataLayer.getQuestionById(idQuestion);
 		answersList = question.getAnswers();
@@ -67,6 +72,7 @@ public class AnswersActivity extends Activity {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id){
 
 				Integer ide = answersList.get(position).getId();
+				
 				Intent intent = new Intent(view.getContext(), CommentsActivity.class);
 				intent.putExtra("idPost", ide);
 				startActivity(intent);
@@ -98,18 +104,25 @@ public class AnswersActivity extends Activity {
 	
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
-	    AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+	   AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 	    //info.position is the position in the list
+	    Integer position = info.position;
+	    Integer ide = answersList.get(position).getId();
+	    
+	    Integer i = answerDataLayer.getScore(ide); 
+    	
 	    switch (item.getItemId()) {
 	        case R.id.voteUpAnswer:
-	            
-	            return true;
+	        	answerDataLayer.voteUp(ide);
+	        	return true;
 	        case R.id.voteDownAnswer:
-	            
+	        	answerDataLayer.voteDown(ide); 
 	            return true;
 	        default:
 	            return super.onContextItemSelected(item);
 	    }
+	    
+	    
 	}
 	
 	@Override

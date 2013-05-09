@@ -335,6 +335,8 @@ public class PostDataLayer extends DataLayer<Question>{
 		return this.pagedSearch(words, pageSize, page, this.indexedTagLazyRetriever, PostDataLayer.CACHE_ID_pagedTagSearch, "post_type_id=1");
 	}
 	
+	
+
 	//////////////////////////////////////
 	/////////// Indexed searches
 	//////////////////////////////////////
