@@ -16,13 +16,10 @@ public class CommentDataLayer extends DataLayer<Comment> {
 		super(db);
 	}
 	
-	public List<Comment> getComentsByPostId(Integer id){
-	
-		final String query = "SELECT * FROM comments WHERE post_id = ?";
-		
-		return querySortedInstanceSet(query, new String[]{id.toString()});
-	}
-	
+	public List<Comment> getCommentsByPostId(Integer idPost){
+		String query = "SELECT * FROM comments WHERE post_id = ? ";
+		return this.querySortedInstanceSet(query, new String[]{idPost.toString()});
+	}	
 	
 	@SuppressWarnings({ "deprecation" })
 	@Override
@@ -71,10 +68,7 @@ public class CommentDataLayer extends DataLayer<Comment> {
 		this.queryInsertOrReplace("comments", attValues, key);
 	}
 	
-	public List<Comment> getCommentsByPostId(Integer idPost){
-		String query = "SELECT * FROM comments WHERE post_id = ? ";
-		return this.querySortedInstanceSet(query, new String[]{idPost.toString()});
-	}
+	
 	
 	
 }

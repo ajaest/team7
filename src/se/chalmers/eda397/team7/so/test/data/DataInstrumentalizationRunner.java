@@ -13,7 +13,7 @@ public class DataInstrumentalizationRunner extends InstrumentationTestRunner {
 		
 		testSuite = new InstrumentationTestSuite(this);
 		
-		testSuite.addTestSuite(PostDataLayerTest.class);
+		testSuite.addTestSuite(DataLayerTestSuite.suite().getClass());
 	}
 	
 	@Override

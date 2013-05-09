@@ -49,7 +49,7 @@ public class CommentsActivity extends Activity {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		commentList = (ArrayList<Comment>)commentDataLayer.getComentsByPostId(idPost);
+		commentList = (ArrayList<Comment>)commentDataLayer.getCommentsByPostId(idPost);
 		commentsListView.setAdapter(new CommentListAdapter(this, commentList, R.layout.comment_item, db));
 		
 		commentButton.setOnClickListener(new OnClickListener() {

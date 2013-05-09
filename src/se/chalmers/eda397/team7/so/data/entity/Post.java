@@ -121,7 +121,7 @@ public class Post extends Entity implements FullTextable {
 	 */
 	public List<Comment> getComments(){
 
-		return this.commendDl.getComentsByPostId(this.getId());
+		return this.commendDl.getCommentsByPostId(this.getId());
 	}
 	
 	
