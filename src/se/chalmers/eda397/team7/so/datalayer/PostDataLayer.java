@@ -126,6 +126,15 @@ public class PostDataLayer extends DataLayer<Question>{
 		return p;
 	}
 	
+	public Integer getMaxId(){
+		String queryString = "SELECT MAX(id) from posts where post_type_id=1";
+		Cursor cur = this.getDbInstance().rawQuery(queryString, null);
+		cur.moveToNext();
+		Integer max = cur.getInt(0);
+		cur.close();
+		return max;
+	}
+	
 	public Question getQuestionById(Integer id){
 
 

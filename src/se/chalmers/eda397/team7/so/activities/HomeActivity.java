@@ -92,7 +92,7 @@ public class HomeActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				Intent intent =  new Intent(HomeActivity.this, AskQuestionActivity.class);
-				
+				intent.putExtra("UserID", userID);
 				startActivity(intent);
 
 			}

@@ -343,7 +343,7 @@ public abstract class DataLayer  <E> {
 		
 		attList = new ArrayList<String>();
 		for(String attName : attValues.keySet()){
-			query  .append(attName + ", ");
+			query  .append(attName + ",");
 			replace.append("?,"          );
 			
 			attList.add(attValues.get(attName));
@@ -356,10 +356,10 @@ public abstract class DataLayer  <E> {
 		query  .append(") ");
 		replace.append(") ");
 		
-		query.append("VALUES (");
+		query.append("VALUES ");
 		query.append(replace   );
 		
-		if(key.size()>0){
+		/*if(key.size()>0){
 			
 			query.append("WHERE ");
 			
@@ -367,7 +367,7 @@ public abstract class DataLayer  <E> {
 				query.append(keyName + "=?");
 				attList.add(key.get(keyName));
 			}
-		}
+		}*/
 		
 		attArray = new Object[attValues.size()];
 		attArray = attList.toArray(attArray);

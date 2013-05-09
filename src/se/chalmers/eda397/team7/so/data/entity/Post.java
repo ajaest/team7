@@ -11,6 +11,8 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import android.R.string;
+
 import se.chalmers.eda397.team7.so.datalayer.CommentDataLayer;
 import se.chalmers.eda397.team7.so.datalayer.DataLayerFactory;
 import se.chalmers.eda397.team7.so.datalayer.PostDataLayer;
@@ -379,26 +381,26 @@ public class Post extends Entity implements FullTextable {
 			
 			values = new HashMap<String, String>();
 			
-			values.put("id"                       ,getId                       ().toString());
-			values.put("post_type_id"             ,getPost_type_id             ().toString());
-			values.put("parent_id"                ,getParent_id                ().toString());
-			values.put("accepted_answer_id"       ,getAccepted_answer_id       ().toString());
-			values.put("creation_date"            ,formatDate(getCreation_date ()      )    );
-			values.put("score"                    ,getScore                    ().toString());
-			values.put("view_count"               ,getView_count               ().toString());
-			values.put("body"                     ,getBody                     ().toString());
-			values.put("owner_user_id"            ,getOwner_user_id            ().toString());
-			values.put("last_editor_user_id"      ,getLast_editor_user_id      ().toString());
-			values.put("last_editor_display_name" ,getLast_editor_display_name ().toString());
-			values.put("last_edit_date"           ,formatDate(getLast_edit_date())          );
-			values.put("last_activity_date"       ,formatDate(getLast_activity_date()  )    );
-			values.put("community_owned_date"     ,formatDate(getCommunity_owned_date())    );
-			values.put("closed_date"              ,formatDate(getClosed_date   ()      )    );
-			values.put("title"                    ,getTitle                    ().toString());
-			values.put("tags"                     ,getTags                     ().toString());
-			values.put("answer_count"             ,getAnswer_count             ().toString());
-			values.put("comment_count"            ,getComment_count            ().toString());
-			values.put("favorite_count"           ,getFavorite_count           ().toString());
+			values.put("id"                       ,getId()!=null ? getId().toString() : "null" );
+			values.put("post_type_id"             ,getPost_type_id()!=null ? getPost_type_id().toString() : "null");
+			values.put("parent_id"                ,getParent_id() != null ? getParent_id().toString() : "null");
+			values.put("accepted_answer_id"       ,getAccepted_answer_id()!=null ? getAccepted_answer_id().toString(): "null");
+			values.put("creation_date"            ,getCreation_date()!=null ? formatDate(getCreation_date ()) : "null");
+			values.put("score"                    ,getScore()!=null ? getScore().toString(): "null");
+			values.put("view_count"               ,getView_count()!=null ? getView_count().toString(): "null");
+			values.put("body"                     ,getBody()!=null ? getBody().toString(): "null");
+			values.put("owner_user_id"            ,getOwner_user_id()!=null ? getOwner_user_id().toString(): "null");
+			values.put("last_editor_user_id"      ,getLast_editor_user_id()!=null ? getLast_editor_user_id().toString(): "null");
+			values.put("last_editor_display_name" ,getLast_editor_display_name()!=null ? getLast_editor_display_name().toString(): "null");
+			values.put("last_edit_date"           ,getLast_edit_date()!=null ? formatDate(getLast_edit_date()) : "null");
+			values.put("last_activity_date"       ,getLast_activity_date()!=null ? formatDate(getLast_activity_date()) : "null");
+			values.put("community_owned_date"     ,getCommunity_owned_date()!=null ? formatDate(getCommunity_owned_date()) : "null");
+			values.put("closed_date"              ,getClosed_date()!=null ? formatDate(getClosed_date())  : "null");
+			values.put("title"                    ,getTitle()!=null ? getTitle().toString(): "null");
+			values.put("tags"                     ,getTags()!=null ? getTags().toString(): "null");
+			values.put("answer_count"             ,getAnswer_count()!=null ? getAnswer_count().toString(): "null");
+			values.put("comment_count"            ,getComment_count()!=null ? getComment_count().toString(): "null");
+			values.put("favorite_count"           ,getFavorite_count()!=null ? getFavorite_count().toString(): "null");
 			
 			this.postDl.updatePost(id, values);
 			
@@ -413,7 +415,9 @@ public class Post extends Entity implements FullTextable {
 	
 	@SuppressWarnings("deprecation")
 	private String formatDate(Date d){
-		return MessageFormat.format("{0}{1}{2}", d.getMonth(), d.getMonth(), d.getDay());
+		//String date = MessageFormat.format("{0}-{1}-%s", d.getYear() + 1900, d.getMonth() + 1, d.getDate());
+		String date = Integer.toString(d.getYear()+1900) + "-" + Integer.toString(d.getMonth()+1) + "-" + Integer.toString(d.getDate());
+		return date;
 	}
 	
 	@Override
