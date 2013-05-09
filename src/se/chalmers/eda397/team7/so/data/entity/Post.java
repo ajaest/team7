@@ -8,13 +8,23 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import se.chalmers.eda397.team7.so.datalayer.CommentDataLayer;
 import se.chalmers.eda397.team7.so.datalayer.DataLayerFactory;
 import se.chalmers.eda397.team7.so.datalayer.PostDataLayer;
 import se.chalmers.eda397.team7.so.datalayer.UserDataLayer;
 
-public class Post extends Entity {
+public class Post extends Entity implements FullTextable {
+	
+	/* Shared static objects */
+	private final static Pattern WORD_PATTERN;
+	
+	static{
+		
+		WORD_PATTERN = Pattern.compile("([a-zA-Z_]+)");
+	}
 	
 	/* Entity relation factories */
 	private final CommentDataLayer commendDl;
@@ -309,6 +319,56 @@ public class Post extends Entity {
 	}
 
 	@Override
+	public Map<String, Set<String>> getFullTextIndexes() {
+		
+		Map<String, Set<String>> indexes       ;
+		Set<String>              current       ;
+		Matcher                  matchedResults;
+		
+		indexes  = new HashMap<String, Set<String>>();
+		
+		/* Post title */
+		current = new HashSet<String>();
+		if(this.getBody()!=null){
+			matchedResults = Post.WORD_PATTERN.matcher(this.getTitle());
+			for(int i=0; i<matchedResults.groupCount(); i++){
+				current.add(matchedResults.group(i));
+			}
+		}		
+		indexes.put("post_titles", current);
+		
+		/* Body search index */
+		current = new HashSet<String>();
+		if(this.getBody()!=null){
+			matchedResults = Post.WORD_PATTERN.matcher(this.getBody());
+			for(int i=0; i<matchedResults.groupCount(); i++){
+				current.add(matchedResults.group(i));
+			}
+		}
+		
+		indexes.put("posts", current);
+		
+		/* Comment search index */
+		current = new HashSet<String>();
+		if(this.getComments().size()!=0){
+			for(Comment comment : this.getComments()){
+				matchedResults = Post.WORD_PATTERN.matcher(comment.getText());
+				for(int i=0; i<matchedResults.groupCount(); i++){
+					current.add(matchedResults.group(i));
+				}
+			}
+		}
+		
+		indexes.put("comments", current);
+		
+		/* Tags search index */
+		indexes.put("tags", this.getTags());
+		
+		
+		return indexes;
+	}
+	
+	@Override
 	public boolean commit() {
 		
 		boolean modified;
@@ -346,6 +406,8 @@ public class Post extends Entity {
 		}else{
 			modified = false;
 		}
+		
+		
 		return modified;
 	}
 	

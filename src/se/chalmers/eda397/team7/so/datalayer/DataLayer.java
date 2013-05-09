@@ -410,16 +410,50 @@ public abstract class DataLayer  <E> {
 		public Collection<T> retrieve(Set<A> args);		
 	}
 	
-	protected static abstract class EntityIndex <J> {
+	protected static abstract class EntityIndex <J> implements Comparable<EntityIndex<J>>{
 		
-		private Integer id;
+		private Integer id         ;
+		private Integer insertOrder;
+		private boolean orderByInsertOrder;
+		
+		/**
+		 * 
+		 * @param id
+		 *            the entity id
+		 * @param insertOrder
+		 *            makes this entity sortable only by insert order. that means that the compareTo
+		 *            method will always return this.getInsertOrder().compareTo(otherObject)
+		 */
+		protected EntityIndex(Integer id, Integer insertOrder){
+			this.id = id;
+			this.insertOrder = insertOrder;
+			orderByInsertOrder = insertOrder!=null;
+		}
 		
 		protected EntityIndex(Integer id){
-			this.id = id;
+			this(id, null);
 		}
 		
 		public Integer getId(){
 			return this.id;
+		}
+		
+		public Integer getInsertOrder(){
+			return this.insertOrder;
+		}
+		
+		public void setInsertOrder(Integer insertOrder){
+			this.orderByInsertOrder = this.orderByInsertOrder && insertOrder!=null;
+			
+			this.insertOrder = insertOrder;
+		}
+		
+		public boolean isCompareByInsertOrder(){
+			return this.orderByInsertOrder;
+		}
+		
+		public void setCompareByInsertOrder(boolean byInsertOrder){
+			this.orderByInsertOrder = byInsertOrder;
 		}
 		
 		public abstract J retrieveInstance();
@@ -449,6 +483,22 @@ public abstract class DataLayer  <E> {
 				return false;
 			return true;
 		}
+		
+		@Override
+		public int compareTo(EntityIndex<J> obj){
+			
+			int compare;
+			
+			if(this.orderByInsertOrder){
+				compare = this.getInsertOrder().compareTo(obj.getInsertOrder());
+			}else{
+				compare = this.entityNaturalCompareTo(obj);
+			}
+			
+			return compare;
+		}
+
+		protected abstract int entityNaturalCompareTo(EntityIndex<J> obj);
 
 	}
 }

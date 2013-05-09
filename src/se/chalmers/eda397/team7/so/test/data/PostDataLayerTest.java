@@ -166,6 +166,62 @@ public class PostDataLayerTest extends InstrumentationTestCase {
 		
 	}
 	
+	public void test_indexedTagSearch_withOrderCriteria(){
+		
+		Set<String> words = new HashSet<String>(Arrays.asList(new String[]{"java"}));
+		
+		SortedSet<PostIndexInformation> indexResults = this.postDL.indexedTagSearch(words,OrderCriteria.CREATION_DATE);
+		
+		assertTrue(indexResults.size()>0);
+		
+		Post previousPost = null;
+		Post curPost;
+		Set<String> tagIntersection;
+		for(PostIndexInformation postIdx : indexResults){
+			curPost = postIdx.retrieveInstance();
+			 
+			tagIntersection = new HashSet<String>(words);
+			tagIntersection.retainAll(curPost.getTags());
+			
+			assertEquals((Integer)tagIntersection.size(), postIdx.getTagsMatchs());
+			
+			if(previousPost!=null){
+				assertTrue(previousPost.getCreation_date().compareTo(curPost.getCreation_date())>=0);
+			}
+			
+			previousPost = curPost;
+		}
+		
+	}
+	
+	public void test_indexedTagSearch_withAnswerCountCriteria(){
+		
+		Set<String> words = new HashSet<String>(Arrays.asList(new String[]{"java"}));
+		
+		SortedSet<PostIndexInformation> indexResults = this.postDL.indexedTagSearch(words,OrderCriteria.ANSWER_COUNT);
+		
+		assertTrue(indexResults.size()>0);
+		
+		Post previousPost = null;
+		Post curPost;
+		Set<String> tagIntersection;
+		for(PostIndexInformation postIdx : indexResults){
+			curPost = postIdx.retrieveInstance();
+			 
+			tagIntersection = new HashSet<String>(words);
+			tagIntersection.retainAll(curPost.getTags());
+			
+			assertEquals((Integer)tagIntersection.size(), postIdx.getTagsMatchs());
+			
+			if(previousPost!=null){
+				assertTrue(previousPost.getAnswer_count().compareTo(curPost.getAnswer_count())>=0);
+			}
+			
+			previousPost = curPost;
+		}
+		
+	}
+	
 	public void test_pagedTagSearch(){
 		
 		Set<String> words                       ;
@@ -181,7 +237,8 @@ public class PostDataLayerTest extends InstrumentationTestCase {
 		for(int i=0; i<(indexResults.size()/10+1); i++){
 			enterLoop = true;
 
-			postResults = this.postDL.pagedTagSearch(words, OrderCriteria.CREATION_DATE,10, i);
+			postResults = this.postDL.pagedTagSearch(words,10, i);
+
 			
 			for(int j=0; j<postResults.size(); j++){
 				assertEquals(indexResults.get(i*10 + j).getId(), postResults.get(j).getId());
@@ -207,7 +264,8 @@ public class PostDataLayerTest extends InstrumentationTestCase {
 		
 		List<Question> postResults;
 		for(int i=0; i<(indexResults.size()/50 + 1); i++){
-			postResults = this.postDL.pagedTagSearch(words,OrderCriteria.CREATION_DATE, 50, i);
+			postResults = this.postDL.pagedTagSearch(words, 50, i);
+
 			enterLoop = true;
 			
 			for(int j=0; j<postResults.size(); j++){
@@ -223,7 +281,8 @@ public class PostDataLayerTest extends InstrumentationTestCase {
 		assertTrue(indexResults.size()>0);
 		
 		for(int i=0; i<(indexResults.size()/50 + 1); i++){
-			postResults = this.postDL.pagedTagSearch(words,OrderCriteria.CREATION_DATE, 50, i);
+			postResults = this.postDL.pagedTagSearch(words, 50, i);
+
 			enterLoop = true;
 			
 			for(int j=0; j<postResults.size(); j++){

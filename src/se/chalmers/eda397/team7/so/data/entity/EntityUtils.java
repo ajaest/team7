@@ -50,9 +50,9 @@ public class EntityUtils {
 		dateString  = cur.getString(cur.getColumnIndex("creation_date"));
 		split = dateString.split("-");
 		if(split.length==3){
-			creation_date            = new Date();
+			creation_date            = new Date(0,0,0,0,0,0);
 			creation_date.setYear (new Integer(split[0]) - 1900);
-			creation_date.setMonth(new Integer(split[1]));
+			creation_date.setMonth(new Integer(split[1])-1);
 			creation_date.setDate (new Integer(split[2]));
 		}else{
 			creation_date = null;
@@ -68,9 +68,9 @@ public class EntityUtils {
 		dateString  = cur.getString(cur.getColumnIndex("last_edit_date"));
 		split = dateString.split("-");
 		if(split.length==3){
-			last_edit_date            = new Date();
+			last_edit_date            = new Date(0,0,0,0,0,0);
 			last_edit_date.setYear (new Integer(split[0]) - 1900);
-			last_edit_date.setMonth(new Integer(split[1]));
+			last_edit_date.setMonth(new Integer(split[1])-1);
 			last_edit_date.setDate (new Integer(split[2]));
 		}else{
 			last_edit_date = null;
@@ -79,9 +79,9 @@ public class EntityUtils {
 		dateString  = cur.getString(cur.getColumnIndex("last_activity_date"));
 		split = dateString.split("-");
 		if(split.length==3){
-			last_activity_date            = new Date();
+			last_activity_date            = new Date(0,0,0,0,0,0);
 			last_activity_date.setYear (new Integer(split[0]) - 1900);
-			last_activity_date.setMonth(new Integer(split[1]));
+			last_activity_date.setMonth(new Integer(split[1])-1);
 			last_activity_date.setDate (new Integer(split[2]));
 		}else{
 			last_activity_date = null;
@@ -91,9 +91,9 @@ public class EntityUtils {
 		dateString  = cur.getString(cur.getColumnIndex("community_owned_date"));
 		split = dateString.split("-");
 		if(split.length==3){
-			community_owned_date            = new Date();
+			community_owned_date            = new Date(0,0,0,0,0,0);
 			community_owned_date.setYear (new Integer(split[0]) - 1900);
-			community_owned_date.setMonth(new Integer(split[1]));
+			community_owned_date.setMonth(new Integer(split[1])-1);
 			community_owned_date.setDate (new Integer(split[2]));
 		}else{
 			community_owned_date = null;
@@ -102,9 +102,9 @@ public class EntityUtils {
 		dateString  = cur.getString(cur.getColumnIndex("closed_date"));
 		split = dateString.split("-");
 		if(split.length==3){
-			closed_date            = new Date();
+			closed_date            = new Date(0,0,0,0,0,0);
 			closed_date.setYear (new Integer(split[0]) - 1900);
-			closed_date.setMonth(new Integer(split[1]));
+			closed_date.setMonth(new Integer(split[1])-1);
 			closed_date.setDate (new Integer(split[2]));
 		}else{
 			closed_date = null;
@@ -184,9 +184,9 @@ public class EntityUtils {
 		dateString  = cur.getString(cur.getColumnIndex("creation_date"));
 		split = dateString.split("-");
 		if(split.length==3){
-			creation_date            = new Date();
+			creation_date            = new Date(0,0,0,0,0,0);
 			creation_date.setYear (new Integer(split[0]) - 1900);
-			creation_date.setMonth(new Integer(split[1]));
+			creation_date.setMonth(new Integer(split[1])-1);
 			creation_date.setDate (new Integer(split[2]));
 		}else{
 			creation_date = null;
@@ -202,9 +202,9 @@ public class EntityUtils {
 		dateString  = cur.getString(cur.getColumnIndex("last_edit_date"));
 		split = dateString.split("-");
 		if(split.length==3){
-			last_edit_date            = new Date();
+			last_edit_date            = new Date(0,0,0,0,0,0);
 			last_edit_date.setYear (new Integer(split[0]) - 1900);
-			last_edit_date.setMonth(new Integer(split[1]));
+			last_edit_date.setMonth(new Integer(split[1])-1);
 			last_edit_date.setDate (new Integer(split[2]));
 		}else{
 			last_edit_date = null;
@@ -213,9 +213,9 @@ public class EntityUtils {
 		dateString  = cur.getString(cur.getColumnIndex("last_activity_date"));
 		split = dateString.split("-");
 		if(split.length==3){
-			last_activity_date            = new Date();
+			last_activity_date            = new Date(0,0,0,0,0,0);
 			last_activity_date.setYear (new Integer(split[0]) - 1900);
-			last_activity_date.setMonth(new Integer(split[1]));
+			last_activity_date.setMonth(new Integer(split[1])-1);
 			last_activity_date.setDate (new Integer(split[2]));
 		}else{
 			last_activity_date = null;
@@ -225,9 +225,9 @@ public class EntityUtils {
 		dateString  = cur.getString(cur.getColumnIndex("community_owned_date"));
 		split = dateString.split("-");
 		if(split.length==3){
-			community_owned_date            = new Date();
+			community_owned_date            = new Date(0,0,0,0,0,0);
 			community_owned_date.setYear (new Integer(split[0]) - 1900);
-			community_owned_date.setMonth(new Integer(split[1]));
+			community_owned_date.setMonth(new Integer(split[1])-1);
 			community_owned_date.setDate (new Integer(split[2]));
 		}else{
 			community_owned_date = null;
@@ -236,9 +236,9 @@ public class EntityUtils {
 		dateString  = cur.getString(cur.getColumnIndex("closed_date"));
 		split = dateString.split("-");
 		if(split.length==3){
-			closed_date            = new Date();
+			closed_date            = new Date(0,0,0,0,0,0);
 			closed_date.setYear (new Integer(split[0]) - 1900);
-			closed_date.setMonth(new Integer(split[1]));
+			closed_date.setMonth(new Integer(split[1])-1);
 			closed_date.setDate (new Integer(split[2]));
 		}else{
 			closed_date = null;

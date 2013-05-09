@@ -27,7 +27,7 @@ public class PostDataLayer extends DataLayer<Question>{
 	private DataLayer.LazyRetriever<String, PostIndexInformation> indexedFullTextLazyRetriever;
 	private DataLayer.LazyRetriever<String, PostIndexInformation> indexedTagLazyRetriever     ; 	
 	
-	private OrderCriteria currentOrderCriteria = OrderCriteria.CREATION_DATE;
+	private OrderCriteria currentOrderCriteria = null;
 	/* Cache IDS */
 	private static final Integer CACHE_ID_pagedFullTextSearchCache;
 	private static final Integer CACHE_ID_pagedTagSearch          ;
@@ -64,7 +64,8 @@ public class PostDataLayer extends DataLayer<Question>{
 					public int hashCode(){
 						
 						int hashcode = super.hashCode();
-						hashcode += thiz.currentOrderCriteria.hashCode() * 31;						
+						if(thiz.currentOrderCriteria!=null)
+							hashcode += thiz.currentOrderCriteria.hashCode() * 31;	
 						return hashcode;
 						
 					}
@@ -145,6 +146,34 @@ public class PostDataLayer extends DataLayer<Question>{
 			
 		return tempString;
 	}
+	
+	public Question newQuestion(String body, String title, String tags, int user_id){
+		
+//		Question q = this.getEntityFactory().createQuestion(
+//			id, 
+//			parent_id, 
+//			accepted_answer_id, 
+//			creation_date, 
+//			score, 
+//			view_count, 
+//			body, 
+//			owner_user_id, 
+//			last_editor_user_id, 
+//			last_editor_display_name, 
+//			last_edit_date, 
+//			last_activity_date, 
+//			community_owned_date, 
+//			closed_date, 
+//			title, 
+//			tags, 
+//			answer_count, 
+//			comment_count, 
+//			favorite_count
+//		);
+//		
+		return null;
+		
+	}
 
 	public void updatePost(Integer id, Map<String, String> attValues) {
 		
@@ -156,6 +185,16 @@ public class PostDataLayer extends DataLayer<Question>{
 		
 		this.queryInsertOrReplace("posts", attValues, key);
 		
+	}
+	
+	public void updateIndex(Integer id, Map<String, String> indexValues) {
+		
+		String query = "DELETE FROM searchindex_%s WERE id=?";
+		
+//		String 
+		for(String index_suffix : indexValues.keySet()){
+			
+		}
 	}
 
 	public List<Question> getQuestionSortedBy(String sortCriteria){
@@ -225,7 +264,7 @@ public class PostDataLayer extends DataLayer<Question>{
 	public List<Question> getAllFavourite(int user_id, OrderCriteria orderCriteria){
 		String query="";
 		List<Question> retList = new ArrayList<Question>();
-		query = "SELECT * FROM favourite_posts JOIN posts ON post_id=id WHERE user_id=? ORDER BY ?";
+		query = "SELECT * FROM favourite_posts JOIN posts ON post_id=id WHERE user_id=? ORDER BY ? DESC";
 		retList = this.querySortedInstanceSet(query, new String[]{""+user_id, orderCriteria.toString()});
 		return retList;
 		
@@ -285,7 +324,7 @@ public class PostDataLayer extends DataLayer<Question>{
 	
 	public List<Question> pagedTagSearch(Set<String> words, Integer pageSize, Integer page){
 		
-		return this.pagedTagSearch(words, OrderCriteria.CREATION_DATE, pageSize, page);
+		return this.pagedTagSearch(words, null, pageSize, page);
 	}
 	
 	public List<Question> pagedTagSearch(Set<String> words,OrderCriteria criteria, Integer pageSize, Integer page){
@@ -305,6 +344,7 @@ public class PostDataLayer extends DataLayer<Question>{
 	}
 	
 	public enum OrderCriteria{
+		
 		CREATION_DATE,
 		ANSWER_COUNT;
 		
@@ -328,18 +368,23 @@ public class PostDataLayer extends DataLayer<Question>{
 		String query, orderTail;		
 		Cursor cur;
 		SortedSet<PostIndexInformation> postIds;
+		EnumSet<INDEX_MODE> searchMode;
 		
-		if(orderCriteria!=null )
-			orderTail = " 1=1 ORDER BY "  + orderCriteria.toString();
-		else
-			orderTail = null; 
+		searchMode = EnumSet.of(INDEX_MODE.TAG);
+		
+		if(orderCriteria!=null ){
+			orderTail = " 1=1 ORDER BY "  + orderCriteria.toString() + " DESC";
+			searchMode.add(INDEX_MODE.QUERY_ORDER);
+		}else{
+			orderTail = null;
+		}
 		
 		if(words.size()>0){		
 			query = generateIdSearchQuery(words.size(), "searchindex_tags", "posts", "tag", orderTail);
 			
 			cur = this.getDbInstance().rawQuery(query, words.toArray(new String[0]));
 			
-			postIds = this.extractSortedPostIndexesFromCursor(cur, EnumSet.of(INDEX_MODE.TAG));
+			postIds = this.extractSortedPostIndexesFromCursor(cur, searchMode);
 			
 		}else{
 			postIds = new TreeSet<PostDataLayer.PostIndexInformation>();
@@ -478,6 +523,8 @@ public class PostDataLayer extends DataLayer<Question>{
 				postIdsMap.put(currentId, current);
 			}
 			
+			current.setInsertOrder(cur.getPosition());
+			
 			if(mode.contains(INDEX_MODE.TAG  )){
 				current.incrementTagMatch();
 			}
@@ -493,6 +540,9 @@ public class PostDataLayer extends DataLayer<Question>{
 			if(mode.contains(INDEX_MODE.RESPONSE)){
 				current.incrementResponseMatch();
 			}
+			if(mode.contains(INDEX_MODE.QUERY_ORDER)){
+				current.setCompareByInsertOrder(true);
+			}
 		}
 		
 		return postIdsMap;
@@ -502,7 +552,7 @@ public class PostDataLayer extends DataLayer<Question>{
 	/////////// Public internal clases
 	//////////////////////////////////////
 	
-	public static class PostIndexInformation extends DataLayer.EntityIndex<Question> implements Comparable<PostIndexInformation>{
+	public static class PostIndexInformation extends DataLayer.EntityIndex<Question> {
 				
 		private final PostDataLayer pdl;
 		
@@ -512,8 +562,20 @@ public class PostDataLayer extends DataLayer<Question>{
 		private Integer tagsMatchs      ;
 		private Integer commentsMatchs  ;
 		
+		
+		
 		protected PostIndexInformation(PostDataLayer pdl,Integer postId){
-			super(postId);
+			this(pdl, postId, null);
+		}
+		
+		/**
+		 * 
+		 * @param pdl the Post data layer
+		 * @param postId the post id
+		 * @param matchOrder whether this class uses match
+		 */
+		protected PostIndexInformation(PostDataLayer pdl,Integer postId, Integer insertOrder){
+			super(postId,insertOrder);
 			
 			this.pdl = pdl;
 			
@@ -522,7 +584,6 @@ public class PostDataLayer extends DataLayer<Question>{
 			commentsMatchs = 0;
 			questionMatchs= 0;
 			responseMatchs = 0;
-			
 			
 		}
 		
@@ -646,9 +707,13 @@ public class PostDataLayer extends DataLayer<Question>{
 
 
 		@Override
-		public int compareTo(PostIndexInformation  rhs){
+		public int entityNaturalCompareTo(EntityIndex<Question> obj){
 			int compare = 0;
 			
+			PostIndexInformation rhs = (PostIndexInformation)obj;
+			/* If there are no order criteria defined, uses match count criteria*/
+
+				
 			compare = this.titleMatchs.compareTo(rhs.titleMatchs);
 			
 			if(compare == 0){
@@ -671,13 +736,13 @@ public class PostDataLayer extends DataLayer<Question>{
 					}
 				}
 			}
-			
+						
 			return -compare;
 		}
 	}
 	
 	private enum INDEX_MODE{
-		TAG, TITLE, QUESTION, RESPONSE, COMMENT 
+		TAG, TITLE, QUESTION, RESPONSE, COMMENT, QUERY_ORDER
 	};
 }
 

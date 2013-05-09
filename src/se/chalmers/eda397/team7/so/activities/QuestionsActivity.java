@@ -121,7 +121,9 @@ public class QuestionsActivity extends Activity {
 		for (String word : parts) {
 			wordSet.add(word);
 		}
+		
 		questions = postDataLayer.pagedTagSearch(wordSet, OrderCriteria.ANSWER_COUNT, 50, 1);
+		
 		return questions;
 	}
 

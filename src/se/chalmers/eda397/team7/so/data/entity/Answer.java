@@ -1,10 +1,12 @@
 package se.chalmers.eda397.team7.so.data.entity;
 
 import java.util.Date;
+import java.util.Map;
+import java.util.Set;
 
 import se.chalmers.eda397.team7.so.datalayer.DataLayerFactory;
 
-public class Answer extends Post {
+public class Answer extends Post implements FullTextable{
 	
 	protected Answer(
 			DataLayerFactory dataLayerFactory,
@@ -54,5 +56,20 @@ public class Answer extends Post {
 				comment_count            ,
 				favorite_count           
 		);
+	}
+	
+	@Override
+	public Map<String, Set<String>> getFullTextIndexes() {
+		
+		Map<String, Set<String>> superTags = super.getFullTextIndexes();
+		Set<String> current;
+		
+		superTags.remove("post_titles");
+		current = superTags.get("posts");
+		superTags.remove("posts");
+		superTags.put("responses",current);		
+		
+		return superTags;
+		
 	}
 }

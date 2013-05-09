@@ -2,11 +2,13 @@ package se.chalmers.eda397.team7.so.data.entity;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import se.chalmers.eda397.team7.so.datalayer.AnswerDataLayer;
 import se.chalmers.eda397.team7.so.datalayer.DataLayerFactory;
 
-public class Question extends Post {
+public class Question extends Post implements FullTextable {
 
 	private final AnswerDataLayer adl;
 	
@@ -67,4 +69,32 @@ public class Question extends Post {
 		return adl.getAnswersByPostId(this.getId());
 	}
 
+	
+	@Override
+	public Map<String, Set<String>> getFullTextIndexes() {
+		
+		Map<String, Set<String>> superTags = super.getFullTextIndexes();
+		
+		Set<String> current;
+		String replaceKey;
+		for(String key : superTags.keySet()){
+			if(key.equals("post_titles")){
+				replaceKey = "question_titles";				
+			}else
+			if(key.equals("posts")){
+				replaceKey = "questions";
+			}else{
+				replaceKey=null;
+			}
+			
+			if(replaceKey!=null){
+				current = superTags.get(key);
+				superTags.remove(key);
+				superTags.put(replaceKey, current);
+			}
+		}
+		
+		
+		return superTags;
+	}
 }

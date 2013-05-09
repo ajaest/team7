@@ -114,7 +114,9 @@ public class QuestionSortByNoA extends Activity{
 		for (String word : parts) {
 			wordSet.add(word);
 		}
+		
 		questions = postDataLayer.pagedTagSearch(wordSet, OrderCriteria.ANSWER_COUNT, 50, 0);
+
 		return questions;
 	}
 }
