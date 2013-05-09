@@ -114,6 +114,7 @@ public class HomeActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(HomeActivity.this, ProfileActivity.class);
+				intent.putExtra("UserID", userID);
 				startActivity(intent);
 			}
 		});
@@ -124,6 +125,7 @@ public class HomeActivity extends Activity {
 			public void onClick(View v) {
 				Intent intent = new Intent(HomeActivity.this, TagCloudActivity.class);
 				intent.putExtra("UserID", userID);
+				intent.putExtra("See_my_tags", false);
 				startActivity(intent);
 
 			}
