@@ -20,20 +20,30 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 
 public class QuestionSortByDate extends Activity{
 
 	private ListView questionListView;
-	private List<Question> questionList= new ArrayList<Question>();
+	private List<Question> questionList;
 	private Bundle bundle;
-	String query="";
-	int userID;
-	int typeSearch = 0;
+	private String query="";
+	private int userID;
+	private int typeSearch = 0;
+	private PostListAdapter listAdapter;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_questions);
+		bundle = getIntent().getExtras();
+		if (bundle != null){
+			typeSearch = bundle.getInt("typeSearch");
+			query = bundle.getString("query");
+			userID = bundle.getInt("UserID");
+			
+		}
+		
 		PostDataLayer postDataLayer = null;
 		try {
 			SQLiteSODatabaseHelper test = new SQLiteSODatabaseHelper(this.getApplicationContext());
@@ -45,27 +55,27 @@ public class QuestionSortByDate extends Activity{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		bundle = getIntent().getExtras();
-		if (bundle != null){
-			typeSearch = bundle.getInt("typeSearch");
-			query = bundle.getString("query");
-			userID = bundle.getInt("UserID");
-			
-		}
-		if (typeSearch == 1){ // It questions
+	    if (typeSearch == 1){ // questions from search
 			questionList = retriveSearchList(postDataLayer, query);
 		}
 		
-		else if (typeSearch == 2){
+		else if (typeSearch == 2){ //show questions by tags
 			questionList = retriveQuestionListByTag(postDataLayer, query);
 			
 		}
+		else if (typeSearch == 4){//get questions of a specific user
+			questionList = postDataLayer.getQuestionsOfUser(userID, OrderCriteria.CREATION_DATE);
+		}
+		else if (typeSearch == 5){//get favorite questions of a user
+			questionList = postDataLayer.getAllFavourite(userID, OrderCriteria.CREATION_DATE);
+		}
 		else {
 			questionList = retrieveList(postDataLayer);
-		}
+		}		
 
 		questionListView = (ListView)findViewById(R.id.listViewQuestions);
-		questionListView.setAdapter(new PostListAdapter(this, questionList, R.layout.question_item));
+		listAdapter = new PostListAdapter(this, questionList, R.layout.question_item);
+		questionListView.setAdapter(listAdapter);
 		questionListView.setOnItemClickListener(new OnItemClickListener(){
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id){
@@ -78,7 +88,8 @@ public class QuestionSortByDate extends Activity{
 			}
 		});        
 	}
-
+	
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.

@@ -11,6 +11,7 @@ import se.chalmers.eda397.team7.so.data.entity.EntityUtils;
 import se.chalmers.eda397.team7.so.data.entity.Post;
 import se.chalmers.eda397.team7.so.datalayer.DataLayerFactory;
 import se.chalmers.eda397.team7.so.datalayer.PostDataLayer;
+import se.chalmers.eda397.team7.so.datalayer.PostDataLayer.OrderCriteria;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -108,7 +109,7 @@ public class QuestionInformation extends Activity{
 			@Override
 			public void onClick(View v) {
 				// Change the picture and later add to the table of favorites
-				Toast.makeText(getApplicationContext(), ((Integer)(postDataLayer.getAllFavourite(userID).size())).toString(), Toast.LENGTH_SHORT).show();
+				Toast.makeText(getApplicationContext(), ((Integer)(postDataLayer.getAllFavourite(userID, OrderCriteria.CREATION_DATE).size())).toString(), Toast.LENGTH_SHORT).show();
 			    if (postDataLayer.isFavourite(question.getId(), userID)){
 			    	postDataLayer.removeFavourite(question.getId(), userID);
 			    	starButton.setBackgroundResource(R.drawable.star);

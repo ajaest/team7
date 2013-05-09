@@ -52,15 +52,15 @@ public class QuestionSortByNoA extends Activity{
 			query = bundle.getString("query");
 			userID = bundle.getInt("UserID");
 		}
-		if (typeSearch == 1){ // It questions
+		if (typeSearch == 1){ // questions from search
 			questionList = retriveSearchList(postDataLayer, query);
 		}
 		
-		else if (typeSearch == 2){
+		else if (typeSearch == 2){ //show questions by tags
 			questionList = retriveQuestionListByTag(postDataLayer, query);
 			
 		}
-		else {
+		else { // get All questions
 			questionList = retrieveList(postDataLayer);
 		}
 

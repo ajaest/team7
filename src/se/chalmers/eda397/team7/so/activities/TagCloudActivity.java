@@ -19,10 +19,18 @@ package se.chalmers.eda397.team7.so.activities;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import se.chalmers.eda397.team7.so.R;
 import se.chalmers.eda397.team7.so.data.SQLiteSODatabaseHelper;
+import se.chalmers.eda397.team7.so.data.entity.Question;
+import se.chalmers.eda397.team7.so.datalayer.DataLayerFactory;
+import se.chalmers.eda397.team7.so.datalayer.PostDataLayer;
+import se.chalmers.eda397.team7.so.datalayer.PostDataLayer.OrderCriteria;
 import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
@@ -62,27 +70,44 @@ public class TagCloudActivity extends FragmentActivity {
     static ViewPager mViewPager;
     
     private  static List<String> tagList;
-    private  static SQLiteDatabase db;
+    private   SQLiteDatabase db;
     private int buttonPressed =-1;
-	static int userID;
+
+    private Bundle bundle;
+    private static Integer userId;
+    private static PostDataLayer postDataLayer;
+    private boolean myTags;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tag_cloud);
 		Bundle bundle;
-		
-		bundle = getIntent().getExtras();
-
-		userID = bundle.getInt("UserID");
 
         try {
 			SQLiteSODatabaseHelper test = new SQLiteSODatabaseHelper(this.getApplicationContext());
-			TagCloudActivity.db = test.getWritableDatabase();
+			db = test.getWritableDatabase();
+			DataLayerFactory factory = new DataLayerFactory(db);
+			postDataLayer = factory.createPostDataLayer();
 		
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        TagCloudActivity.tagList = getAllTags();
+        bundle = getIntent().getExtras();
+        userId = bundle.getInt("UserID");
+        myTags = bundle.getBoolean("See_my_tags");
+        if(myTags)
+        	TagCloudActivity.tagList = getAllTagsOfUser(userId);
+        else{
+        	TagCloudActivity.tagList = postDataLayer.getAllTags();
+        	 // Set up action bar.
+            final ActionBar actionBar = getActionBar();
+
+            // Specify that the Home button should show an "Up" caret, indicating that touching the
+            // button will take the user one step up in the application's hierarchy.
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+        	
         // Create an adapter that when requested, will return a fragment representing an object in
         // the collection.
         // 
@@ -91,12 +116,7 @@ public class TagCloudActivity extends FragmentActivity {
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mDemoCollectionPagerAdapter = new DemoCollectionPagerAdapter(getSupportFragmentManager(),tagList);
 
-        // Set up action bar.
-        final ActionBar actionBar = getActionBar();
-
-        // Specify that the Home button should show an "Up" caret, indicating that touching the
-        // button will take the user one step up in the application's hierarchy.
-        actionBar.setDisplayHomeAsUpEnabled(true);
+       
 
         // Set up the ViewPager, attaching the adapter.
        
@@ -118,22 +138,48 @@ public class TagCloudActivity extends FragmentActivity {
 	}
 
 
-	/*
-     * Returns the list of tags in our system order by number of appearances 
+	
+    
+    /*
+     * Returns the list of tags in our system of a specific user 
      */
-    private List<String> getAllTags(){
-    	Cursor cur;
-    	List<String> tagsList = new ArrayList<String>();
-  
-		cur = db.rawQuery("SELECT tag, count(*) FROM searchindex_tags GROUP BY tag ORDER BY 1 ", null);
-		while(cur.moveToNext())
-			if (!cur.getString(0).equals("UL")) { //Problems with this tag, what is it??
-				tagsList.add(cur.getString(0));
-			}
-		
-		cur.close();
-    	return tagsList;
+      private List<String> getAllTagsOfUser(Integer userId){
+    	  List<String> openTags = new ArrayList<String>();
+    	  DataLayerFactory factory = new DataLayerFactory(db);
+    	  PostDataLayer postDataLayer = factory.createPostDataLayer();
+    	  List<Question> userQuestions = postDataLayer.getQuestionsOfUser(userId, OrderCriteria.CREATION_DATE);
+    	  for (Question question : userQuestions) 
+  			openTags.addAll(question.getTags());
+    	  return openTags;
+  		}
+    
+    /*
+     * Returns the list of tags in our system of a specific user 
+     */
+  /*  private List<String> getAllTagsOfUser(Integer userId){
+
+    	List<String> openTags = new ArrayList<String>();
+    	List<String> closedTags = new ArrayList<String>();
+    	DataLayerFactory factory = new DataLayerFactory(db);
+		PostDataLayer postDataLayer = factory.createPostDataLayer();
+		List<Question> userQuestions = postDataLayer.getQuestionsOfUser(userId, OrderCriteria.CREATION_DATE);
+		for (Question question : userQuestions) {
+			openTags.addAll(question.getTags());
+		}
+		while(!openTags.isEmpty()){			
+			String tag = openTags.get(0);
+			List<String> neighbourTagsList = postDataLayer.getCloseTags(tag);
+			openTags.remove(tag);
+			closedTags.add(tag);
+			for (String neighbourTag : neighbourTagsList) {
+				if ((!closedTags.contains(neighbourTag)) && (!openTags.contains(neighbourTag)))
+					openTags.add(neighbourTag);
+			}	
+    	}
+		Collections.sort(closedTags);
+    	return closedTags;
     }
+    */
 
     @SuppressWarnings("deprecation")
 	@Override
@@ -216,8 +262,9 @@ public class TagCloudActivity extends FragmentActivity {
             View rootView = inflater.inflate(R.layout.fragment_tag_cloud, container, false);
             Bundle args = getArguments();
             String centerTag = args.getString("center_tag");
-            List<String> closeTagsList = getCloseTags(centerTag);
-         
+            
+            List<String> closeTagsList = postDataLayer.getCloseTags(centerTag);
+            
             centerButton = (Button) rootView.findViewById(R.id.buttonCenter);
             topLeftButton = (Button) rootView.findViewById(R.id.buttonTopLeft);
             topRightButton = (Button) rootView.findViewById(R.id.buttonTopRight);
@@ -242,60 +289,68 @@ public class TagCloudActivity extends FragmentActivity {
             else 
 				bottomRightButton.setVisibility(View.GONE);
 
+            
+            
             setButtonListener(centerButton);
-            setButtonListener2(topLeftButton);
-            setButtonListener2(topRightButton);
-            setButtonListener2(bottomLeftButton);
-            setButtonListener2(bottomRightButton);
-         
+            if (tagList.contains(topLeftButton.getText().toString())) 
+            	setButtonListener2(topLeftButton);
+            else
+            	setButtonListener(topLeftButton);
+ 
+            
+            if (tagList.contains(topRightButton.getText().toString())) 
+            	setButtonListener2(topRightButton);
+            else
+            	setButtonListener(topRightButton);
+
+            
+            if (tagList.contains(bottomLeftButton.getText().toString())) 
+            	setButtonListener2(bottomLeftButton);
+            else
+            	setButtonListener(bottomLeftButton);
+ 
+            
+            if (tagList.contains(bottomRightButton.getText().toString())) 
+            	setButtonListener2(bottomRightButton);
+            else
+            	setButtonListener(bottomRightButton);
+            
+           
             return rootView;
         }
         
+        //Listener for the buttons in the corners
         private void setButtonListener2(Button button){
         	final String tag = button.getText().toString();
-        	Log.d("testing","tag pressed:"+ tag);
         	// button on click listers
     		button.setOnClickListener(new OnClickListener() {
     			@Override
     			public void onClick(View v) {
     				int pos = tagList.indexOf(tag);
     				mViewPager.setCurrentItem(pos);
+    				
 
     			}
     		});
         }
         
+        //Listener for the center Button
         private void setButtonListener(Button button){
         	final Context ctx = this.getActivity();
         	final String tag = button.getText().toString();
-        	Log.d("testing","tag pressed:"+ tag);
         	// button on click listers
     		button.setOnClickListener(new OnClickListener() {
     			@Override
     			public void onClick(View v) {
     				Intent intent =  new Intent(ctx, Questions_Tab_Activity.class);
     				intent.putExtra("tagPressed", tag);
-    				intent.putExtra("UserID", userID);
+    				intent.putExtra("UserID", userId);
     				startActivity(intent);
-
+    				
     			}
     		});
         }
-        /*
-         * Gets the 4 tags more related to the given tag.
-         */
-        private List<String> getCloseTags(String tag){
-        	ArrayList<String> closeTags = new ArrayList<String>();
-        	Cursor cursor;
-        	cursor = db.rawQuery("SELECT sum(weight), tag1,tag2 from tag_graph " +
-        			"where tag1<>tag2 and tag1=? " +
-        			" group by tag1,tag2 order by 1 desc LIMIT 4",new String[]{tag});
-        	while (  cursor.moveToNext()) {
-				closeTags.add(cursor.getString(2));
-			}
-        	cursor.close();
-        	return closeTags;
-        }
+        
     }
     
 }

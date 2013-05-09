@@ -163,6 +163,54 @@ public class PostDataLayer extends DataLayer<Question>{
 		
 		return this.querySortedInstanceSet(queryString, new String[]{});
 	}
+	
+	
+	
+	public List<Question> getQuestionsOfUser(Integer idUser, OrderCriteria orderCriteria){
+		String query = "SELECT * FROM posts WHERE post_type_id=1 AND owner_user_id = ? ORDER BY ?";
+		
+		return this.querySortedInstanceSet(query, new String[]{idUser.toString(), orderCriteria.toString()});
+	}
+	
+	
+	/////////////////////////////////
+	/// Methods that query information of tags
+	/////////////////////////////////
+	
+	/*
+     * Gets the 4 tags more related to the given tag.
+     */
+    public List<String> getCloseTags(String tag){
+    	ArrayList<String> closeTags = new ArrayList<String>();
+    	Cursor cursor;
+    	cursor = this.getDbInstance().rawQuery("SELECT sum(weight), tag1,tag2 from tag_graph " +
+    			"where tag1<>tag2 and tag1=? " +
+    			" group by tag1,tag2 order by 1 desc LIMIT 4",new String[]{tag});
+    	while (  cursor.moveToNext()) {
+			closeTags.add(cursor.getString(2));
+		}
+    	cursor.close();
+    	return closeTags;
+    }
+    
+    /*
+     * Returns the list of tags in our system order by alphabetical order
+     */
+    public List<String> getAllTags(){
+    	Cursor cur;
+    	List<String> tagsList = new ArrayList<String>();
+  
+		cur = this.getDbInstance().rawQuery("SELECT tag, count(*) FROM searchindex_tags GROUP BY tag ORDER BY 1 ", null);
+		while(cur.moveToNext())
+				tagsList.add(cur.getString(0));
+		
+		cur.close();
+    	return tagsList;
+    }
+	
+	
+	
+	
 	//////////////////////////////////////
 	/////////// Favorite posts things
 	//////////////////////////////////////	
@@ -174,11 +222,11 @@ public class PostDataLayer extends DataLayer<Question>{
 		
 	}
 	
-	public List<Question> getAllFavourite(int user_id){
+	public List<Question> getAllFavourite(int user_id, OrderCriteria orderCriteria){
 		String query="";
 		List<Question> retList = new ArrayList<Question>();
-		query = "SELECT * FROM favourite_posts JOIN posts ON post_id=id WHERE user_id=?";
-		retList = this.querySortedInstanceSet(query, new String[]{""+user_id});
+		query = "SELECT * FROM favourite_posts JOIN posts ON post_id=id WHERE user_id=? ORDER BY ?";
+		retList = this.querySortedInstanceSet(query, new String[]{""+user_id, orderCriteria.toString()});
 		return retList;
 		
 	}
@@ -632,24 +680,4 @@ public class PostDataLayer extends DataLayer<Question>{
 		TAG, TITLE, QUESTION, RESPONSE, COMMENT 
 	};
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

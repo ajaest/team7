@@ -37,5 +37,8 @@ public class PostListAdapter extends ArrayAdapter<Question>{
 		//}
 		return(row);
 	}
+
+
+	
 	
 }
