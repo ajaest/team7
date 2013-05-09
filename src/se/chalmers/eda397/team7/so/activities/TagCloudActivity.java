@@ -58,15 +58,21 @@ public class TagCloudActivity extends FragmentActivity {
     /**
      * The {@link android.support.v4.view.ViewPager} that will display the object collection.
      */
+    
     static ViewPager mViewPager;
     
     private  static List<String> tagList;
     private  static SQLiteDatabase db;
     private int buttonPressed =-1;
-
+	static int userID;
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tag_cloud);
+		Bundle bundle;
+		
+		bundle = getIntent().getExtras();
+
+		userID = bundle.getInt("UserID");
 
         try {
 			SQLiteSODatabaseHelper test = new SQLiteSODatabaseHelper(this.getApplicationContext());
@@ -202,6 +208,8 @@ public class TagCloudActivity extends FragmentActivity {
         private Button bottomLeftButton;
         private Button bottomRightButton;
         
+        
+        
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
@@ -209,7 +217,7 @@ public class TagCloudActivity extends FragmentActivity {
             Bundle args = getArguments();
             String centerTag = args.getString("center_tag");
             List<String> closeTagsList = getCloseTags(centerTag);
-            
+         
             centerButton = (Button) rootView.findViewById(R.id.buttonCenter);
             topLeftButton = (Button) rootView.findViewById(R.id.buttonTopLeft);
             topRightButton = (Button) rootView.findViewById(R.id.buttonTopRight);
@@ -267,6 +275,7 @@ public class TagCloudActivity extends FragmentActivity {
     			public void onClick(View v) {
     				Intent intent =  new Intent(ctx, Questions_Tab_Activity.class);
     				intent.putExtra("tagPressed", tag);
+    				intent.putExtra("UserID", userID);
     				startActivity(intent);
 
     			}
