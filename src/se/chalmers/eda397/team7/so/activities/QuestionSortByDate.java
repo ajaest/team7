@@ -44,6 +44,22 @@ public class QuestionSortByDate extends Activity{
 			
 		}
 		
+		inflateList();
+		
+	}
+	
+	
+	@Override
+	protected void onRestart() {
+		inflateList();      
+		super.onRestart();
+	}
+
+
+	/**
+	 * We load the list of questions from the db according to the type of search we are doing
+	 */
+	public void inflateList(){ 
 		PostDataLayer postDataLayer = null;
 		try {
 			SQLiteSODatabaseHelper test = new SQLiteSODatabaseHelper(this.getApplicationContext());
@@ -88,8 +104,6 @@ public class QuestionSortByDate extends Activity{
 			}
 		});        
 	}
-	
-	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.

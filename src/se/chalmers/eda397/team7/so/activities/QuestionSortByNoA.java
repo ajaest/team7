@@ -35,6 +35,22 @@ public class QuestionSortByNoA extends Activity{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_questions);
+		bundle = getIntent().getExtras();
+		if (bundle != null){
+			typeSearch = bundle.getInt("typeSearch");
+			query = bundle.getString("query");
+			userID = bundle.getInt("UserID");
+		}
+		inflateList();
+	}
+
+	@Override
+	protected void onRestart() {
+		inflateList();      
+		super.onRestart();
+	}
+
+	public void inflateList(){
 		PostDataLayer postDataLayer = null;
 		try {
 			SQLiteSODatabaseHelper test = new SQLiteSODatabaseHelper(this.getApplicationContext());
@@ -46,12 +62,7 @@ public class QuestionSortByNoA extends Activity{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		bundle = getIntent().getExtras();
-		if (bundle != null){
-			typeSearch = bundle.getInt("typeSearch");
-			query = bundle.getString("query");
-			userID = bundle.getInt("UserID");
-		}
+		
 		if (typeSearch == 1){ // questions from search
 			questionList = retriveSearchList(postDataLayer, query);
 		}
@@ -78,7 +89,8 @@ public class QuestionSortByNoA extends Activity{
 			}
 		});        
 	}
-
+	
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
