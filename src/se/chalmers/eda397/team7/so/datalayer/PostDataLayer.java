@@ -156,33 +156,6 @@ public class PostDataLayer extends DataLayer<Question>{
 		return tempString;
 	}
 	
-	public Question newQuestion(String body, String title, String tags, int user_id){
-		
-//		Question q = this.getEntityFactory().createQuestion(
-//			id, 
-//			parent_id, 
-//			accepted_answer_id, 
-//			creation_date, 
-//			score, 
-//			view_count, 
-//			body, 
-//			owner_user_id, 
-//			last_editor_user_id, 
-//			last_editor_display_name, 
-//			last_edit_date, 
-//			last_activity_date, 
-//			community_owned_date, 
-//			closed_date, 
-//			title, 
-//			tags, 
-//			answer_count, 
-//			comment_count, 
-//			favorite_count
-//		);
-//		
-		return null;
-		
-	}
 
 	public void updatePost(Integer id, Map<String, String> attValues) {
 		
@@ -196,14 +169,33 @@ public class PostDataLayer extends DataLayer<Question>{
 		
 	}
 	
-	public void updateIndex(Integer id, Map<String, String> indexValues) {
+	public void updateIndex(Integer id, Map<String, Set<String>> indexValues) {
 		
-		String query = "DELETE FROM searchindex_%s WERE id=?";
+		Cursor cur;
+		SQLiteDatabase sqlDb;
 		
-//		String 
+		String reusable_query_delete  = "DELETE FROM searchindex_%s WHERE id=?";
+		String reausable_query_insert = "INSERT INTO searchindex_%s VALUES (?,?)";
+		
+		sqlDb = this.getDbInstance();
+		
+		String query;
 		for(String index_suffix : indexValues.keySet()){
+			/* Remove all previously existing indexes in this table */
+			query = String.format(reusable_query_delete, index_suffix);
+			cur = sqlDb.rawQuery(query, new String[]{id.toString()});
+			cur.close();
 			
+			query = String.format(reausable_query_insert, index_suffix);
+			
+			/* Add new indexes */
+			for(String word: indexValues.get(index_suffix)){
+				
+				cur = sqlDb.rawQuery(query, new String[]{id.toString(), word});
+				cur.close();
+			}
 		}
+		
 	}
 
 	public List<Question> getQuestionSortedBy(String sortCriteria){

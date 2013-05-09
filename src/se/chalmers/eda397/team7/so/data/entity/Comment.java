@@ -98,20 +98,22 @@ public class Comment extends Entity {
 			
 			values = new HashMap<String, String>();
 			
-			values.put("id           ",this.getId           ().toString()); 
-			values.put("post_id      ",this.getPost_id      ().toString()); 
-			values.put("score        ",this.getScore        ().toString()); 
-			values.put("text         ",this.getText         ()           ); 
+			values.put("id           ",this.getId     ()!=null ? this.getId           ().toString(): null); 
+			values.put("post_id      ",this.getPost_id()!=null ? this.getPost_id      ().toString(): null); 
+			values.put("score        ",this.getScore  ()!=null ? this.getScore        ().toString(): null); 
+			values.put("text         ",this.getScore  ()!=null ? this.getText         ()           : null); 
 			
-			creation_date = 
-				"" + 
-				this.getCreation_date().getYear () + "-" + 
-				this.getCreation_date().getMonth() + "-" + 
-				this.getCreation_date().getDate () + "-"
-			;
-			
-			values.put("creation_date",creation_date                     ); 
-			values.put("user_id      ",this.getUser_id      ().toString());
+			if(this.getCreation_date()!=null){
+				creation_date = 
+					"" + 
+					(this.getCreation_date().getYear ()+1900) + "-" + 
+					(this.getCreation_date().getMonth()+1   ) + "-" + 
+					 this.getCreation_date().getDate ()        
+				;
+				values.put("creation_date",creation_date                     );
+			}
+			 
+			values.put("user_id      ",this.getUser_id()!=null ? this.getUser_id      ().toString() : null);
 			
 			cdl.updateComment(this.getId(), values);
 			
