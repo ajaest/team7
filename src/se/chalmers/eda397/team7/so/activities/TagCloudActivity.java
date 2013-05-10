@@ -83,7 +83,25 @@ public class TagCloudActivity extends FragmentActivity {
         setContentView(R.layout.activity_tag_cloud);
 		Bundle bundle;
 
-        try {
+		bundle = getIntent().getExtras();
+        userId = bundle.getInt("UserID");
+        myTags = bundle.getBoolean("See_my_tags");
+        
+        inflateViewPager();
+        
+    }
+    
+    
+    @Override
+    public void onRestart(){
+    	inflateViewPager();
+    	super.onRestart();
+    }
+   
+    
+    
+    public void inflateViewPager(){
+    	try {
 			SQLiteSODatabaseHelper test = new SQLiteSODatabaseHelper(this.getApplicationContext());
 			db = test.getWritableDatabase();
 			DataLayerFactory factory = new DataLayerFactory(db);
@@ -93,9 +111,7 @@ public class TagCloudActivity extends FragmentActivity {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        bundle = getIntent().getExtras();
-        userId = bundle.getInt("UserID");
-        myTags = bundle.getBoolean("See_my_tags");
+        
         if(myTags)
         	TagCloudActivity.tagList = getAllTagsOfUser(userId);
         else{
@@ -116,14 +132,10 @@ public class TagCloudActivity extends FragmentActivity {
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mDemoCollectionPagerAdapter = new DemoCollectionPagerAdapter(getSupportFragmentManager(),tagList);
 
-       
-
         // Set up the ViewPager, attaching the adapter.
        
         mViewPager.setAdapter(mDemoCollectionPagerAdapter);
     }
-   
-    
     
     public int getButtonPressed() {
 		return buttonPressed;
@@ -149,7 +161,12 @@ public class TagCloudActivity extends FragmentActivity {
     	  PostDataLayer postDataLayer = factory.createPostDataLayer();
     	  List<Question> userQuestions = postDataLayer.getQuestionsOfUser(userId, OrderCriteria.CREATION_DATE);
     	  for (Question question : userQuestions) 
-  			openTags.addAll(question.getTags());
+    		  for (String tag : question.getTags()) {
+				if (!openTags.contains(tag)) {
+					openTags.add(tag);
+				}
+			}
+  			
     	  return openTags;
   		}
     

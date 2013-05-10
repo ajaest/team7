@@ -183,6 +183,11 @@ public class PostDataLayer extends DataLayer<Question>{
 		return null;
 		
 	}
+	
+	
+	public void deletePost(Integer id){
+		this.getDbInstance().delete("posts", "id = ?", new String[]{id.toString()});
+	}
 
 	public void updatePost(Integer id, Map<String, String> attValues) {
 		

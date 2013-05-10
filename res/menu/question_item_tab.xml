@@ -1,5 +1,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-
+	<item android:id="@+id/menu_edit_question"
+        android:title="@string/menu_edit_question"
+        android:icon="@drawable/edit"
+        android:orderInCategory="100"
+        android:visible="false"
+        android:showAsAction="ifRoom" />
+   
+	<item android:id="@+id/menu_remove_question"
+        android:title="@string/menu_remove_question"
+        android:icon="@drawable/remove"
+        android:orderInCategory="100"
+        android:visible="false"
+        android:showAsAction="ifRoom" />
+	
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"

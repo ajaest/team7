@@ -3,6 +3,7 @@ package se.chalmers.eda397.team7.so.activities;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.Date;
+import java.util.Set;
 
 import se.chalmers.eda397.team7.so.R;
 import se.chalmers.eda397.team7.so.R.layout;
@@ -31,6 +32,7 @@ public class AskQuestionActivity extends Activity {
 	private Bundle bundle;
 	private PostDataLayer postDataLayer;
 	private Integer userId;
+	private Question oldQuestion;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -40,15 +42,6 @@ public class AskQuestionActivity extends Activity {
 		editTextBody = (EditText) findViewById(R.id.editTextBodyQuestion);
 		editTextTags = (EditText) findViewById(R.id.editTextTagsQuestion);
 		editTextTitle = (EditText) findViewById(R.id.editTextTitleQuestion);
-		
-		bundle = getIntent().getExtras();
-		userId = bundle.getInt("UserID");
-//		if (bundle.getInt("is Edition") == 1){
-//			editTextBody.setText("....");
-//			editTextTags.setText(":...");
-//			editTextTitle.setText(".....");
-//		}
-		
 		try {
 			SQLiteSODatabaseHelper test = new SQLiteSODatabaseHelper(this.getApplicationContext());
 			SQLiteDatabase db = test.getWritableDatabase();
@@ -60,10 +53,29 @@ public class AskQuestionActivity extends Activity {
 			e.printStackTrace();
 		}
 		
+		bundle = getIntent().getExtras();
+		userId = bundle.getInt("UserID");
+		if (bundle.getBoolean("isEdition")){
+			oldQuestion = postDataLayer.getQuestionById(bundle.getInt("idQuestion"));
+			editTextBody.setText(oldQuestion.getBody());
+			editTextTags.setText(showTags(oldQuestion));
+			editTextTitle.setText(oldQuestion.getTitle());
+		}
+		
+		
+		
 		
 	}
 
-	
+	//We show the list of tags in the view
+		private String showTags(Question question){
+			Set<String> tagSet = question.getTags();
+			StringBuilder sbBuilder = new StringBuilder();
+			for (String tag : tagSet) {
+				sbBuilder.append(tag + " ");
+			}
+			return sbBuilder.toString();
+		}
 	
 	
 	@Override
@@ -111,35 +123,67 @@ public class AskQuestionActivity extends Activity {
 				if(!checkTags())
 					Toast.makeText(this, "Wrong number of tags", Toast.LENGTH_SHORT).show();
 				else{
-					
-					Question question = postDataLayer.createQuestion(
-							(Integer)(postDataLayer.getMaxId() +1)      ,
-							(Integer)1             					 ,
-							(Integer)null                             ,
-							(Integer)null                             ,
-							(new Date())           ,
-							(Integer)0                    			 ,
-							(Integer)0               				 ,
-							editTextBody.getText().toString(),
-							userId         					 ,
-							(Integer)null                             ,
-							(String)null 							 ,
-							(Date)null           					 ,
-							(new Date())	         ,
-							(Date)null    					     ,
-							(Date)null           				     ,
-							editTextTitle.getText().toString(),
-							formatTags()                     ,
-							(Integer)0             ,
-							(Integer)0            ,
-							(Integer)0 		
-						);
-					Toast.makeText(this, "Question posted", Toast.LENGTH_SHORT).show();
-					intent = new Intent(this, HomeActivity.class);
-					intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); 
-					intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-					intent.putExtra("UserID", userId);
-					startActivity(intent);
+					if(bundle.getBoolean("isEdition")){ //EDIT QUESTION
+						Question question = postDataLayer.createQuestion(
+								oldQuestion.getId()      ,
+								(Integer)1             					 ,
+								(Integer)null                             ,
+								(Integer)null                             ,
+								oldQuestion.getCreation_date()           ,
+								oldQuestion.getScore()                   			 ,
+								oldQuestion.getView_count()             				 ,
+								editTextBody.getText().toString(),
+								userId         					 ,
+								userId                             ,
+								oldQuestion.getLast_editor_display_name() 							 ,
+								(new Date())           					 ,
+								(new Date())	         ,
+								(Date)null    					     ,
+								(Date)null           				     ,
+								editTextTitle.getText().toString(),
+								formatTags()                     ,
+								oldQuestion.getAnswer_count()            ,
+								oldQuestion.getComment_count()            ,
+								oldQuestion.getFavorite_count() 		
+							);
+						Toast.makeText(this, "Question edited", Toast.LENGTH_SHORT).show();
+						intent = new Intent(this, QuestionItemTab.class);
+						intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); 
+						intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+						intent.putExtra("idQuestion", question.getId());
+						intent.putExtra("UserID", userId);
+						startActivity(intent);
+					}
+					else{ 								//NEW QUESTION
+						Question question = postDataLayer.createQuestion(
+								(Integer)(postDataLayer.getMaxId() +1)      ,
+								(Integer)1             					 ,
+								(Integer)null                             ,
+								(Integer)null                             ,
+								(new Date())           ,
+								(Integer)0                    			 ,
+								(Integer)0               				 ,
+								editTextBody.getText().toString(),
+								userId         					 ,
+								(Integer)null                             ,
+								(String)null 							 ,
+								(Date)null           					 ,
+								(new Date())	         ,
+								(Date)null    					     ,
+								(Date)null           				     ,
+								editTextTitle.getText().toString(),
+								formatTags()                     ,
+								(Integer)0             ,
+								(Integer)0            ,
+								(Integer)0 		
+							);
+						Toast.makeText(this, "Question posted", Toast.LENGTH_SHORT).show();
+						intent = new Intent(this, HomeActivity.class);
+						intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); 
+						intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+						intent.putExtra("UserID", userId);
+						startActivity(intent);
+					}
 				}
 			}else
 				Toast.makeText(this, "Missing field", Toast.LENGTH_SHORT).show();

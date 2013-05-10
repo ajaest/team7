@@ -93,6 +93,7 @@ public class HomeActivity extends Activity {
 			public void onClick(View v) {
 				Intent intent =  new Intent(HomeActivity.this, AskQuestionActivity.class);
 				intent.putExtra("UserID", userID);
+				intent.putExtra("isEdition", false);
 				startActivity(intent);
 
 			}
