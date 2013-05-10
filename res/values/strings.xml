@@ -38,5 +38,8 @@
     <string name="title_activity_popup_answer_question">PopupAnswerQuestionActivity</string>
     <string name="title_activity_profile">ProfileActivity</string>
     <string name="title_activity_profile_posts">ProfilePostsActivity</string>
+    <string name="menu_edit_question">Edit question</string>
+    <string name="menu_remove_question">Remove question</string>
+    
 
 </resources>

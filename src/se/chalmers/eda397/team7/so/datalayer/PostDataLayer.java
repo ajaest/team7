@@ -157,6 +157,40 @@ public class PostDataLayer extends DataLayer<Question>{
 	}
 	
 
+	public Question newQuestion(String body, String title, String tags, int user_id){
+		
+//		Question q = this.getEntityFactory().createQuestion(
+//			id, 
+//			parent_id, 
+//			accepted_answer_id, 
+//			creation_date, 
+//			score, 
+//			view_count, 
+//			body, 
+//			owner_user_id, 
+//			last_editor_user_id, 
+//			last_editor_display_name, 
+//			last_edit_date, 
+//			last_activity_date, 
+//			community_owned_date, 
+//			closed_date, 
+//			title, 
+//			tags, 
+//			answer_count, 
+//			comment_count, 
+//			favorite_count
+//		);
+//		
+		return null;
+		
+	}
+	
+	
+	public void deletePost(Integer id){
+		this.getDbInstance().delete("posts", "id = ?", new String[]{id.toString()});
+	}
+
+
 	public void updatePost(Integer id, Map<String, String> attValues) {
 		
 		Map<String, String> key;

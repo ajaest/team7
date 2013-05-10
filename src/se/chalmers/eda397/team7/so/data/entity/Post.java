@@ -199,11 +199,11 @@ public class Post extends Entity implements FullTextable {
 
 	public Set<String> getTags() {
 		
-		String[] tags;
+		String[] tagss;
 		
-		tags = this.tags.substring(1, this.tags.length()-1).split("><");
+		tagss = this.tags.substring(1, this.tags.length()-1).split("><");
 		
-		return new HashSet<String>(Arrays.asList(tags));
+		return new HashSet<String>(Arrays.asList(tagss));
 	}
 
 	public Integer getAnswer_count() {
@@ -397,7 +397,7 @@ public class Post extends Entity implements FullTextable {
 			values.put("community_owned_date"     ,getCommunity_owned_date()!=null ? formatDate(getCommunity_owned_date()) : "null");
 			values.put("closed_date"              ,getClosed_date()!=null ? formatDate(getClosed_date())  : "null");
 			values.put("title"                    ,getTitle()!=null ? getTitle().toString(): "null");
-			values.put("tags"                     ,getTags()!=null ? getTags().toString(): "null");
+			values.put("tags"                     ,getTags()!=null ? this.tags: "null");
 			values.put("answer_count"             ,getAnswer_count()!=null ? getAnswer_count().toString(): "null");
 			values.put("comment_count"            ,getComment_count()!=null ? getComment_count().toString(): "null");
 			values.put("favorite_count"           ,getFavorite_count()!=null ? getFavorite_count().toString(): "null");
