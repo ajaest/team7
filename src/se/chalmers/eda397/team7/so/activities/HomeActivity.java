@@ -15,7 +15,7 @@ import android.widget.Button;
 import android.widget.SearchView;
 import android.widget.SearchView.OnQueryTextListener;
 import android.widget.TextView;
-import android.widget.Toast;
+
 
 public class HomeActivity extends Activity {
 	int userID;
@@ -69,7 +69,7 @@ public class HomeActivity extends Activity {
 
 			@Override
 			public boolean onQueryTextChange(String newText) {
-				//Toast.makeText(getApplicationContext(), newText + " newtext", Toast.LENGTH_SHORT).show();
+				
 				return false;
 			}
 		});

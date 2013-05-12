@@ -22,7 +22,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.TextView.BufferType;
-import android.widget.Toast;
+
 
 public class QuestionInformation extends Activity{
 	
@@ -78,7 +78,7 @@ public class QuestionInformation extends Activity{
 		questionTitleTextView.setText(question.getTitle());
 		questionBodyTextView.setText(EntityUtils.extractText(question.getBody()),BufferType.SPANNABLE);
 		ownerTextView.setText(question.getOwnerUser().getDisplay_name());
-		Toast.makeText(getApplicationContext(), ((Integer)userID).toString(), Toast.LENGTH_SHORT).show();
+		
 	    if (postDataLayer.isFavourite(question.getId(), userID)){
 	    	starButton.setBackgroundResource(R.drawable.yellowstar);
 
@@ -109,7 +109,7 @@ public class QuestionInformation extends Activity{
 			@Override
 			public void onClick(View v) {
 				// Change the picture and later add to the table of favorites
-				Toast.makeText(getApplicationContext(), ((Integer)(postDataLayer.getAllFavourite(userID, OrderCriteria.CREATION_DATE).size())).toString(), Toast.LENGTH_SHORT).show();
+				
 			    if (postDataLayer.isFavourite(question.getId(), userID)){
 			    	postDataLayer.removeFavourite(question.getId(), userID);
 			    	starButton.setBackgroundResource(R.drawable.star);

@@ -25,10 +25,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
-import android.widget.TextView;
+
 
 
 public class AnswersActivity extends Activity {
@@ -51,7 +50,29 @@ public class AnswersActivity extends Activity {
 		setContentView(R.layout.activity_answers);
 		bundle = getIntent().getExtras();
 		idQuestion = bundle.getInt("idQuestion");
+		inflateList();
 		
+	
+	}
+
+	
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v,
+	                                ContextMenuInfo menuInfo) {
+	    super.onCreateContextMenu(menu, v, menuInfo);
+	    MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.context_menu_answers, menu);
+	}
+	
+	@Override
+	protected void onRestart() {
+		   inflateList(); 
+		super.onRestart();
+	}
+	
+	
+	
+	public void inflateList(){
 		try {
 			SQLiteSODatabaseHelper test = new SQLiteSODatabaseHelper(this.getApplicationContext());
 			db = test.getWritableDatabase();
@@ -91,16 +112,9 @@ public class AnswersActivity extends Activity {
 
 			}
 		});
+	
 	}
 
-	
-	@Override
-	public void onCreateContextMenu(ContextMenu menu, View v,
-	                                ContextMenuInfo menuInfo) {
-	    super.onCreateContextMenu(menu, v, menuInfo);
-	    MenuInflater inflater = getMenuInflater();
-	    inflater.inflate(R.menu.context_menu_answers, menu);
-	}
 	
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
@@ -109,14 +123,16 @@ public class AnswersActivity extends Activity {
 	    Integer position = info.position;
 	    Integer ide = answersList.get(position).getId();
 	    
-	    Integer i = answerDataLayer.getScore(ide); 
+
     	
 	    switch (item.getItemId()) {
 	        case R.id.voteUpAnswer:
 	        	answerDataLayer.voteUp(ide);
+	        	inflateList();
 	        	return true;
 	        case R.id.voteDownAnswer:
 	        	answerDataLayer.voteDown(ide); 
+	        	inflateList();
 	            return true;
 	        default:
 	            return super.onContextItemSelected(item);
