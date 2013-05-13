@@ -267,6 +267,7 @@ public class PostDataLayer extends DataLayer<Question>{
     	return closeTags;
     }
     
+    
     /*
      * Returns the list of tags in our system order by alphabetical order
      */

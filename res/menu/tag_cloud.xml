@@ -1,9 +1,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-
-    	<item android:id="@+id/menu_heat_cloud_profile"
+	<item android:id="@+id/menu_heat_cloud"
         android:title="@string/heat"
         android:orderInCategory="100"
-        android:visible="false"
         android:showAsAction="ifRoom" />
+
 
 </menu>
