@@ -138,6 +138,7 @@ public class HomeActivity extends Activity {
 			public void onClick(View v) {
 				Intent intent = new Intent(HomeActivity.this, SearchActivity.class);
 				intent.putExtra("UserID", userID);
+				intent.putExtra("isMultitag",false);
 				startActivity(intent);
 				
 			}

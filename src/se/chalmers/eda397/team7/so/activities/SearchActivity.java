@@ -103,11 +103,11 @@ public class SearchActivity extends Activity {
 				query=query.toLowerCase();
 				
 				
-				Intent intent = new Intent(SearchActivity.this, Questions_Tab_Activity.class);
-				intent.putExtra("typeSearch", 2);
+				Intent intent = new Intent(SearchActivity.this, TagCloudActivity.class);
+				intent.putExtra("See_my_tags", false);
 				intent.putExtra("query", query);
 				intent.putExtra("UserID", userID);
-				intent.putExtra("tagPressed",query);
+				intent.putExtra("isMultitag",true);
 				startActivity(intent);
 				
 				

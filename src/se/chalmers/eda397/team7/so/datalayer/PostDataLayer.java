@@ -246,13 +246,7 @@ public class PostDataLayer extends DataLayer<Question>{
 		return this.querySortedInstanceSet(query, new String[]{idUser.toString(), orderCriteria.toString()});
 	}
 	
-	
-	/////////////////////////////////
-	/// Methods that query information of tags
-	/////////////////////////////////
-	
-    
-   
+
 	
 	
 	

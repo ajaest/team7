@@ -28,10 +28,13 @@ import se.chalmers.eda397.team7.so.datalayer.DataLayerFactory;
 import se.chalmers.eda397.team7.so.datalayer.PostDataLayer;
 import se.chalmers.eda397.team7.so.datalayer.PostDataLayer.OrderCriteria;
 import se.chalmers.eda397.team7.so.datalayer.TagDataLayer;
+import android.R.string;
 import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.nfc.Tag;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -40,7 +43,10 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.view.ViewPager;
+import android.text.StaticLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -56,7 +62,7 @@ public class TagCloudActivity extends FragmentActivity {
      * state in the process. This is important to conserve memory and is a best practice when
      * allowing navigation between objects in a potentially large collection.
      */
-    DemoCollectionPagerAdapter mDemoCollectionPagerAdapter;
+   static  DemoCollectionPagerAdapter mDemoCollectionPagerAdapter;
 
     /**
      * The {@link android.support.v4.view.ViewPager} that will display the object collection.
@@ -68,20 +74,20 @@ public class TagCloudActivity extends FragmentActivity {
     private   SQLiteDatabase db;
     private int buttonPressed =-1;
 
-//    private Bundle bundle;
+    private Bundle bundle;
     private static Integer userId;
     private static TagDataLayer  tagDataLayer;
     private boolean myTags;
+    private static boolean multiTag;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tag_cloud);
-		Bundle bundle;
 
 		bundle = getIntent().getExtras();
         userId = bundle.getInt("UserID");
         myTags = bundle.getBoolean("See_my_tags");
-        
+        multiTag = bundle.getBoolean("isMultitag");
         inflateViewPager();
         
     }
@@ -96,6 +102,7 @@ public class TagCloudActivity extends FragmentActivity {
     
     
     public void inflateViewPager(){
+    	String tags = null;
     	try {
 			SQLiteSODatabaseHelper test = new SQLiteSODatabaseHelper(this.getApplicationContext());
 			db = test.getWritableDatabase();
@@ -104,8 +111,12 @@ public class TagCloudActivity extends FragmentActivity {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-        
-        if(myTags)
+        if(multiTag){
+        	tags = bundle.getString("query");
+        	TagCloudActivity.tagList = new ArrayList<String>();
+        	TagCloudActivity.tagList.add(tags);
+        }
+        else if(myTags)
         	TagCloudActivity.tagList = getAllTagsOfUser(userId);
         else{
         	TagCloudActivity.tagList = tagDataLayer.getAllTags();
@@ -123,12 +134,26 @@ public class TagCloudActivity extends FragmentActivity {
         // ViewPager and its adapters use support library fragments, so we must use
         // getSupportFragmentManager.
         mViewPager = (ViewPager) findViewById(R.id.pager);
-        mDemoCollectionPagerAdapter = new DemoCollectionPagerAdapter(getSupportFragmentManager(),tagList);
-
+        mDemoCollectionPagerAdapter = new DemoCollectionPagerAdapter(getSupportFragmentManager());
         // Set up the ViewPager, attaching the adapter.
        
         mViewPager.setAdapter(mDemoCollectionPagerAdapter);
     }
+    
+    
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; 
+		getMenuInflater().inflate(R.menu.tag_cloud, menu); 
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			ActionBar actionBar = getActionBar();
+			actionBar.setDisplayHomeAsUpEnabled(true);
+			actionBar.setDisplayShowTitleEnabled(true);
+			
+		}
+		return true;
+	}
+	
     
     public int getButtonPressed() {
 		return buttonPressed;
@@ -214,6 +239,9 @@ public class TagCloudActivity extends FragmentActivity {
                     NavUtils.navigateUpTo(this, upIntent);
                 }
                 return true;
+            case R.id.menu_heat_cloud:
+            	
+            	return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -225,11 +253,13 @@ public class TagCloudActivity extends FragmentActivity {
      */
     public static class DemoCollectionPagerAdapter extends FragmentStatePagerAdapter {
 
-    	private List<String> tagList;
-        public DemoCollectionPagerAdapter(FragmentManager fm, List<String> tagList) {
+        public DemoCollectionPagerAdapter(FragmentManager fm) {
         	super(fm);
-        	this.tagList = tagList;
         	
+        }
+        @Override
+        public int getItemPosition(Object object) {
+            return POSITION_NONE;
         }
 
         @Override
@@ -237,7 +267,7 @@ public class TagCloudActivity extends FragmentActivity {
             Fragment fragment = new DemoObjectFragment();
             Bundle args = new Bundle();
             
-            args.putString("center_tag", this.tagList.get(i)); 
+            args.putString("center_tag", tagList.get(i)); 
             fragment.setArguments(args);
             return fragment;
         }
@@ -251,6 +281,7 @@ public class TagCloudActivity extends FragmentActivity {
         public CharSequence getPageTitle(int position) {
             return " " + tagList.get(position) + " ";
         } 
+        
     }
 
 
@@ -263,6 +294,7 @@ public class TagCloudActivity extends FragmentActivity {
         private Button topRightButton;
         private Button bottomLeftButton;
         private Button bottomRightButton;
+        private String centerTag;
         
         
         
@@ -271,62 +303,95 @@ public class TagCloudActivity extends FragmentActivity {
                 Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_tag_cloud, container, false);
             Bundle args = getArguments();
-            String centerTag = args.getString("center_tag");
-            
-            List<String> closeTagsList = tagDataLayer.getCloseTags(centerTag);
+
+            centerTag = args.getString("center_tag");
+
             
             centerButton = (Button) rootView.findViewById(R.id.buttonCenter);
             topLeftButton = (Button) rootView.findViewById(R.id.buttonTopLeft);
             topRightButton = (Button) rootView.findViewById(R.id.buttonTopRight);
             bottomLeftButton = (Button) rootView.findViewById(R.id.buttonBottomLeft);
             bottomRightButton = (Button) rootView.findViewById(R.id.buttonBottomRight);
-
-            centerButton.setText(centerTag);
-            if (closeTagsList.size()>0) 
-				topLeftButton.setText(closeTagsList.get(0));
-            else 
-				topLeftButton.setVisibility(View.GONE);
-            if(closeTagsList.size()>1)
-				topRightButton.setText(closeTagsList.get(1));
-            else 
-				topRightButton.setVisibility(View.GONE);
-            if (closeTagsList.size()>2) 
-				bottomLeftButton.setText(closeTagsList.get(2));
-            else 
-				bottomLeftButton.setVisibility(View.GONE);
-            if (closeTagsList.size()>3)
-            	bottomRightButton.setText(closeTagsList.get(3));
-            else 
-				bottomRightButton.setVisibility(View.GONE);
-
             
-            
-            setButtonListener(centerButton);
-            if (tagList.contains(topLeftButton.getText().toString())) 
-            	setButtonListener2(topLeftButton);
-            else
-            	setButtonListener(topLeftButton);
- 
-            
-            if (tagList.contains(topRightButton.getText().toString())) 
-            	setButtonListener2(topRightButton);
-            else
-            	setButtonListener(topRightButton);
-
-            
-            if (tagList.contains(bottomLeftButton.getText().toString())) 
-            	setButtonListener2(bottomLeftButton);
-            else
-            	setButtonListener(bottomLeftButton);
- 
-            
-            if (tagList.contains(bottomRightButton.getText().toString())) 
-            	setButtonListener2(bottomRightButton);
-            else
-            	setButtonListener(bottomRightButton);
+            if (multiTag ) {
+				inflateMultiCloudLayout();
+			}
+            else{
+            	centerButton.setText(centerTag);
+            	List<String> closeTagsList = tagDataLayer.getCloseTags(centerTag);    
+                      
+	            if (closeTagsList.size()>0) 
+					topLeftButton.setText(closeTagsList.get(0));
+	            else 
+					topLeftButton.setVisibility(View.GONE);
+	            if(closeTagsList.size()>1)
+					topRightButton.setText(closeTagsList.get(1));
+	            else 
+					topRightButton.setVisibility(View.GONE);
+	            if (closeTagsList.size()>2) 
+					bottomLeftButton.setText(closeTagsList.get(2));
+	            else 
+					bottomLeftButton.setVisibility(View.GONE);
+	            if (closeTagsList.size()>3)
+	            	bottomRightButton.setText(closeTagsList.get(3));
+	            else 
+					bottomRightButton.setVisibility(View.GONE);
+	
+	            
+	            
+	            setButtonListener(centerButton);
+	            if (tagList.contains(topLeftButton.getText().toString())) 
+	            	setButtonListener2(topLeftButton);
+	            else
+	            	setButtonListener(topLeftButton);
+	 
+	            
+	            if (tagList.contains(topRightButton.getText().toString())) 
+	            	setButtonListener2(topRightButton);
+	            else
+	            	setButtonListener(topRightButton);
+	
+	            
+	            if (tagList.contains(bottomLeftButton.getText().toString())) 
+	            	setButtonListener2(bottomLeftButton);
+	            else
+	            	setButtonListener(bottomLeftButton);
+	 
+	            
+	            if (tagList.contains(bottomRightButton.getText().toString())) 
+	            	setButtonListener2(bottomRightButton);
+	            else
+	            	setButtonListener(bottomRightButton);
+            }
             
            
             return rootView;
+        }
+        
+
+        private String implode (String [] stringArray){
+        	StringBuilder builder = new StringBuilder();
+        	for (int i = 0; i < stringArray.length; i++) {
+				builder.append(stringArray[i]+" ");
+			}
+        
+        	return builder.toString();
+        }
+        
+        //Listener for the corner buttons in the multitag cloud
+        private void setButtonListener3(Button button, final int pos){
+        	String tag = button.getText().toString();      	
+        	String tags[]= centerTag.split(" ");
+			tags[pos] = tag;
+			final String tagString = implode(tags);
+        	button.setOnClickListener(new OnClickListener() {
+    			@Override
+    			public void onClick(View v) {
+    				tagList.remove(0);
+    				tagList.add(tagString);
+    				mDemoCollectionPagerAdapter.notifyDataSetChanged();
+    			}
+    		});
         }
         
         //Listener for the buttons in the corners
@@ -361,6 +426,37 @@ public class TagCloudActivity extends FragmentActivity {
     		});
         }
         
+        
+        private void inflateMultiCloudLayout(){
+        	centerButton.setText(centerTag);
+        	setButtonListener(centerButton);
+        	String tags[]= centerTag.split(" ");
+        	topLeftButton.setText(getClosestTag(tags[0]));
+        	setButtonListener3(topLeftButton, 0);
+        	if (tags.length>1){ 
+				topRightButton.setText(getClosestTag(tags[1]));
+				setButtonListener3(topRightButton, 1);
+        	}
+        	else
+        		topRightButton.setVisibility(View.GONE);
+        	if (tags.length>2){
+        		bottomLeftButton.setText(getClosestTag(tags[2]));
+        		setButtonListener3(bottomLeftButton, 2);
+        	}
+        	else 
+				bottomLeftButton.setVisibility(View.GONE);
+			if (tags.length>3){
+				bottomRightButton.setText(getClosestTag(tags[3]));
+				setButtonListener3(bottomRightButton, 3);
+			}
+			else 
+				bottomRightButton.setVisibility(View.GONE);
+        }
+        
+        private String getClosestTag(String tag){
+        	return (tagDataLayer.getCloseTags(tag).get(0));
+        }
     }
+    
     
 }

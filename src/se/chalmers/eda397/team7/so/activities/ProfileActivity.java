@@ -5,6 +5,7 @@ import android.app.TabActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 
@@ -12,6 +13,7 @@ public class ProfileActivity extends TabActivity {
 
 	private Bundle bundle;
 	private Integer userId;
+	private TabHost tabHost;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -19,8 +21,7 @@ public class ProfileActivity extends TabActivity {
 	
 		bundle = getIntent().getExtras();
 		userId = bundle.getInt("UserID");
-		TabHost tabHost = getTabHost();
-        
+		tabHost = getTabHost();
         // Info Tab
         TabSpec info = tabHost.newTabSpec("INFO");
         info.setIndicator("INFO");
@@ -54,6 +55,7 @@ public class ProfileActivity extends TabActivity {
         //intent4.putExtra("tagPressed", " ");
         intent4.putExtra("UserID", userId);
         intent4.putExtra("See_my_tags", true);
+        intent4.putExtra("isMultitag",false);
        // intent4.putExtra("typeSearch", 6);
         myTags.setContent(intent4);
         
@@ -66,8 +68,12 @@ public class ProfileActivity extends TabActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
+		// Inflate the menu; 
 		getMenuInflater().inflate(R.menu.profile, menu);
+		MenuItem heatMenuItem = menu.findItem(R.id.menu_heat_cloud_profile); 
+		int currentTab = tabHost.getCurrentTab();
+		if (currentTab==3)
+			heatMenuItem.setVisible(true);
 		return true;
 	}
 
