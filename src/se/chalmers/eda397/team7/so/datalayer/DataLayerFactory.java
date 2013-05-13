@@ -8,6 +8,7 @@ public class DataLayerFactory {
 	private UserDataLayer    userDl    = null;
 	private CommentDataLayer commentDl = null;
 	private AnswerDataLayer  answerDl  = null;
+	private TagDataLayer     tagDl     = null;
 	
 	private final SQLiteDatabase db ;
 	
@@ -49,6 +50,14 @@ public class DataLayerFactory {
 		}
 		
 		return this.answerDl;
+	}
+	
+	public TagDataLayer createTagDataLayer(){
+		if(this.tagDl==null){
+			this.tagDl = new TagDataLayer(this);
+		}
+		
+		return this.tagDl;
 	}
 
 	protected SQLiteDatabase getDB() {

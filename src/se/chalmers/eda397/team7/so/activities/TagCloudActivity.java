@@ -19,11 +19,7 @@ package se.chalmers.eda397.team7.so.activities;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import se.chalmers.eda397.team7.so.R;
 import se.chalmers.eda397.team7.so.data.SQLiteSODatabaseHelper;
@@ -31,10 +27,10 @@ import se.chalmers.eda397.team7.so.data.entity.Question;
 import se.chalmers.eda397.team7.so.datalayer.DataLayerFactory;
 import se.chalmers.eda397.team7.so.datalayer.PostDataLayer;
 import se.chalmers.eda397.team7.so.datalayer.PostDataLayer.OrderCriteria;
+import se.chalmers.eda397.team7.so.datalayer.TagDataLayer;
 import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -44,7 +40,6 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -73,9 +68,9 @@ public class TagCloudActivity extends FragmentActivity {
     private   SQLiteDatabase db;
     private int buttonPressed =-1;
 
-    private Bundle bundle;
+//    private Bundle bundle;
     private static Integer userId;
-    private static PostDataLayer postDataLayer;
+    private static TagDataLayer  tagDataLayer;
     private boolean myTags;
 
     public void onCreate(Bundle savedInstanceState) {
@@ -105,17 +100,15 @@ public class TagCloudActivity extends FragmentActivity {
 			SQLiteSODatabaseHelper test = new SQLiteSODatabaseHelper(this.getApplicationContext());
 			db = test.getWritableDatabase();
 			DataLayerFactory factory = new DataLayerFactory(db);
-			postDataLayer = factory.createPostDataLayer();
-		
+			tagDataLayer = factory.createTagDataLayer();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
         
         if(myTags)
         	TagCloudActivity.tagList = getAllTagsOfUser(userId);
         else{
-        	TagCloudActivity.tagList = postDataLayer.getAllTags();
+        	TagCloudActivity.tagList = tagDataLayer.getAllTags();
         	 // Set up action bar.
             final ActionBar actionBar = getActionBar();
 
@@ -280,7 +273,7 @@ public class TagCloudActivity extends FragmentActivity {
             Bundle args = getArguments();
             String centerTag = args.getString("center_tag");
             
-            List<String> closeTagsList = postDataLayer.getCloseTags(centerTag);
+            List<String> closeTagsList = tagDataLayer.getCloseTags(centerTag);
             
             centerButton = (Button) rootView.findViewById(R.id.buttonCenter);
             topLeftButton = (Button) rootView.findViewById(R.id.buttonTopLeft);

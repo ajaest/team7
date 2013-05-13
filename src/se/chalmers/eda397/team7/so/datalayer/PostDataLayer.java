@@ -251,36 +251,8 @@ public class PostDataLayer extends DataLayer<Question>{
 	/// Methods that query information of tags
 	/////////////////////////////////
 	
-	/*
-     * Gets the 4 tags more related to the given tag.
-     */
-    public List<String> getCloseTags(String tag){
-    	ArrayList<String> closeTags = new ArrayList<String>();
-    	Cursor cursor;
-    	cursor = this.getDbInstance().rawQuery("SELECT sum(weight), tag1,tag2 from tag_graph " +
-    			"where tag1<>tag2 and tag1=? " +
-    			" group by tag1,tag2 order by 1 desc LIMIT 4",new String[]{tag});
-    	while (  cursor.moveToNext()) {
-			closeTags.add(cursor.getString(2));
-		}
-    	cursor.close();
-    	return closeTags;
-    }
     
-    /*
-     * Returns the list of tags in our system order by alphabetical order
-     */
-    public List<String> getAllTags(){
-    	Cursor cur;
-    	List<String> tagsList = new ArrayList<String>();
-  
-		cur = this.getDbInstance().rawQuery("SELECT tag, count(*) FROM searchindex_tags GROUP BY tag ORDER BY 1 ", null);
-		while(cur.moveToNext())
-				tagsList.add(cur.getString(0));
-		
-		cur.close();
-    	return tagsList;
-    }
+   
 	
 	
 	

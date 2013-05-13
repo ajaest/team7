@@ -1,24 +1,20 @@
 package se.chalmers.eda397.team7.so.activities;
 
 import java.io.IOException;
-import java.text.MessageFormat;
 import java.util.Date;
 import java.util.Set;
 
 import se.chalmers.eda397.team7.so.R;
-import se.chalmers.eda397.team7.so.R.layout;
-import se.chalmers.eda397.team7.so.R.menu;
 import se.chalmers.eda397.team7.so.data.SQLiteSODatabaseHelper;
 import se.chalmers.eda397.team7.so.data.entity.Question;
 import se.chalmers.eda397.team7.so.datalayer.DataLayerFactory;
 import se.chalmers.eda397.team7.so.datalayer.PostDataLayer;
-import android.os.Build;
-import android.os.Bundle;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
+import android.os.Build;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -184,6 +180,7 @@ public class AskQuestionActivity extends Activity {
 						intent.putExtra("UserID", userId);
 						startActivity(intent);
 					}
+
 				}
 			}else
 				Toast.makeText(this, "Missing field", Toast.LENGTH_SHORT).show();

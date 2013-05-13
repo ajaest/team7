@@ -11,7 +11,8 @@ public class DataLayerTestSuite extends TestCase {
 		suite.setName("DataLayers tests");
 		//$JUnit-BEGIN$
 		suite.addTestSuite(CommentDataLayerTest.class);
-		suite.addTestSuite(PostDataLayerTest.class);
+		suite.addTestSuite(PostDataLayerTest   .class);
+		suite.addTestSuite(TagDataLayerTest    .class);
 		//$JUnit-END$
 		return suite;
 	}

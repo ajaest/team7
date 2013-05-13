@@ -65,6 +65,37 @@ public class PostDataLayerTest extends InstrumentationTestCase {
 //////////////////////////////////////////////////////////
 	
 	//////////////////////////////////////
+	////// PostDataLayer.createQuestion(...)
+	//////////////////////////////////////
+	
+	public void test_createQuestion(){
+		
+		Integer newId = postDL.getMaxId();
+		
+//		Question q = postDL.createQuestion(
+//			newId,  
+//			parent_id, 
+//			accepted_answer_id, 
+//			creation_date, 
+//			score, 
+//			view_count, 
+//			body, 
+//			owner_user_id, 
+//			last_editor_user_id, 
+//			last_editor_display_name, 
+//			last_edit_date, 
+//			last_activity_date, 
+//			community_owned_date, 
+//			closed_date, 
+//			title, 
+//			tags, 
+//			answer_count, 
+//			comment_count, 
+//			favorite_count
+//		);
+	}
+	
+	//////////////////////////////////////
 	////// PostDataLayer.getPostById(Integer)
 	//////////////////////////////////////
 	
