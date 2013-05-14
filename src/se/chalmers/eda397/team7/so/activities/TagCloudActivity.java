@@ -222,11 +222,15 @@ public class TagCloudActivity extends FragmentActivity {
             	onBackPressed();
                 return true;
             case R.id.menu_heat_cloud:
-            	
+            	/*FragmentManager fragmentManager = this.getSupportFragmentManager();
+            	DemoObjectFragment fragment = (TagCloudActivity.DemoObjectFragment) mDemoCollectionPagerAdapter.getItem(0);
+            	fragment.heatButtons();*/
             	return true;
         }
         return super.onOptionsItemSelected(item);
     }
+    
+   
     
 
     /**
@@ -287,9 +291,7 @@ public class TagCloudActivity extends FragmentActivity {
             Bundle args = getArguments();
 
             centerTag = args.getString("center_tag");
-            
-            Integer curTagColor ;
-           
+                       
             centerButton = (Button) rootView.findViewById(R.id.buttonCenter);
             topLeftButton = (Button) rootView.findViewById(R.id.buttonTopLeft);
             topRightButton = (Button) rootView.findViewById(R.id.buttonTopRight);
@@ -307,41 +309,26 @@ public class TagCloudActivity extends FragmentActivity {
             	 
                 if (closeTagsList.size()>0) {
     				topLeftButton.setText(closeTagsList.get(0));
-    				
-    				curTagColor = tagDataLayer.getTagGraphRelativeColor(centerTag, closeTagsList.get(0));
-    				
-    				topLeftButton.getBackground().setColorFilter(curTagColor, Mode.LIGHTEN);
                 }
                 else 
     				topLeftButton.setVisibility(View.GONE);
                 
                 if(closeTagsList.size()>1){
     				topRightButton.setText(closeTagsList.get(1));
-    				
-    				curTagColor = tagDataLayer.getTagGraphRelativeColor(centerTag, closeTagsList.get(1));
-    				
-    				topRightButton.getBackground().setColorFilter(curTagColor, Mode.LIGHTEN);
                 }else 
     				topRightButton.setVisibility(View.GONE);
                 
                 if (closeTagsList.size()>2) {
     				bottomLeftButton.setText(closeTagsList.get(2));
-    				
-    				curTagColor = tagDataLayer.getTagGraphRelativeColor(centerTag, closeTagsList.get(2));
-    				
-    				bottomLeftButton.getBackground().setColorFilter(curTagColor, Mode.LIGHTEN);
                 }else 
     				bottomLeftButton.setVisibility(View.GONE);
                 
                 if (closeTagsList.size()>3){
                 	bottomRightButton.setText(closeTagsList.get(3));
-                	
-                	curTagColor = tagDataLayer.getTagGraphRelativeColor(centerTag, closeTagsList.get(3));
-                	
-                	bottomRightButton.getBackground().setColorFilter(curTagColor, Mode.LIGHTEN);
                 }else 
     				bottomRightButton.setVisibility(View.GONE);
-	
+                
+                heatButtons();
 	            
 	            
 	            setButtonListener(centerButton);
@@ -371,6 +358,36 @@ public class TagCloudActivity extends FragmentActivity {
             
            
             return rootView;
+        }
+        
+        public void heatButtons(){
+        	Integer curTagColor;
+        	List<String> closeTagsList = tagDataLayer.getCloseTags(centerTag);    
+            
+       	 
+            if (closeTagsList.size()>0) {
+    			curTagColor = tagDataLayer.getTagGraphRelativeColor(centerTag, closeTagsList.get(0));
+    			
+    			topLeftButton.getBackground().setColorFilter(curTagColor, Mode.LIGHTEN);
+            }
+            
+            if(closeTagsList.size()>1){
+    			curTagColor = tagDataLayer.getTagGraphRelativeColor(centerTag, closeTagsList.get(1));
+    			
+    			topRightButton.getBackground().setColorFilter(curTagColor, Mode.LIGHTEN);
+            }
+
+            if (closeTagsList.size()>2) {	
+    			curTagColor = tagDataLayer.getTagGraphRelativeColor(centerTag, closeTagsList.get(2));
+    			
+    			bottomLeftButton.getBackground().setColorFilter(curTagColor, Mode.LIGHTEN);
+            }
+            
+            if (closeTagsList.size()>3){            	
+            	curTagColor = tagDataLayer.getTagGraphRelativeColor(centerTag, closeTagsList.get(3));
+            	
+            	bottomRightButton.getBackground().setColorFilter(curTagColor, Mode.LIGHTEN);
+            }
         }
         
 
