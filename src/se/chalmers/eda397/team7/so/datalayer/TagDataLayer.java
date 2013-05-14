@@ -56,14 +56,20 @@ public class TagDataLayer extends DataLayer<String> {
 			
 			midValue = minValue + (maxValue-minValue)/2;
 			
-			if(curTagWeight>=midValue){
-				color = new Float(256/(maxValue - midValue) * (curTagWeight-midValue)).intValue();
+			if(((float)curTagWeight)==maxValue){
+				color = Color.GREEN;
+			}else
+			if(((float)curTagWeight)==minValue){
+				color = Color.RED;
+			} else
+			if(curTagWeight>midValue){
+				color = new Float(255/(maxValue - midValue) * (curTagWeight-midValue)).intValue();
 				color = color << 16; //move to red byte
-				color = Color.GREEN + color;
+				color = Color.YELLOW - color;
 			}else {
-				color = new Float(256/(midValue - minValue) * (curTagWeight-minValue)).intValue();
+				color = new Float(255/(midValue - minValue) * (curTagWeight-minValue)).intValue();
 				color = color << 8; //move to green byte
-				color = Color.RED   + color;
+				color = Color.RED    + color;
 			}
 			
 		}

@@ -28,12 +28,11 @@ import se.chalmers.eda397.team7.so.datalayer.DataLayerFactory;
 import se.chalmers.eda397.team7.so.datalayer.PostDataLayer;
 import se.chalmers.eda397.team7.so.datalayer.PostDataLayer.OrderCriteria;
 import se.chalmers.eda397.team7.so.datalayer.TagDataLayer;
-import android.R.string;
 import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
-import android.nfc.Tag;
+import android.graphics.PorterDuff.Mode;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -43,8 +42,6 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.view.ViewPager;
-import android.text.StaticLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -305,13 +302,15 @@ public class TagCloudActivity extends FragmentActivity {
             Bundle args = getArguments();
 
             centerTag = args.getString("center_tag");
-
             
+            Integer curTagColor ;
+           
             centerButton = (Button) rootView.findViewById(R.id.buttonCenter);
             topLeftButton = (Button) rootView.findViewById(R.id.buttonTopLeft);
             topRightButton = (Button) rootView.findViewById(R.id.buttonTopRight);
             bottomLeftButton = (Button) rootView.findViewById(R.id.buttonBottomLeft);
             bottomRightButton = (Button) rootView.findViewById(R.id.buttonBottomRight);
+          
             
             if (multiTag ) {
 				inflateMultiCloudLayout();
@@ -320,22 +319,43 @@ public class TagCloudActivity extends FragmentActivity {
             	centerButton.setText(centerTag);
             	List<String> closeTagsList = tagDataLayer.getCloseTags(centerTag);    
                       
-	            if (closeTagsList.size()>0) 
-					topLeftButton.setText(closeTagsList.get(0));
-	            else 
-					topLeftButton.setVisibility(View.GONE);
-	            if(closeTagsList.size()>1)
-					topRightButton.setText(closeTagsList.get(1));
-	            else 
-					topRightButton.setVisibility(View.GONE);
-	            if (closeTagsList.size()>2) 
-					bottomLeftButton.setText(closeTagsList.get(2));
-	            else 
-					bottomLeftButton.setVisibility(View.GONE);
-	            if (closeTagsList.size()>3)
-	            	bottomRightButton.setText(closeTagsList.get(3));
-	            else 
-					bottomRightButton.setVisibility(View.GONE);
+            	 
+                if (closeTagsList.size()>0) {
+    				topLeftButton.setText(closeTagsList.get(0));
+    				
+    				curTagColor = tagDataLayer.getTagGraphRelativeColor(centerTag, closeTagsList.get(0));
+    				
+    				topLeftButton.getBackground().setColorFilter(curTagColor, Mode.LIGHTEN);
+                }
+                else 
+    				topLeftButton.setVisibility(View.GONE);
+                
+                if(closeTagsList.size()>1){
+    				topRightButton.setText(closeTagsList.get(1));
+    				
+    				curTagColor = tagDataLayer.getTagGraphRelativeColor(centerTag, closeTagsList.get(1));
+    				
+    				topRightButton.getBackground().setColorFilter(curTagColor, Mode.LIGHTEN);
+                }else 
+    				topRightButton.setVisibility(View.GONE);
+                
+                if (closeTagsList.size()>2) {
+    				bottomLeftButton.setText(closeTagsList.get(2));
+    				
+    				curTagColor = tagDataLayer.getTagGraphRelativeColor(centerTag, closeTagsList.get(2));
+    				
+    				bottomLeftButton.getBackground().setColorFilter(curTagColor, Mode.LIGHTEN);
+                }else 
+    				bottomLeftButton.setVisibility(View.GONE);
+                
+                if (closeTagsList.size()>3){
+                	bottomRightButton.setText(closeTagsList.get(3));
+                	
+                	curTagColor = tagDataLayer.getTagGraphRelativeColor(centerTag, closeTagsList.get(3));
+                	
+                	bottomRightButton.getBackground().setColorFilter(curTagColor, Mode.LIGHTEN);
+                }else 
+    				bottomRightButton.setVisibility(View.GONE);
 	
 	            
 	            
