@@ -127,6 +127,7 @@ public class HomeActivity extends Activity {
 				Intent intent = new Intent(HomeActivity.this, TagCloudActivity.class);
 				intent.putExtra("UserID", userID);
 				intent.putExtra("See_my_tags", false);
+				intent.putExtra("multitag", false);
 				startActivity(intent);
 
 			}
@@ -153,7 +154,6 @@ public class HomeActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.home, menu);
 		return true;
 	}
 
