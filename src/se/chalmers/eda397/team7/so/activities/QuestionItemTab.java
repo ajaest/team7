@@ -29,6 +29,7 @@ public class QuestionItemTab extends TabActivity {
 	private Integer userId;
 	private Integer questionId;
 	private PostDataLayer postDataLayer;
+	private Question question;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -37,6 +38,17 @@ public class QuestionItemTab extends TabActivity {
 		bundle = getIntent().getExtras();
 		userId = bundle.getInt("UserID");
 		questionId = bundle.getInt("idQuestion");
+		try {
+			SQLiteSODatabaseHelper test = new SQLiteSODatabaseHelper(this.getApplicationContext());
+			SQLiteDatabase db = test.getWritableDatabase();
+			DataLayerFactory factory = new DataLayerFactory(db);
+
+			postDataLayer= factory.createPostDataLayer();
+			question = postDataLayer.getQuestionById(questionId);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		setTitle(question.getTitle());
 		TabHost tabHost = getTabHost();
 		 // Newer Tab
         TabSpec Info = tabHost.newTabSpec(INFO);

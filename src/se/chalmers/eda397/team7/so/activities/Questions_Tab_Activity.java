@@ -1,10 +1,14 @@
 package se.chalmers.eda397.team7.so.activities;
 
 import se.chalmers.eda397.team7.so.R;
+import android.app.ActionBar;
 import android.app.TabActivity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 
@@ -63,4 +67,26 @@ public class Questions_Tab_Activity extends TabActivity{
         tabHost.addTab(Newer); // Adding Newer tab
         tabHost.addTab(numberOfAnswers); // Adding NoA tab
     }
+    
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			ActionBar actionBar = getActionBar();
+			actionBar.setDisplayHomeAsUpEnabled(true);
+			actionBar.setDisplayShowTitleEnabled(true);
+		}
+		return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			onBackPressed();
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+	}
 }

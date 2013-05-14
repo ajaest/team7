@@ -8,12 +8,15 @@ import se.chalmers.eda397.team7.so.datalayer.DataLayerFactory;
 import se.chalmers.eda397.team7.so.datalayer.PostDataLayer;
 import se.chalmers.eda397.team7.so.datalayer.UserDataLayer;
 import android.annotation.SuppressLint;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -22,16 +25,21 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageButton;
 import android.widget.MultiAutoCompleteTextView;
+import android.widget.Toast;
 
 /*
  * TypeSearch
  * 	1 = SearchFullText Question
  * 	2 = Search Tag Question
  *  3 = Search User 
+ *  
  */ 
+
+
 @SuppressLint("DefaultLocale")
 public class SearchActivity extends Activity {
-
+	
+	private  Context ctx;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -40,7 +48,7 @@ public class SearchActivity extends Activity {
 		final AutoCompleteTextView singelUserSearch = (AutoCompleteTextView) findViewById(R.id.singelUserSearch);
 		final MultiAutoCompleteTextView multiTagSearch = (MultiAutoCompleteTextView) findViewById(R.id.multiTagSearch);
 		ImageButton imgButton = (ImageButton) findViewById(R.id.multiTagButton);
-		Context ctx = this.getApplicationContext();
+		ctx = this.getApplicationContext();
 		SQLiteSODatabaseHelper databaseHelper = null;
 		try {
 			databaseHelper = new SQLiteSODatabaseHelper(ctx);
@@ -102,13 +110,23 @@ public class SearchActivity extends Activity {
 				query = query.replaceAll(",", "");
 				query=query.toLowerCase();
 				
-				
-				Intent intent = new Intent(SearchActivity.this, TagCloudActivity.class);
-				intent.putExtra("See_my_tags", false);
-				intent.putExtra("query", query);
-				intent.putExtra("UserID", userID);
-				intent.putExtra("isMultitag",true);
-				startActivity(intent);
+				String tags[] = query.split(" ");
+				if (tags.length>4)
+					Toast.makeText(ctx, "Too many tags", Toast.LENGTH_SHORT).show();
+				else{
+					Intent intent = new Intent(SearchActivity.this, TagCloudActivity.class);
+					intent.putExtra("UserID", userID);
+					if (tags[0].equals("")){ //We don't search for anything --> we show all the cloud
+						intent.putExtra("See_my_tags", false);
+						intent.putExtra("multitag", false);
+					}
+					else{
+						intent.putExtra("See_my_tags", false);
+						intent.putExtra("query", query);						
+						intent.putExtra("isMultitag",true);
+					}
+					startActivity(intent);
+				}
 				
 				
 			}
@@ -119,17 +137,28 @@ public class SearchActivity extends Activity {
 
 
 
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			onBackPressed();
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+	}
 
 
 
-
-
-@Override
-public boolean onCreateOptionsMenu(Menu menu) {
-	// Inflate the menu; this adds items to the action bar if it is present.
-	getMenuInflater().inflate(R.menu.search, menu);
-	return true;
-}
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			ActionBar actionBar = getActionBar();
+			actionBar.setDisplayHomeAsUpEnabled(true);
+			actionBar.setDisplayShowTitleEnabled(true);
+		}
+		return true;
+	}
 
 
 

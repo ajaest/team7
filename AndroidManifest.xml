@@ -70,7 +70,7 @@
         </activity>
         <activity
             android:name="se.chalmers.eda397.team7.so.activities.TagCloudActivity"
-            android:label="@string/title_activity_search" >
+            android:label="@string/title_activity_tag_cloud" >
         </activity>
         <activity
             android:name="se.chalmers.eda397.team7.so.activities.UsersSortByAlphabeth"
