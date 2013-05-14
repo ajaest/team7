@@ -50,6 +50,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 public class TagCloudActivity extends FragmentActivity {
 
@@ -77,6 +78,7 @@ public class TagCloudActivity extends FragmentActivity {
     private static TagDataLayer  tagDataLayer;
     private boolean myTags;
     private static boolean multiTag;
+    private static boolean heat=false;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -222,6 +224,8 @@ public class TagCloudActivity extends FragmentActivity {
             	onBackPressed();
                 return true;
             case R.id.menu_heat_cloud:
+            	heat = !heat;
+            	mDemoCollectionPagerAdapter.notifyDataSetChanged();
             	/*FragmentManager fragmentManager = this.getSupportFragmentManager();
             	DemoObjectFragment fragment = (TagCloudActivity.DemoObjectFragment) mDemoCollectionPagerAdapter.getItem(0);
             	fragment.heatButtons();*/
@@ -282,8 +286,7 @@ public class TagCloudActivity extends FragmentActivity {
         private Button bottomRightButton;
         private String centerTag;
         
-        
-        
+
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
@@ -328,7 +331,10 @@ public class TagCloudActivity extends FragmentActivity {
                 }else 
     				bottomRightButton.setVisibility(View.GONE);
                 
-                heatButtons();
+                if (heat) {
+                	
+					heatButtons();
+				}
 	            
 	            
 	            setButtonListener(centerButton);
