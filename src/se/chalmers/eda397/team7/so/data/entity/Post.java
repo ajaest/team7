@@ -201,7 +201,7 @@ public class Post extends Entity implements FullTextable {
 		
 		String[] tagss;
 		
-		tagss = this.tags.substring(1, this.tags.length()-1).split("><");
+		tagss = this.tags!=null ? this.tags.substring(1, this.tags.length()-1).split("><"): new String[]{};
 		
 		return new HashSet<String>(Arrays.asList(tagss));
 	}

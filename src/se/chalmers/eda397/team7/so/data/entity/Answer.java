@@ -36,7 +36,7 @@ public class Answer extends Post implements FullTextable{
 				dataLayerFactory,		
 
 				id                       ,
-				/*post_type_id*/ 0       , /*post_type_id=1 for question*/
+				/*post_type_id*/ 2       , /*post_type_id=1 for question*/
 				parent_id                ,
 				accepted_answer_id       ,
 				creation_date            ,

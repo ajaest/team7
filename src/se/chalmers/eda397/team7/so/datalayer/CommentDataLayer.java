@@ -1,5 +1,7 @@
 package se.chalmers.eda397.team7.so.datalayer;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -68,6 +70,30 @@ public class CommentDataLayer extends DataLayer<Comment> {
 		this.queryInsertOrReplace("comments", attValues, key);
 	}
 	
+	public void createComment(String text, Integer post_id,  Integer user_id, Integer id){
+		
+		String query = new String();
+		final DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		String dateString = "";
+		dateString = format.format(new Date());
+		
+
+		
+		query = "INSERT OR REPLACE INTO comments (id,post_id,score,text,creation_date,user_id) VALUES(" + id+ "," +post_id+"," +0+ ",'" + text + "', '" +dateString+"' ," + user_id + ")";
+		
+
+		// Don't know this
+		this.queryInsertComment(query);
+
+	}
+	public Integer getMaxId(){
+		String queryString = "SELECT MAX(id) from comments";
+		Cursor cur = this.getDbInstance().rawQuery(queryString, null);
+		cur.moveToNext();
+		Integer max = cur.getInt(0);
+		cur.close();
+		return max;
+	}
 	
 	
 	

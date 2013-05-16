@@ -41,7 +41,7 @@ public class AnswersActivity extends Activity {
 	private AnswerDataLayer answerDataLayer;
 	private Question question;
 	private Button answerQuestionButton;
-
+	private Integer userId;
 
 	
 	@Override
@@ -50,6 +50,7 @@ public class AnswersActivity extends Activity {
 		setContentView(R.layout.activity_answers);
 		bundle = getIntent().getExtras();
 		idQuestion = bundle.getInt("idQuestion");
+		userId = bundle.getInt("UserID");
 		inflateList();
 		
 	
@@ -107,6 +108,7 @@ public class AnswersActivity extends Activity {
 				Intent intent =  new Intent(AnswersActivity.this, PopupAnswerOrCommentActivity.class);
 				Log.d("mytest", "id "+idQuestion.toString());
 				intent.putExtra("idPost", idQuestion);
+				intent.putExtra("UserID", userId);
 				intent.putExtra("isComment", false);
 				startActivity(intent);
 

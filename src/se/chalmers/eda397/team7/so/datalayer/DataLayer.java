@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import se.chalmers.eda397.team7.so.data.entity.Comment;
 import se.chalmers.eda397.team7.so.data.entity.EntityFactory;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -331,6 +332,7 @@ public abstract class DataLayer  <E> {
 	 * 		(OR &lt;key.keyX&gt;=&lt;key.valueX&gt;){&lt;key.size()&gt;-1}
 	 * </pre>
 	 */
+	
 	protected void queryInsertOrReplace(String tableName, Map<String, String> attValues, Map<String, String> key){
 		
 		StringBuilder query   ;
@@ -377,6 +379,15 @@ public abstract class DataLayer  <E> {
 		/* Inserting a new value in the database can make the current cache invalid */
 		this.clearCache();
 	}
+	//Cheating by Henrik
+	protected void queryInsertComment(String query){
+		this.getDbInstance().execSQL(query);
+	}
+	protected void queryInsertAnswer(String query){
+		this.getDbInstance().execSQL(query);
+	}
+	
+	
 	
 	////////////////////////////////////////////
 	//// Entity methods

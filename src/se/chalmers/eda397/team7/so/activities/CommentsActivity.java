@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class CommentsActivity extends Activity {
 
@@ -33,7 +34,7 @@ public class CommentsActivity extends Activity {
 	private CommentDataLayer commentDataLayer;
 	private ArrayList<Comment> commentList;
 	private Button commentButton;
-	
+	private	Integer userID;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -44,6 +45,8 @@ public class CommentsActivity extends Activity {
 		
 		bundle = getIntent().getExtras();
 		idPost = bundle.getInt("idPost");
+		userID = bundle.getInt("UserID");
+		
 		try {
 			SQLiteSODatabaseHelper test = new SQLiteSODatabaseHelper(this.getApplicationContext());
 			db = test.getWritableDatabase();
@@ -62,13 +65,13 @@ public class CommentsActivity extends Activity {
 			public void onClick(View v) {
 				Intent intent =  new Intent(CommentsActivity.this, PopupAnswerOrCommentActivity.class);
 				intent.putExtra("idPost", idPost);
+				intent.putExtra("UserID", userID);
 				intent.putExtra("isComment", true);
 				startActivity(intent);
 
 			}
 		});
 	}
-
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {

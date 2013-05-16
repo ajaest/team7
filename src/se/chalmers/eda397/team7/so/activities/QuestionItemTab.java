@@ -18,6 +18,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TabHost;
+import android.widget.Toast;
 import android.widget.TabHost.TabSpec;
 
 @SuppressWarnings("deprecation")
@@ -55,9 +56,11 @@ public class QuestionItemTab extends TabActivity {
         // Tab Icon
         Info.setIndicator(INFO);
         Intent infoIntent = new Intent(this, QuestionInformation.class);
-        infoIntent.putExtras(bundle);
-        Info.setContent(infoIntent);
         
+        infoIntent.putExtras(bundle);
+        infoIntent.putExtra("UserID", userId);
+        Info.setContent(infoIntent);
+       
         
         // Newer Tab
         TabSpec Answers = tabHost.newTabSpec(ANSWERS);
@@ -65,6 +68,7 @@ public class QuestionItemTab extends TabActivity {
         Answers.setIndicator(ANSWERS);
         Intent answersIntent = new Intent(this, AnswersActivity.class);
         answersIntent.putExtras(bundle);
+        answersIntent.putExtra("UserID", userId);
         Answers.setContent(answersIntent);
         
         // Adding all TabSpec to TabHost

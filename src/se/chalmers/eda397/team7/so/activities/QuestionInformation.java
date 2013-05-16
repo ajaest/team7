@@ -41,7 +41,7 @@ public class QuestionInformation extends Activity{
 	private PostDataLayer postDataLayer;
 	private Set<String> tagSet;
 	private SQLiteDatabase db;
-	
+	private Integer userID;
 
 	
 	@Override
@@ -49,11 +49,23 @@ public class QuestionInformation extends Activity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.question_info);
 		
-		final int userID;
+		
 		bundle = getIntent().getExtras();
 		idQuestion = bundle.getInt("idQuestion");
 		userID = bundle.getInt("UserID");
+		inflateList();
 		
+
+	}
+
+
+	
+	@Override
+	protected void onRestart() {
+		   inflateList(); 
+		super.onRestart();
+	}
+	public void inflateList(){
 		
 		
 		try {
@@ -129,15 +141,13 @@ public class QuestionInformation extends Activity{
 		});
 		
 
+		
 	}
-
-
-	
-	
 	//Callback method for the button seeAnswers
 	public void showComments(View view){
 		Intent intent = new Intent(this, CommentsActivity.class);
 		intent.putExtra("idPost", idQuestion);
+		intent.putExtra("UserID", userID);
 		startActivity(intent);
 	}
 	
