@@ -46,7 +46,7 @@ public class CommentListAdapter extends ArrayAdapter<Comment>{
 			commentBodyTextView.setText(this.commentList.get(position).getText());
 			Log.d("test", "message : " + this.commentList.get(position).getText());
 			commentScoreTextView.setText(Integer.toString(this.commentList.get(position).getScore()));
-			SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.US);
+			SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
 			commentDateTextView.setText(df.format(this.commentList.get(position).getCreation_date()));
 			User user = getUserName(this.commentList.get(position).getUser_id());
 			commentUserTextView.setText(user.getDisplay_name());

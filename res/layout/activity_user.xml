@@ -1,4 +1,10 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/scrollView1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/background" >
+        
+    <LinearLayout 
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
@@ -77,7 +83,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginRight="5dp"
-                                android:text="Bio" />
+                                android:text="Bio"
+                                android:textStyle="bold" />
 
                             <LinearLayout
                                 android:layout_width="wrap_content"
@@ -119,7 +126,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginRight="5dp"
-                                android:text="Visits" />
+                                android:text="Visits" 
+                                android:textStyle="bold" />
 
                             <LinearLayout
                                 android:layout_width="wrap_content"
@@ -154,7 +162,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginRight="5dp"
-                                android:text="Stats" />
+                                android:text="Stats" 
+                                android:textStyle="bold" />
 
                             <TextView
                                 android:id="@+id/textViewProfileViews"
@@ -174,19 +183,10 @@
 
     </LinearLayout>
 
-    <ScrollView
-        android:id="@+id/scrollView1"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="5dp"
-        android:layout_weight="1" >
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_margin="10dp"
             android:orientation="vertical" >
 
             <TextView
@@ -196,6 +196,7 @@
                 android:text="TextViewasdfsffsfsfsfsdffffff dff dss sdfsdfsdfdfsfadsfdsfsfasdfsfasdfasfsadfsadfasfsdfsdfasdfsafsfasdfsdfsdfasdf" />
 
         </LinearLayout>
-    </ScrollView>
+   
 
 </LinearLayout>
+ </ScrollView>

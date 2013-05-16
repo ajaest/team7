@@ -1,21 +1,3 @@
-/*
-
-
- * 
- * Copyright 2012 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 
 package se.chalmers.eda397.team7.so.activities;
 
@@ -76,7 +58,7 @@ public class TagCloudActivity extends FragmentActivity {
     private Bundle bundle;
     private static Integer userId;
     private static TagDataLayer  tagDataLayer;
-    private boolean myTags;
+    private static boolean myTags;
     private static boolean multiTag;
     private static boolean heat=false;
 
@@ -144,7 +126,8 @@ public class TagCloudActivity extends FragmentActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; 
-		getMenuInflater().inflate(R.menu.tag_cloud, menu); 
+		if(!multiTag)
+			getMenuInflater().inflate(R.menu.tag_cloud, menu); 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			ActionBar actionBar = getActionBar();
 			actionBar.setDisplayHomeAsUpEnabled(true);
@@ -187,36 +170,9 @@ public class TagCloudActivity extends FragmentActivity {
   			
     	  return openTags;
   		}
-    
-    /*
-     * Returns the list of tags in our system of a specific user 
-     */
-  /*  private List<String> getAllTagsOfUser(Integer userId){
 
-    	List<String> openTags = new ArrayList<String>();
-    	List<String> closedTags = new ArrayList<String>();
-    	DataLayerFactory factory = new DataLayerFactory(db);
-		PostDataLayer postDataLayer = factory.createPostDataLayer();
-		List<Question> userQuestions = postDataLayer.getQuestionsOfUser(userId, OrderCriteria.CREATION_DATE);
-		for (Question question : userQuestions) {
-			openTags.addAll(question.getTags());
-		}
-		while(!openTags.isEmpty()){			
-			String tag = openTags.get(0);
-			List<String> neighbourTagsList = postDataLayer.getCloseTags(tag);
-			openTags.remove(tag);
-			closedTags.add(tag);
-			for (String neighbourTag : neighbourTagsList) {
-				if ((!closedTags.contains(neighbourTag)) && (!openTags.contains(neighbourTag)))
-					openTags.add(neighbourTag);
-			}	
-    	}
-		Collections.sort(closedTags);
-    	return closedTags;
-    }
-    */
 
-    @SuppressWarnings("deprecation")
+
 	@Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -226,9 +182,6 @@ public class TagCloudActivity extends FragmentActivity {
             case R.id.menu_heat_cloud:
             	heat = !heat;
             	mDemoCollectionPagerAdapter.notifyDataSetChanged();
-            	/*FragmentManager fragmentManager = this.getSupportFragmentManager();
-            	DemoObjectFragment fragment = (TagCloudActivity.DemoObjectFragment) mDemoCollectionPagerAdapter.getItem(0);
-            	fragment.heatButtons();*/
             	return true;
         }
         return super.onOptionsItemSelected(item);
@@ -331,7 +284,7 @@ public class TagCloudActivity extends FragmentActivity {
                 }else 
     				bottomRightButton.setVisibility(View.GONE);
                 
-                if (heat) {
+                if (heat && !myTags) {
                 	
 					heatButtons();
 				}

@@ -89,7 +89,7 @@ public class QuestionInformation extends Activity{
 
 	    			    
 	    }
-		SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.US);
+		SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
 		dateQuestionTextView.setText(df.format(question.getCreation_date()));
 		if(question.getView_count()==0)
 			nViewsTextView.setText("");
