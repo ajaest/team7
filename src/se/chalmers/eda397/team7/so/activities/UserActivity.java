@@ -75,7 +75,7 @@ public class UserActivity extends Activity {
 		else 
 			textViewAge.setText(user.getAge().toString());
 		
-		SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.US);
+		SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
 		textViewMembershipTime.setText(df.format(user.getCreation_date()));
 		textViewLastVisit.setText(df.format(user.getLast_access_date()));
 		textViewProfileViews.setText(user.getViews().toString()+ " visits ");
