@@ -400,6 +400,10 @@ public class TagCloudActivity extends FragmentActivity {
     				Intent intent =  new Intent(ctx, Questions_Tab_Activity.class);
     				intent.putExtra("tagPressed", tag);
     				intent.putExtra("UserID", userId);
+//    				if(multiTag)
+    					intent.putExtra("typeSearch", 3);
+//    				else
+//    					intent.putExtra("typeSearch", 1);
     				startActivity(intent);
     				
     			}

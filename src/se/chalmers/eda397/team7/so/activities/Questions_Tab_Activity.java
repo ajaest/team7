@@ -16,8 +16,11 @@ public class Questions_Tab_Activity extends TabActivity{
 	int userID;
 	private static final String NEWER = "Newer";
 	private static final String NoA = "Number Of Answers";
+	private static final String FULL_TEXT = "Full text";
+	private static final String TAG_MATCHES = "Number of tag matches";
 	private Bundle bundle;
 	private String tagPressed;
+	private String query;
 	private Integer typeSearch;
 	
     @Override
@@ -28,45 +31,80 @@ public class Questions_Tab_Activity extends TabActivity{
     	bundle = getIntent().getExtras();
     	userID = bundle.getInt("UserID");
     	typeSearch = bundle.getInt("typeSearch");
-			
-		
-
-        ///Get the tag pressed from the tag cloud
         tagPressed = bundle.getString("tagPressed");
+        query = bundle.getString("query");
+        
+        
+        ///
+        /// Relevance tab. Present at fulltext search and multi-tag search
+        ///
         
         TabHost tabHost = getTabHost();
+        Intent inboxIntent;
         
+        TabSpec currentTab =null;
         // Newer Tab
-        TabSpec Newer = tabHost.newTabSpec(NEWER);
-        // Tab Icon
-        Newer.setIndicator(NEWER);
-        Intent inboxIntent = new Intent(this, QuestionSortByDate.class);
-        inboxIntent.putExtra("UserID", userID);
-        if (!tagPressed.equals(" ")) { //We came from the tag cloud
-        	inboxIntent.putExtra("typeSearch", typeSearch);
-            inboxIntent.putExtra("query", tagPressed);
-         
-		}
-        	
-        // Tab Content
-        Newer.setContent(inboxIntent);
-        
-        // Number of answers Tab
-        TabSpec numberOfAnswers = tabHost.newTabSpec(NoA);
-        numberOfAnswers.setIndicator(NoA);
-        Intent outboxIntent = new Intent(this, QuestionSortByNoA.class);
-        outboxIntent.putExtra("UserID", userID);
-        if (!tagPressed.equals(" ")) { //We came from the tag cloud
-        	outboxIntent.putExtra("query", tagPressed);
-        	outboxIntent.putExtra("typeSearch", typeSearch);
-   
+        if(typeSearch.equals(1)){
+        	currentTab = tabHost.newTabSpec(FULL_TEXT);
+        	currentTab.setIndicator(FULL_TEXT+ ": " + query);
+        }else if(typeSearch.equals(3)){
+        	currentTab = tabHost.newTabSpec(TAG_MATCHES);
+        	currentTab.setIndicator(TAG_MATCHES);
         }
-       
-        numberOfAnswers.setContent(outboxIntent);
+        // Tab Icon
         
-        // Adding all TabSpec to TabHost
-        tabHost.addTab(Newer); // Adding Newer tab
-        tabHost.addTab(numberOfAnswers); // Adding NoA tab
+        if(typeSearch.equals(1) || typeSearch.equals(3)){
+	        inboxIntent = new Intent(this, QuestionSortByDate.class);
+	        inboxIntent.putExtra("UserID", userID);
+	        
+	        inboxIntent.putExtra("typeSearch", typeSearch);
+	        
+	        if (!tagPressed.equals(" ")) { //We came from the tag cloud
+	        	
+	            inboxIntent.putExtra("query", tagPressed);
+			}else{
+				inboxIntent.putExtra("query", query);
+			}
+	        
+	        currentTab.setContent(inboxIntent);
+	        tabHost.addTab(currentTab); // Adding Newer tab
+        }
+        
+        if(!typeSearch.equals(1)){
+	        
+        	//By date
+        	currentTab = tabHost.newTabSpec(NEWER);
+        	currentTab.setIndicator(NEWER);
+        	
+        	inboxIntent = new Intent(this, QuestionSortByDate.class);
+            inboxIntent.putExtra("UserID", userID);
+            if (!tagPressed.equals(" ")) { //We came from the tag cloud
+            	inboxIntent.putExtra("typeSearch", 2);
+                inboxIntent.putExtra("query", tagPressed);
+                inboxIntent.putExtra("orderby", "date");
+             
+    		}
+            
+            // Tab Content
+            currentTab.setContent(inboxIntent);
+            tabHost.addTab(currentTab); // Adding Newer tab
+	        
+	        // Number of answers Tab
+	        TabSpec numberOfAnswers = tabHost.newTabSpec(NoA);
+	        numberOfAnswers.setIndicator(NoA);
+	        Intent outboxIntent = new Intent(this, QuestionSortByNoA.class);
+	        outboxIntent.putExtra("UserID", userID);
+	        if (!tagPressed.equals(" ")) { //We came from the tag cloud
+	        	outboxIntent.putExtra("query", tagPressed);
+	        	outboxIntent.putExtra("typeSearch", 2);
+	   
+	        }
+	        
+	        numberOfAnswers.setContent(outboxIntent);
+	   
+	        
+	        tabHost.addTab(numberOfAnswers); // Adding NoA tab
+        }
     }
     
 	

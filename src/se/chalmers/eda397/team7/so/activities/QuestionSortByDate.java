@@ -30,6 +30,7 @@ public class QuestionSortByDate extends Activity{
 	private Bundle bundle;
 	private String query="";
 	private int userID;
+	private String orderBy;
 	private int typeSearch = 0;
 	private PostListAdapter listAdapter;
 	@Override
@@ -41,7 +42,7 @@ public class QuestionSortByDate extends Activity{
 			typeSearch = bundle.getInt("typeSearch");
 			query = bundle.getString("query");
 			userID = bundle.getInt("UserID");
-			
+			orderBy = bundle.getString("orderby");
 		}
 		
 		inflateList();
@@ -76,6 +77,10 @@ public class QuestionSortByDate extends Activity{
 		}
 		
 		else if (typeSearch == 2){ //show questions by tags
+			questionList = retriveQuestionListByTagOrderByDate(postDataLayer, query);
+			
+		}
+		else if (typeSearch == 3){ //show questions by tags
 			questionList = retriveQuestionListByTag(postDataLayer, query);
 			
 		}
@@ -131,7 +136,7 @@ public class QuestionSortByDate extends Activity{
 		return questions; 
 	}
 	
-	private List<Question> retriveQuestionListByTag(PostDataLayer postDataLayer, String query){
+	private List<Question> retriveQuestionListByTagOrderByDate(PostDataLayer postDataLayer, String query){
 		List<Question> questions = new ArrayList<Question>();
 		Set<String> wordSet = new HashSet<String>();
 		String[] parts = query.split(" ");
@@ -139,6 +144,17 @@ public class QuestionSortByDate extends Activity{
 			wordSet.add(word);
 		}
 		questions = postDataLayer.pagedTagSearch(wordSet, OrderCriteria.CREATION_DATE, 50, 0);
+		return questions;
+	}
+	
+	private List<Question> retriveQuestionListByTag(PostDataLayer postDataLayer, String query){
+		List<Question> questions = new ArrayList<Question>();
+		Set<String> wordSet = new HashSet<String>();
+		String[] parts = query.split(" ");
+		for (String word : parts) {
+			wordSet.add(word);
+		}
+		questions = postDataLayer.pagedTagSearch(wordSet,  50, 0);
 		return questions;
 	}
 }

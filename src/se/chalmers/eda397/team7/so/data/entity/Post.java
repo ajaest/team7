@@ -331,7 +331,7 @@ public class Post extends Entity implements FullTextable {
 		
 		/* Post title */
 		current = new HashSet<String>();
-		if(this.getBody()!=null){
+		if(this.getTitle()!=null){
 			matchedResults = Post.WORD_PATTERN.matcher(this.getTitle());
 			
 			while(matchedResults.find()){
