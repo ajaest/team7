@@ -2,6 +2,8 @@ package se.chalmers.eda397.team7.so.datalayer;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -17,6 +19,7 @@ import se.chalmers.eda397.team7.so.data.entity.Question;
 import android.annotation.SuppressLint;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.util.Log;
 
 
@@ -747,5 +750,49 @@ public class PostDataLayer extends DataLayer<Question>{
 	private enum INDEX_MODE{
 		TAG, TITLE, QUESTION, RESPONSE, COMMENT, QUERY_ORDER
 	};
+	
+	
+	/*** Functions for coloring the question list **/
+	public Integer colorQuestion(Question question, List<Question> list){
+		Float midValue;
+		Integer color;
+		Integer maxValue;
+		Integer minValue;
+		scoreComparator comparator = new scoreComparator();
+		List<Question> auxList = new ArrayList<Question>();
+		auxList.addAll(list);
+		Collections.sort(auxList,comparator);
+		maxValue = auxList.get(0).getScore();
+		minValue = auxList.get(auxList.size()-1).getScore();
+		midValue = (float) (minValue + (maxValue-minValue)/2);
+		
+		if(((float)question.getScore())==maxValue){
+			color = Color.GREEN;
+		}else
+		if(((float)question.getScore())==minValue){
+			color = Color.RED;
+		} else
+		if(question.getScore()>midValue){
+			color = new Float(255/(maxValue - midValue) * (question.getScore()-midValue)).intValue();
+			color = color << 16; //move to red byte
+			color = Color.YELLOW - color;
+		}else {
+			color = new Float(255/(midValue - minValue) * (question.getScore()-minValue)).intValue();
+			color = color << 8; //move to green byte
+			color = Color.RED    + color;
+		}
+		
+		return color;
+	}
+	
+	public class scoreComparator implements Comparator<Question>{
+
+		@Override
+		public int compare(Question lhs, Question rhs) {
+			return rhs.getScore()-lhs.getScore();
+		}
+		
+	}
+	
 }
 

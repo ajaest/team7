@@ -17,12 +17,16 @@ public class Questions_Tab_Activity extends TabActivity{
 	private static final String NEWER = "Newer";
 	private static final String NoA = "Number Of Answers";
 	private static final String FULL_TEXT = "Full text";
-	private static final String TAG_MATCHES = "Number of tag matches";
+	private static final String TAG_MATCHES = "Relevance";
 	private Bundle bundle;
 	private String tagPressed;
 	private String query;
 	private Integer typeSearch;
 	
+	private TabHost tabHost;
+	private TabHost.TabSpec Newer;
+	private TabHost.TabSpec numberOfAnswers;
+	private static boolean isHeat = false;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,7 +34,12 @@ public class Questions_Tab_Activity extends TabActivity{
         
     	bundle = getIntent().getExtras();
     	userID = bundle.getInt("UserID");
+
     	typeSearch = bundle.getInt("typeSearch");
+
+		
+
+        ///Get the tag pressed from the tag cloud
         tagPressed = bundle.getString("tagPressed");
         query = bundle.getString("query");
         
@@ -39,8 +48,14 @@ public class Questions_Tab_Activity extends TabActivity{
         /// Relevance tab. Present at fulltext search and multi-tag search
         ///
         
-        TabHost tabHost = getTabHost();
-        Intent inboxIntent;
+        tabHost = getTabHost();
+        addTabs(isHeat);
+        
+        
+    }
+    
+    private void addTabs(boolean isHeat){
+    	Intent inboxIntent;
         
         TabSpec currentTab =null;
         // Newer Tab
@@ -58,6 +73,7 @@ public class Questions_Tab_Activity extends TabActivity{
 	        inboxIntent.putExtra("UserID", userID);
 	        
 	        inboxIntent.putExtra("typeSearch", typeSearch);
+	        inboxIntent.putExtra("isHeat", isHeat);
 	        
 	        if (!tagPressed.equals(" ")) { //We came from the tag cloud
 	        	
@@ -82,6 +98,7 @@ public class Questions_Tab_Activity extends TabActivity{
             	inboxIntent.putExtra("typeSearch", 2);
                 inboxIntent.putExtra("query", tagPressed);
                 inboxIntent.putExtra("orderby", "date");
+                inboxIntent.putExtra("isHeat", isHeat);
              
     		}
             
@@ -97,6 +114,7 @@ public class Questions_Tab_Activity extends TabActivity{
 	        if (!tagPressed.equals(" ")) { //We came from the tag cloud
 	        	outboxIntent.putExtra("query", tagPressed);
 	        	outboxIntent.putExtra("typeSearch", 2);
+	        	outboxIntent.putExtra("isHeat", isHeat);
 	   
 	        }
 	        
@@ -110,6 +128,7 @@ public class Questions_Tab_Activity extends TabActivity{
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.questions_tab, menu); 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			ActionBar actionBar = getActionBar();
 			actionBar.setDisplayHomeAsUpEnabled(true);
@@ -123,6 +142,13 @@ public class Questions_Tab_Activity extends TabActivity{
 		switch (item.getItemId()) {
 		case android.R.id.home:
 			onBackPressed();
+			return true;
+		case R.id.menu_heat_questions:
+			boolean a = !isHeat;			
+			isHeat = a;
+			
+			tabHost.clearAllTabs();
+			addTabs(isHeat);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);

@@ -30,9 +30,9 @@ public class QuestionSortByDate extends Activity{
 	private Bundle bundle;
 	private String query="";
 	private int userID;
-	private String orderBy;
 	private int typeSearch = 0;
 	private PostListAdapter listAdapter;
+	private boolean isHeat;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -42,7 +42,7 @@ public class QuestionSortByDate extends Activity{
 			typeSearch = bundle.getInt("typeSearch");
 			query = bundle.getString("query");
 			userID = bundle.getInt("UserID");
-			orderBy = bundle.getString("orderby");
+			isHeat = bundle.getBoolean("isHeat");
 		}
 		
 		inflateList();
@@ -100,7 +100,7 @@ public class QuestionSortByDate extends Activity{
 		}		
 
 		questionListView = (ListView)findViewById(R.id.listViewQuestions);
-		listAdapter = new PostListAdapter(this, questionList, R.layout.question_item);
+		listAdapter = new PostListAdapter(this, questionList, R.layout.question_item, isHeat);
 		questionListView.setAdapter(listAdapter);
 		questionListView.setOnItemClickListener(new OnItemClickListener(){
 			@Override
@@ -114,6 +114,7 @@ public class QuestionSortByDate extends Activity{
 			}
 		});        
 	}
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
