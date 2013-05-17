@@ -60,7 +60,7 @@ public class DataLayerFactory {
 		return this.tagDl;
 	}
 
-	protected SQLiteDatabase getDB() {
+	public SQLiteDatabase getDB() {
 		return this.db;
 	}
 

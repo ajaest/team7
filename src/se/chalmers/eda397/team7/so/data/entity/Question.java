@@ -75,26 +75,14 @@ public class Question extends Post implements FullTextable {
 		
 		Map<String, Set<String>> superTags = super.getFullTextIndexes();
 		
-		Set<String> current;
-		String replaceKey;
-		for(String key : superTags.keySet()){
-			if(key.equals("post_titles")){
-				replaceKey = "question_titles";				
-			}else
-			if(key.equals("posts")){
-				replaceKey = "questions";
-			}else{
-				replaceKey=null;
-			}
-			
-			if(replaceKey!=null){
-				current = superTags.get(key);
-				superTags.remove(key);
-				superTags.put(replaceKey, current);
-			}
+		if(superTags.containsKey("post_titles")){
+			superTags.put("question_titles", superTags.remove("post_titles"));
 		}
 		
+		if(superTags.containsKey("posts")){
+			superTags.put("questions", superTags.remove("posts"));
+		}	
 		
-		return superTags;
+	return superTags;
 	}
 }

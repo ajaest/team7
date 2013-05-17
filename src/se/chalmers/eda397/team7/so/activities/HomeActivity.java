@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.webkit.WebView.FindListener;
 import android.widget.Button;
 import android.widget.SearchView;
 import android.widget.SearchView.OnQueryTextListener;
@@ -82,6 +81,7 @@ public class HomeActivity extends Activity {
 				Intent intent =  new Intent(HomeActivity.this, Questions_Tab_Activity.class);
 				intent.putExtra("tagPressed", " ");
 				intent.putExtra("UserID", userID);
+				intent.putExtra("typeSearch", 1);
 				startActivity(intent);
 
 			}
@@ -128,6 +128,7 @@ public class HomeActivity extends Activity {
 				intent.putExtra("UserID", userID);
 				intent.putExtra("See_my_tags", false);
 				intent.putExtra("multitag", false);
+				intent.putExtra("typeSearch", 2);
 				startActivity(intent);
 
 			}

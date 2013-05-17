@@ -2,6 +2,7 @@ package se.chalmers.eda397.team7.so.datalayer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import android.annotation.SuppressLint;
 import android.database.Cursor;
@@ -127,6 +128,29 @@ public class TagDataLayer extends DataLayer<String> {
     	return tagsList;
     }
     
+    public void addTagGraphDependece(Set<String> tagSet){
+    
+    	String check_query     = "SELECT count(*) FROM tag_graph WHERE tag1=? AND tag2=?";
+    	String insert_query    = "INSERT INTO tag_graph VALUES (?,?,?)";
+    	String increment_query = "UPDATE tag_graph SET weight=(weight+1) WHERE tag1=? AND tag2=?";
+    	
+    	Cursor cur;
+    	
+    	for(String tag1 : tagSet){
+    		for(String tag2 : tagSet){
+    			cur = this.getDbInstance().rawQuery(check_query, new String[]{tag1, tag2});
+    			cur.moveToNext();
+    			
+    			if(cur.getInt(cur.getColumnIndex("count(*)"))>0){
+    				this.getDbInstance().execSQL(increment_query, new String[]{tag1, tag2});
+    			}else{
+    				this.getDbInstance().execSQL(insert_query, new String[]{tag1,tag2, "1"});
+    			}
+    			
+    			cur.close();
+    		}
+    	}
+    }
 	
 	@Override
 	protected String createNotSyncronizedInstance(Cursor cur) {

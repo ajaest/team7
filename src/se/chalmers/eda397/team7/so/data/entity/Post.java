@@ -1,6 +1,5 @@
 package se.chalmers.eda397.team7.so.data.entity;
 
-import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -11,11 +10,10 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import android.R.string;
-
 import se.chalmers.eda397.team7.so.datalayer.CommentDataLayer;
 import se.chalmers.eda397.team7.so.datalayer.DataLayerFactory;
 import se.chalmers.eda397.team7.so.datalayer.PostDataLayer;
+import se.chalmers.eda397.team7.so.datalayer.TagDataLayer;
 import se.chalmers.eda397.team7.so.datalayer.UserDataLayer;
 
 public class Post extends Entity implements FullTextable {
@@ -31,7 +29,8 @@ public class Post extends Entity implements FullTextable {
 	/* Entity relation factories */
 	private final CommentDataLayer commendDl;
 	private final PostDataLayer    postDl   ;
-	private final UserDataLayer    userDl   ; 
+	private final UserDataLayer    userDl   ;
+	private final TagDataLayer     tagDataLayer; 
 	
 	/* Attributes */
 	private  Integer id                       ;
@@ -84,6 +83,7 @@ public class Post extends Entity implements FullTextable {
 		this.commendDl = dataLayerFactory.createCommentDataLayer();
 		this.postDl    = dataLayerFactory.createPostDataLayer   ();
 		this.userDl    = dataLayerFactory.createUserDataLayer   ();
+		this.tagDataLayer = dataLayerFactory.createTagDataLayer();
 		
 
 		this. id                         = id                       ;
@@ -333,8 +333,9 @@ public class Post extends Entity implements FullTextable {
 		current = new HashSet<String>();
 		if(this.getBody()!=null){
 			matchedResults = Post.WORD_PATTERN.matcher(this.getTitle());
-			for(int i=0; i<matchedResults.groupCount(); i++){
-				current.add(matchedResults.group(i));
+			
+			while(matchedResults.find()){
+				current.add(matchedResults.group());
 			}
 		}		
 		indexes.put("post_titles", current);
@@ -343,8 +344,9 @@ public class Post extends Entity implements FullTextable {
 		current = new HashSet<String>();
 		if(this.getBody()!=null){
 			matchedResults = Post.WORD_PATTERN.matcher(this.getBody());
-			for(int i=0; i<matchedResults.groupCount(); i++){
-				current.add(matchedResults.group(i));
+			
+			while(matchedResults.find()){
+				current.add(matchedResults.group());
 			}
 		}
 		
@@ -355,8 +357,9 @@ public class Post extends Entity implements FullTextable {
 		if(this.getComments().size()!=0){
 			for(Comment comment : this.getComments()){
 				matchedResults = Post.WORD_PATTERN.matcher(comment.getText());
-				for(int i=0; i<matchedResults.groupCount(); i++){
-					current.add(matchedResults.group(i));
+				
+				while(matchedResults.find()){
+					current.add(matchedResults.group());
 				}
 			}
 		}
@@ -404,10 +407,16 @@ public class Post extends Entity implements FullTextable {
 			
 			this.postDl.updatePost(id, values);
 			
+			this.commitSearchIndexes();
+			
+			this.tagDataLayer.addTagGraphDependece(this.getTags());
+			
 			modified = true;
 		}else{
 			modified = false;
 		}
+		
+		
 		
 		
 		return modified;

@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import se.chalmers.eda397.team7.so.datalayer.DataLayerFactory;
 import se.chalmers.eda397.team7.so.datalayer.UserDataLayer;
@@ -232,6 +233,12 @@ public class User extends Entity{
 		}
 		
 		return updated;
+	}
+
+	@Override
+	public Map<String, Set<String>> getFullTextIndexes() {
+		// TODO Auto-generated method stub
+		return new HashMap<String, Set<String>>();
 	}
 
 }

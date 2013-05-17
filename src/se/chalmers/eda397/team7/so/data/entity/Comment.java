@@ -3,11 +3,12 @@ package se.chalmers.eda397.team7.so.data.entity;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import se.chalmers.eda397.team7.so.datalayer.CommentDataLayer;
 import se.chalmers.eda397.team7.so.datalayer.DataLayerFactory;
 
-public class Comment extends Entity {
+public class Comment extends Entity implements FullTextable{
 
 	private final CommentDataLayer cdl;
 	
@@ -124,6 +125,12 @@ public class Comment extends Entity {
 		
 		
 		return updated;
+	}
+
+	@Override
+	public Map<String, Set<String>> getFullTextIndexes() {
+		// TODO Auto-generated method stub
+		return new HashMap<String, Set<String>>();
 	}
 
 

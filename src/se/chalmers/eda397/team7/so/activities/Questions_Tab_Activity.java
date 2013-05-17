@@ -6,7 +6,6 @@ import android.app.TabActivity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TabHost;
@@ -19,6 +18,8 @@ public class Questions_Tab_Activity extends TabActivity{
 	private static final String NoA = "Number Of Answers";
 	private Bundle bundle;
 	private String tagPressed;
+	private Integer typeSearch;
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,7 +27,7 @@ public class Questions_Tab_Activity extends TabActivity{
         
     	bundle = getIntent().getExtras();
     	userID = bundle.getInt("UserID");
-    	
+    	typeSearch = bundle.getInt("typeSearch");
 			
 		
 
@@ -42,7 +43,7 @@ public class Questions_Tab_Activity extends TabActivity{
         Intent inboxIntent = new Intent(this, QuestionSortByDate.class);
         inboxIntent.putExtra("UserID", userID);
         if (!tagPressed.equals(" ")) { //We came from the tag cloud
-        	inboxIntent.putExtra("typeSearch", 2);
+        	inboxIntent.putExtra("typeSearch", typeSearch);
             inboxIntent.putExtra("query", tagPressed);
          
 		}
@@ -57,7 +58,7 @@ public class Questions_Tab_Activity extends TabActivity{
         outboxIntent.putExtra("UserID", userID);
         if (!tagPressed.equals(" ")) { //We came from the tag cloud
         	outboxIntent.putExtra("query", tagPressed);
-        	outboxIntent.putExtra("typeSearch", 2);
+        	outboxIntent.putExtra("typeSearch", typeSearch);
    
         }
        
