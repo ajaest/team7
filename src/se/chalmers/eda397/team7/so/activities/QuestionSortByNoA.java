@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ListAdapter;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
@@ -31,6 +32,7 @@ public class QuestionSortByNoA extends Activity{
 	String query="";
 	int userID;
 	int typeSearch = 0;
+	private boolean isHeat;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -40,6 +42,7 @@ public class QuestionSortByNoA extends Activity{
 			typeSearch = bundle.getInt("typeSearch");
 			query = bundle.getString("query");
 			userID = bundle.getInt("UserID");
+			isHeat = bundle.getBoolean("isHeat");
 		}
 		inflateList();
 	}
@@ -76,7 +79,9 @@ public class QuestionSortByNoA extends Activity{
 		}
 
 		questionListView = (ListView)findViewById(R.id.listViewQuestions);
-		questionListView.setAdapter(new PostListAdapter(this, questionList, R.layout.question_item));
+		PostListAdapter listAdapter = new PostListAdapter(this, questionList, R.layout.question_item, isHeat);
+		
+		questionListView.setAdapter(listAdapter);
 		questionListView.setOnItemClickListener(new OnItemClickListener(){
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id){

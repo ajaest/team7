@@ -73,7 +73,7 @@ public class QuestionsActivity extends Activity {
 
 
 		questionListView = (ListView)findViewById(R.id.listViewQuestions);
-		questionListView.setAdapter(new PostListAdapter(this, questionList, R.layout.question_item));
+		questionListView.setAdapter(new PostListAdapter(this, questionList, R.layout.question_item, false));
 		questionListView.setOnItemClickListener(new OnItemClickListener(){
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id){
