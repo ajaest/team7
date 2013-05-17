@@ -81,7 +81,7 @@ public class HomeActivity extends Activity {
 				Intent intent =  new Intent(HomeActivity.this, Questions_Tab_Activity.class);
 				intent.putExtra("tagPressed", " ");
 				intent.putExtra("UserID", userID);
-				intent.putExtra("typeSearch", 1);
+				intent.putExtra("typeSearch", 11);
 				startActivity(intent);
 
 			}

@@ -41,6 +41,7 @@ public class QuestionSortByDate extends Activity{
 		if (bundle != null){
 			typeSearch = bundle.getInt("typeSearch");
 			query = bundle.getString("query");
+			query= query==null?"":query;
 			userID = bundle.getInt("UserID");
 			isHeat = bundle.getBoolean("isHeat");
 		}
@@ -80,7 +81,9 @@ public class QuestionSortByDate extends Activity{
 	    if (typeSearch == 1){ // questions from search
 			questionList = retriveSearchList(postDataLayer, query);
 		}
-		
+	    else if(typeSearch == 11){
+			questionList = retrieveList(postDataLayer);
+		}
 		else if (typeSearch == 2){ //show questions by tags
 			questionList = retriveQuestionListByTagOrderByDate(postDataLayer, query);
 			

@@ -94,12 +94,11 @@ public class Questions_Tab_Activity extends TabActivity{
         	
         	inboxIntent = new Intent(this, QuestionSortByDate.class);
             inboxIntent.putExtra("UserID", userID);
+            inboxIntent.putExtra("isHeat", isHeat);
             if (!tagPressed.equals(" ")) { //We came from the tag cloud
             	inboxIntent.putExtra("typeSearch", 2);
                 inboxIntent.putExtra("query", tagPressed);
-                inboxIntent.putExtra("orderby", "date");
-                inboxIntent.putExtra("isHeat", isHeat);
-             
+                inboxIntent.putExtra("orderby", "date");             
     		}
             
             // Tab Content
@@ -110,11 +109,11 @@ public class Questions_Tab_Activity extends TabActivity{
 	        TabSpec numberOfAnswers = tabHost.newTabSpec(NoA);
 	        numberOfAnswers.setIndicator(NoA);
 	        Intent outboxIntent = new Intent(this, QuestionSortByNoA.class);
+	        inboxIntent.putExtra("isHeat", isHeat);
 	        outboxIntent.putExtra("UserID", userID);
 	        if (!tagPressed.equals(" ")) { //We came from the tag cloud
 	        	outboxIntent.putExtra("query", tagPressed);
 	        	outboxIntent.putExtra("typeSearch", 2);
-	        	outboxIntent.putExtra("isHeat", isHeat);
 	   
 	        }
 	        
