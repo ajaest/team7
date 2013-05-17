@@ -93,7 +93,7 @@ public class TagDataLayer extends DataLayer<String> {
 		}else{
 			weight = -1;
 		}
-		
+		c.close();
 		return weight;
 	}
 	

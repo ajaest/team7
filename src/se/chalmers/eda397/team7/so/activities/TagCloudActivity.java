@@ -13,6 +13,7 @@ import se.chalmers.eda397.team7.so.datalayer.DataLayerFactory;
 import se.chalmers.eda397.team7.so.datalayer.PostDataLayer;
 import se.chalmers.eda397.team7.so.datalayer.PostDataLayer.OrderCriteria;
 import se.chalmers.eda397.team7.so.datalayer.TagDataLayer;
+import android.R.integer;
 import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
@@ -84,6 +85,16 @@ public class TagCloudActivity extends FragmentActivity {
     
     public void inflateViewPager(){
     	String tags = null;
+    	// Create an adapter that when requested, will return a fragment representing an object in
+        // the collection.
+        // 
+        // ViewPager and its adapters use support library fragments, so we must use
+        // getSupportFragmentManager.
+        mViewPager = (ViewPager) findViewById(R.id.pager);
+        mDemoCollectionPagerAdapter = new DemoCollectionPagerAdapter(getSupportFragmentManager());
+        // Set up the ViewPager, attaching the adapter.
+       
+        mViewPager.setAdapter(mDemoCollectionPagerAdapter);
     	try {
 			SQLiteSODatabaseHelper test = new SQLiteSODatabaseHelper(this.getApplicationContext());
 			db = test.getWritableDatabase();
@@ -101,6 +112,11 @@ public class TagCloudActivity extends FragmentActivity {
         	TagCloudActivity.tagList = getAllTagsOfUser(userId);
         else{
         	TagCloudActivity.tagList = tagDataLayer.getAllTags();
+        	String tag = bundle.getString("tag");
+        	if(tag!=null){
+	        	int pos = tagList.indexOf(tag);
+				mViewPager.setCurrentItem(pos);
+        	}
         	 // Set up action bar.
             final ActionBar actionBar = getActionBar();
 
@@ -109,16 +125,8 @@ public class TagCloudActivity extends FragmentActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
         	
-        // Create an adapter that when requested, will return a fragment representing an object in
-        // the collection.
-        // 
-        // ViewPager and its adapters use support library fragments, so we must use
-        // getSupportFragmentManager.
-        mViewPager = (ViewPager) findViewById(R.id.pager);
-        mDemoCollectionPagerAdapter = new DemoCollectionPagerAdapter(getSupportFragmentManager());
-        // Set up the ViewPager, attaching the adapter.
-       
-        mViewPager.setAdapter(mDemoCollectionPagerAdapter);
+        
+        
     }
     
     
@@ -415,30 +423,37 @@ public class TagCloudActivity extends FragmentActivity {
         	centerButton.setText(centerTag);
         	setButtonListener(centerButton);
         	String tags[]= centerTag.split(" ");
-        	topLeftButton.setText(getClosestTag(tags[0]));
+        	topLeftButton.setText(getClosestNTag(tags[0],0));
         	setButtonListener3(topLeftButton, 0);
-        	if (tags.length>1){ 
-				topRightButton.setText(getClosestTag(tags[1]));
-				setButtonListener3(topRightButton, 1);
-        	}
-        	else
-        		topRightButton.setVisibility(View.GONE);
-        	if (tags.length>2){
-        		bottomLeftButton.setText(getClosestTag(tags[2]));
-        		setButtonListener3(bottomLeftButton, 2);
-        	}
-        	else 
-				bottomLeftButton.setVisibility(View.GONE);
-			if (tags.length>3){
-				bottomRightButton.setText(getClosestTag(tags[3]));
-				setButtonListener3(bottomRightButton, 3);
+        	if (tags.length==2) {
+        		topRightButton.setText(getClosestNTag(tags[0],1));
+				setButtonListener3(topRightButton, 0);
+				bottomLeftButton.setText(getClosestNTag(tags[1],0));
+        		setButtonListener3(bottomLeftButton, 1);
+        		bottomRightButton.setText(getClosestNTag(tags[1],1));
+				setButtonListener3(bottomRightButton, 1);
 			}
-			else 
-				bottomRightButton.setVisibility(View.GONE);
+        	else if (tags.length==3) {
+        		topRightButton.setText(getClosestNTag(tags[1],0));
+				setButtonListener3(topRightButton, 1);
+				bottomLeftButton.setText(getClosestNTag(tags[2],0));
+        		setButtonListener3(bottomLeftButton, 2);
+        		bottomRightButton.setVisibility(View.GONE);
+			}
+        	else if (tags.length==4){
+        		topRightButton.setText(getClosestNTag(tags[1],0));
+				setButtonListener3(topRightButton, 1);
+				bottomLeftButton.setText(getClosestNTag(tags[2],0));
+        		setButtonListener3(bottomLeftButton, 2);
+        		bottomRightButton.setText(getClosestNTag(tags[3],0));
+				setButtonListener3(bottomRightButton, 3);
+        	}
+        	
         }
         
-        private String getClosestTag(String tag){
-        	return (tagDataLayer.getCloseTags(tag).get(0));
+        private String getClosestNTag(String tag, int n){
+   
+				return tagDataLayer.getCloseTags(tag).get(n);
         }
     }
     

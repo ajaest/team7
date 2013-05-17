@@ -118,7 +118,12 @@ public class SearchActivity extends Activity {
 					intent.putExtra("UserID", userID);
 					if (tags[0].equals("")){ //We don't search for anything --> we show all the cloud
 						intent.putExtra("See_my_tags", false);
-						intent.putExtra("multitag", false);
+						intent.putExtra("isMultitag", false);
+					}
+					else if (tags.length==1) { // only one tag
+						intent.putExtra("See_my_tags", false);
+						intent.putExtra("isMultitag",false);
+						intent.putExtra("tag", tags[0]);
 					}
 					else{
 						intent.putExtra("See_my_tags", false);

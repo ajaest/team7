@@ -395,7 +395,6 @@ public class PostDataLayer extends DataLayer<Question>{
 		}else{
 			postIds = new TreeSet<PostDataLayer.PostIndexInformation>();
 		}
-		
 		return postIds;
 	}
 	

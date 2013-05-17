@@ -129,6 +129,7 @@ public class HomeActivity extends Activity {
 				intent.putExtra("See_my_tags", false);
 				intent.putExtra("multitag", false);
 				intent.putExtra("typeSearch", 2);
+				
 				startActivity(intent);
 
 			}

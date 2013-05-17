@@ -199,7 +199,7 @@ public abstract class DataLayer  <E> {
 		}else{
 			ins = null;
 		}
-		
+		cur.close();
 		
 		return ins;
 		

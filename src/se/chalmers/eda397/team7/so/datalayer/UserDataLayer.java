@@ -37,6 +37,7 @@ public class UserDataLayer extends DataLayer<User>{
 			tempString.add(cur.getString(0));
 			
 		}
+		cur.close();
 	
 			
 		return tempString;
