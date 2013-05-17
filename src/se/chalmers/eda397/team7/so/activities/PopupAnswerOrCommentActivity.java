@@ -69,7 +69,6 @@ public class PopupAnswerOrCommentActivity extends Activity {
 				@Override
 				public void onClick(View v) {
 					
-					//Toast.makeText(getApplicationContext(),commentDataLayer.(getMaxId()+1).toString() , Toast.LENGTH_LONG).show();
 					int id;
 					id = commentDataLayer.getMaxId()+1;
 					

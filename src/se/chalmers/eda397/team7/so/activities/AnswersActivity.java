@@ -71,6 +71,12 @@ public class AnswersActivity extends Activity {
 		super.onRestart();
 	}
 	
+	@Override
+	protected void onResume() {
+		   inflateList(); 
+		super.onResume();
+	}
+	
 	
 	
 	public void inflateList(){
@@ -97,6 +103,7 @@ public class AnswersActivity extends Activity {
 				
 				Intent intent = new Intent(view.getContext(), CommentsActivity.class);
 				intent.putExtra("idPost", ide);
+				intent.putExtra("UserID",userId);
 				startActivity(intent);
 			}
 		});        

@@ -47,7 +47,7 @@ public class AnswerListAdapter extends ArrayAdapter<Answer>{
 			scoreView.setText(Integer.toString(this.answerList.get(position).getScore()));
 			SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
 			dateTextView.setText(df.format(this.answerList.get(position).getCreation_date()));
-			numberComments.setText(Integer.toString(this.answerList.get(position).getComment_count())+ " comments");
+			numberComments.setText(this.answerList.get(position).getComments().size()+ " comments");
 			
 			//}
 		return(row);

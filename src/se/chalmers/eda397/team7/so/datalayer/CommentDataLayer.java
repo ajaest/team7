@@ -77,15 +77,26 @@ public class CommentDataLayer extends DataLayer<Comment> {
 		String dateString = "";
 		dateString = format.format(new Date());
 		
+		
+		Map<String, String> attValues;
+		attValues = new HashMap<String, String>();
+		
+		attValues.put("id",id.toString());
+		attValues.put("post_id",post_id.toString());
+		attValues.put("score","0");
+		attValues.put("text",text);
+		attValues.put("creation_date",dateString);
+		attValues.put("user_id",user_id.toString());
+		
+		
+		
+		
+		this.queryInsertOrReplace("comments", attValues, null);
 
 		
-		query = "INSERT OR REPLACE INTO comments (id,post_id,score,text,creation_date,user_id) VALUES(" + id+ "," +post_id+"," +0+ ",'" + text + "', '" +dateString+"' ," + user_id + ")";
-		
-
-		// Don't know this
-		this.queryInsertComment(query);
 
 	}
+	
 	public Integer getMaxId(){
 		String queryString = "SELECT MAX(id) from comments";
 		Cursor cur = this.getDbInstance().rawQuery(queryString, null);

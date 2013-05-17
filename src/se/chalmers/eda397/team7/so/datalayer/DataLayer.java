@@ -379,13 +379,6 @@ public abstract class DataLayer  <E> {
 		/* Inserting a new value in the database can make the current cache invalid */
 		this.clearCache();
 	}
-	//Cheating by Henrik
-	protected void queryInsertComment(String query){
-		this.getDbInstance().execSQL(query);
-	}
-	protected void queryInsertAnswer(String query){
-		this.getDbInstance().execSQL(query);
-	}
 	
 	
 	

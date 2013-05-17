@@ -39,6 +39,10 @@ public class QuestionsActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_questions);
+		inflateList();
+		       
+	}
+	public void inflateList(){
 		PostDataLayer postDataLayer = null;
 		try {
 			SQLiteSODatabaseHelper test = new SQLiteSODatabaseHelper(this.getApplicationContext());
@@ -83,9 +87,21 @@ public class QuestionsActivity extends Activity {
 				intent.putExtra("idQuestion", ide);
 				startActivity(intent);
 			}
-		});        
+		}); 
 	}
 
+	@Override
+	protected void onResume(){
+		inflateList();
+		super.onResume();
+	}
+
+	
+	@Override
+	protected void onRestart() {
+		   inflateList(); 
+		super.onRestart();
+	}
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.

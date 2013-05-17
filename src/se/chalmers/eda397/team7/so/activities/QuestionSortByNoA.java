@@ -49,6 +49,11 @@ public class QuestionSortByNoA extends Activity{
 		inflateList();      
 		super.onRestart();
 	}
+	@Override
+	protected void onResume(){
+		inflateList();
+		super.onResume();
+	}
 
 	public void inflateList(){
 		PostDataLayer postDataLayer = null;

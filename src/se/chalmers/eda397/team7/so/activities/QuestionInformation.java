@@ -57,7 +57,11 @@ public class QuestionInformation extends Activity{
 		
 
 	}
-
+	@Override
+	protected void onResume(){
+		inflateList();
+		super.onResume();
+	}
 
 	
 	@Override
@@ -110,10 +114,12 @@ public class QuestionInformation extends Activity{
 		
 		showTags();
 		
-		if (question.getComment_count()==0) 
-			SeeAllAnswers.setVisibility(View.GONE);
-		else 
-			SeeAllAnswers.setText("See " + question.getComment_count().toString() + " comments");
+		if (question.getComments().size()==0) 
+			SeeAllAnswers.setText("Add a comment");
+		
+		else
+		
+			SeeAllAnswers.setText("See " + question.getComments().size() + " comments");
 		
 		// StarImageButtonEventHandeler
 		starButton.setOnClickListener(new OnClickListener() {

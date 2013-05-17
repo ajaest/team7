@@ -23,7 +23,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
+
 
 public class CommentsActivity extends Activity {
 
@@ -40,12 +40,16 @@ public class CommentsActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_comments);
 		
-		commentsListView = (ListView) findViewById(R.id.listViewComments);
-		commentButton = (Button) findViewById(R.id.buttonCommentPost);
-		
 		bundle = getIntent().getExtras();
 		idPost = bundle.getInt("idPost");
 		userID = bundle.getInt("UserID");
+		
+
+		inflateList();
+	}
+	public void inflateList(){
+		commentsListView = (ListView) findViewById(R.id.listViewComments);
+		commentButton = (Button) findViewById(R.id.buttonCommentPost);
 		
 		try {
 			SQLiteSODatabaseHelper test = new SQLiteSODatabaseHelper(this.getApplicationContext());
@@ -71,7 +75,19 @@ public class CommentsActivity extends Activity {
 
 			}
 		});
+		
 	}
+	@Override
+	public void onRestart(){
+		inflateList();
+		super.onRestart();
+	}
+	@Override
+	public void onResume(){
+		inflateList();
+		super.onResume();
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
@@ -81,6 +97,7 @@ public class CommentsActivity extends Activity {
 		}
 		return true;
 	}
+
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {

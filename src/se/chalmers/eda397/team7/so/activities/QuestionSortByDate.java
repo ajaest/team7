@@ -55,6 +55,11 @@ public class QuestionSortByDate extends Activity{
 		inflateList();      
 		super.onRestart();
 	}
+	@Override
+	protected void onResume() {
+		inflateList();
+		super.onResume();
+	}
 
 
 	/**
