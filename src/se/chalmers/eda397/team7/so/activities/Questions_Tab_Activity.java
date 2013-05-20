@@ -109,7 +109,7 @@ public class Questions_Tab_Activity extends TabActivity{
 	        TabSpec numberOfAnswers = tabHost.newTabSpec(NoA);
 	        numberOfAnswers.setIndicator(NoA);
 	        Intent outboxIntent = new Intent(this, QuestionSortByNoA.class);
-	        inboxIntent.putExtra("isHeat", isHeat);
+	        outboxIntent.putExtra("isHeat", isHeat);
 	        outboxIntent.putExtra("UserID", userID);
 	        if (!tagPressed.equals(" ")) { //We came from the tag cloud
 	        	outboxIntent.putExtra("query", tagPressed);
@@ -146,8 +146,13 @@ public class Questions_Tab_Activity extends TabActivity{
 			boolean a = !isHeat;			
 			isHeat = a;
 			
-			tabHost.clearAllTabs();
-			addTabs(isHeat);
+			/*tabHost.clearAllTabs();
+			addTabs(isHeat);*/
+			Intent intent = new Intent(this,Questions_Tab_Activity.class);
+			intent.putExtras(bundle);
+			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(intent);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);

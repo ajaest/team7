@@ -128,7 +128,7 @@ public class QuestionSortByDate extends Activity{
 	private List<Question> retrieveList(PostDataLayer postDataLayer){
 		List<Question> questions ;
 
-		questions = postDataLayer.getQuestionSortedBy("creation_date");
+		questions = new ArrayList<Question>(postDataLayer.getQuestionSortedBy("creation_date"));
 		return questions;
 	}
 
